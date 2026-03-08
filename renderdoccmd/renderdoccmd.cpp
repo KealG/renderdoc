@@ -474,7 +474,8 @@ public:
     parser.add("preview", 'v', "Display a preview window when a replay is active.");
     parser.add<uint32_t>(
         "port", 'p',
-        "The port to listen on. Default is 0, which listens on RenderDoc's default port.", false, 0);
+        "The port to listen on. Default is 0, which listens on " RDOC_BRAND_PRODUCT_NAME
+        "'s default port.", false, 0);
   }
   virtual const char *Description()
   {
@@ -1289,7 +1290,7 @@ public:
   {
     parser.add("explain", '\0',
                "Explain what the status of the layer registration is, and how it can be resolved");
-    parser.add("register", '\0', "Register RenderDoc's vulkan layer");
+    parser.add("register", '\0', "Register " RDOC_BRAND_PRODUCT_NAME "'s vulkan layer");
     parser.add("user", '\0',
                "Install layer registration at user-local level instead of system-wide");
     parser.add("system", '\0', "Install layer registration system-wide (requires admin privileges)");
@@ -1322,7 +1323,8 @@ public:
           std::cerr << "** There is an unfixable problem with your vulkan layer configuration.\n\n"
                        "This is most commonly caused by having a distribution-provided package of "
                        RDOC_BRAND_PRODUCT_NAME " "
-                       "installed, which cannot be modified by another build of RenderDoc.\n\n"
+                       "installed, which cannot be modified by another build of "
+                       RDOC_BRAND_PRODUCT_NAME ".\n\n"
                        "Please consult the " RDOC_BRAND_PRODUCT_NAME " documentation, or package/distribution "
                        "documentation on "
                        "linux."
