@@ -37,6 +37,7 @@
 #include <QString>
 #include <QUrlQuery>
 #include "Code/QRDUtils.h"
+#include "../../../renderdoc/common/brand_config.h"
 #include "ui_CrashDialog.h"
 
 const qint64 MaxUploadSize = 2250LL * 1024LL * 1024LL;
@@ -145,19 +146,20 @@ CrashDialog::CrashDialog(PersistantConfig &cfg, QVariantMap crashReportJSON, QWi
   else if(replayCrash)
   {
     text =
-        tr("<p>RenderDoc encountered a serious problem. Please take a moment to look over this "
-           "form to check what has been gathered then send it off so that RenderDoc can get "
-           "better!</p>");
+        tr("<p>%1 encountered a serious problem. Please take a moment to look over this form to "
+           "check what has been gathered then send it off so that %1 can get better!</p>")
+            .arg(lit(RDOC_BRAND_PRODUCT_NAME));
   }
   else
   {
     text =
-        tr("<p>A crash happened while RenderDoc was injected into your application. It's not "
-           "feasible to tell whether the crash was in your application or in RenderDoc's capturing "
-           "code. The minidump <a href=\"%1\">in the zip</a> might show the problem.</p>"
-           "<p>If you don't think your application crashed on its own please take a moment to "
-           "look over this form to check what has been gathered then send it off so that RenderDoc "
-           "can get better!</p>")
+        tr("<p>A crash happened while %1 was injected into your application. It's not feasible to "
+           "tell whether the crash was in your application or in %1's capturing code. The "
+           "minidump <a href=\"%2\">in the zip</a> might show the problem.</p>"
+           "<p>If you don't think your application crashed on its own please take a moment to look "
+           "over this form to check what has been gathered then send it off so that %1 can get "
+           "better!</p>")
+            .arg(lit(RDOC_BRAND_PRODUCT_NAME))
             .arg(QUrl::fromLocalFile(m_ReportPath).toString());
   }
 
@@ -169,9 +171,10 @@ CrashDialog::CrashDialog(PersistantConfig &cfg, QVariantMap crashReportJSON, QWi
   if(m_Config.CheckUpdate_UpdateAvailable)
   {
     text +=
-        tr("<p><b><a href=\"https://renderdoc.org/builds\">An updated version of RenderDoc</a> is "
-           "available</b>. This bug may be fixed in a newer version, it's advised that you "
-           "update to see if the bug is fixed.</p>");
+        tr("<p><b><a href=\"https://renderdoc.org/builds\">An updated version of %1</a> is "
+           "available</b>. This bug may be fixed in a newer version, it's advised that you update "
+           "to see if the bug is fixed.</p>")
+            .arg(lit(RDOC_BRAND_PRODUCT_NAME));
   }
 
   text += tr("<p>The contents of the report can be found <a href=\"%1\">in this zip</a> which "
@@ -192,10 +195,9 @@ CrashDialog::CrashDialog(PersistantConfig &cfg, QVariantMap crashReportJSON, QWi
     ui->rememberEmail->setEnabled(false);
     ui->email->setEnabled(false);
 
-    text = tr(
-        "<p>RenderDoc encountered a serious problem. "
-        "Unfortunately something went wrong while initialising the bug reporter as Qt was unable "
-        "to load SSL support at runtime.</p>");
+    text = tr("<p>%1 encountered a serious problem. Unfortunately something went wrong while "
+              "initialising the bug reporter as Qt was unable to load SSL support at runtime.</p>")
+               .arg(lit(RDOC_BRAND_PRODUCT_NAME));
 
     text +=
         tr("<p>Due to legal reasons only official builds can be distributed with the OpenSSL "
@@ -207,9 +209,11 @@ CrashDialog::CrashDialog(PersistantConfig &cfg, QVariantMap crashReportJSON, QWi
 #if defined(Q_OS_WIN32)
 #if QT_POINTER_SIZE == 8
     text +=
-        tr("you have libcrypto-1_1-64.dll and libssl-1_1-64.dll available next to qrenderdoc.exe.");
+        tr("you have libcrypto-1_1-64.dll and libssl-1_1-64.dll available next to %1.")
+            .arg(lit(RDOC_BRAND_UI_EXECUTABLE));
 #else
-    text += tr("you have libcrypto-1_1.dll and libssl-1_1.dll available next to qrenderdoc.exe.");
+    text += tr("you have libcrypto-1_1.dll and libssl-1_1.dll available next to %1.")
+                .arg(lit(RDOC_BRAND_UI_EXECUTABLE));
 #endif
 #else
     text += tr("you have the runtime libopenssl library >= 1.1.1 available in your system.");
@@ -218,7 +222,8 @@ CrashDialog::CrashDialog(PersistantConfig &cfg, QVariantMap crashReportJSON, QWi
 #else
 
 #if defined(Q_OS_WIN32)
-    text += tr("you have libeay32.dll and ssleay32.dll available next to qrenderdoc.exe.");
+    text += tr("you have libeay32.dll and ssleay32.dll available next to %1.")
+                .arg(lit(RDOC_BRAND_UI_EXECUTABLE));
 #else
     text += tr("you have the runtime libopenssl library >= 1.0.0 available in your system.");
 #endif
@@ -323,11 +328,11 @@ void CrashDialog::on_send_clicked()
   {
     QMessageBox::StandardButton result =
         RDDialog::question(this, tr("Are you sure?"),
-                           tr("Uploading your capture file will send it privately to the "
-                              "RenderDoc server where I can "
-                              "use it to reproduce your problem.\n\nAre you sure you are "
-                              "OK with sending the capture "
-                              "securely to RenderDoc's website?"));
+                           tr("Uploading your capture file will send it privately to the %1 "
+                              "server where I can use it to reproduce your problem.\n\nAre you "
+                              "sure you are OK with sending the capture securely to %1's "
+                              "website?")
+                               .arg(lit(RDOC_BRAND_PRODUCT_NAME)));
 
     if(result != QMessageBox::Yes)
     {

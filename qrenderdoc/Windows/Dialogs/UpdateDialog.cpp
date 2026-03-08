@@ -126,10 +126,11 @@ void UpdateDialog::on_close_clicked()
 void UpdateDialog::on_update_clicked()
 {
   QMessageBox::StandardButton res =
-      RDDialog::question(this, tr("RenderDoc Update"),
-                         tr("This will close RenderDoc immediately - if you have any "
+      RDDialog::question(this, tr("%1 Update").arg(lit(RDOC_BRAND_PRODUCT_NAME)),
+                         tr("This will close %1 immediately - if you have any "
                             "unsaved work, save it first!\n"
-                            "Continue?"),
+                            "Continue?")
+                             .arg(lit(RDOC_BRAND_PRODUCT_NAME)),
                          QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
   if(res == QMessageBox::Yes)
@@ -169,8 +170,9 @@ void UpdateDialog::on_update_clicked()
     if(running > 0)
     {
       RDDialog::critical(
-          this, tr("RenderDoc in use"),
-          tr("RenderDoc is currently capturing, cannot update until the program%1 closed:\n\n")
+          this, tr("%1 in use").arg(lit(RDOC_BRAND_PRODUCT_NAME)),
+          tr("%1 is currently capturing, cannot update until the program%2 closed:\n\n")
+                  .arg(lit(RDOC_BRAND_PRODUCT_NAME))
                   .arg(running > 1 ? lit("s are") : lit(" is")) +
               runningPrograms);
       return;

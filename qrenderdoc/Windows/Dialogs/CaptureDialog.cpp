@@ -354,10 +354,11 @@ void CaptureDialog::vulkanLayerWarn_mouseClick()
   {
     QString msg =
         tr("There is an unfixable problem with your vulkan layer configuration.\n\n"
-           "This is most commonly caused by having a distribution-provided package of RenderDoc "
-           "installed, which cannot be modified by another build of RenderDoc.\n\n"
-           "Please consult the RenderDoc documentation, or package/distribution documentation on "
-           "linux. ");
+           "This is most commonly caused by having a distribution-provided package of %1 "
+           "installed, which cannot be modified by another build of %1.\n\n"
+           "Please consult the %1 documentation, or package/distribution documentation on "
+           "linux. ")
+            .arg(lit(RDOC_BRAND_PRODUCT_NAME));
 
     if(info.otherJSONs.size() > 1)
       msg += tr("Conflicting manifests:\n\n");
@@ -372,18 +373,21 @@ void CaptureDialog::vulkanLayerWarn_mouseClick()
   }
 
   QString msg =
-      tr("Vulkan capture happens through the API's layer mechanism. RenderDoc has detected that ");
+      tr("Vulkan capture happens through the API's layer mechanism. %1 has detected that ")
+          .arg(lit(RDOC_BRAND_PRODUCT_NAME));
 
   if(hasOtherJSON)
   {
     if(info.otherJSONs.size() > 1)
       msg +=
-          tr("there are other conflicting RenderDoc builds registered already. They must be "
-             "disabled so that vulkan programs can be captured without crashes.");
+          tr("there are other conflicting %1 builds registered already. They must be disabled "
+             "so that vulkan programs can be captured without crashes.")
+              .arg(lit(RDOC_BRAND_PRODUCT_NAME));
     else
       msg +=
-          tr("there is another conflicting RenderDoc build registered already. It must be disabled "
-             "so that vulkan programs can be captured without crashes.");
+          tr("there is another conflicting %1 build registered already. It must be disabled so "
+             "that vulkan programs can be captured without crashes.")
+              .arg(lit(RDOC_BRAND_PRODUCT_NAME));
 
     if(!thisRegistered)
       msg += tr(" Also ");
@@ -426,8 +430,9 @@ void CaptureDialog::vulkanLayerWarn_mouseClick()
 
   if(needElevation)
     msg +=
-        tr("Due to some builds being in privileged locations, RenderDoc must elevate permissions "
-           "to update them.\n\n");
+        tr("Due to some builds being in privileged locations, %1 must elevate permissions to "
+           "update them.\n\n")
+            .arg(lit(RDOC_BRAND_PRODUCT_NAME));
 
   msg += tr("This is a one-off change, it won't be needed again unless the installation moves.");
 
@@ -448,12 +453,13 @@ void CaptureDialog::vulkanLayerWarn_mouseClick()
 
       if(needElevation)
         msg +=
-            tr("\n\nNote that RenderDoc needs to elevate permissions to update the registration "
-               "regardless.");
+            tr("\n\nNote that %1 needs to elevate permissions to update the registration "
+               "regardless.")
+                .arg(lit(RDOC_BRAND_PRODUCT_NAME));
       else
         msg +=
-            tr("\n\nNote that RenderDoc will need to elevate permissions to register at system "
-               "level.");
+            tr("\n\nNote that %1 will need to elevate permissions to register at system level.")
+                .arg(lit(RDOC_BRAND_PRODUCT_NAME));
 
       QMessageBox::StandardButton elevate =
           RDDialog::question(this, tr("Install at system level"), msg, RDDialog::YesNoCancel);
@@ -778,7 +784,8 @@ void CaptureDialog::on_toggleGlobal_clicked()
     {
       QMessageBox::StandardButton res = RDDialog::question(
           this, tr("Restart as admin?"),
-          tr("RenderDoc needs to restart with administrator privileges. Restart?"),
+          tr("%1 needs to restart with administrator privileges. Restart?")
+              .arg(lit(RDOC_BRAND_PRODUCT_NAME)),
           RDDialog::YesNoCancel);
 
       if(res == QMessageBox::Yes)

@@ -264,8 +264,9 @@ MainWindow::MainWindow(ICaptureContext &ctx) : QMainWindow(NULL), ui(new Ui::Mai
               NULL, tr("vkconfig detected - possible incompatibility"),
               tr("Configuration from 'vkconfig' tool detected.\n\n"
                  "This program has caused problems in the past and it is \n"
-                 "strongly recommended that you disable it while using RenderDoc.\n\n"
-                 "If this program is not active check the path below for any leftover files:\n\n%1")
+                 "strongly recommended that you disable it while using %1.\n\n"
+                 "If this program is not active check the path below for any leftover files:\n\n%2")
+                  .arg(lit(RDOC_BRAND_PRODUCT_NAME))
                   .arg(vkconfigcheck.absoluteFilePath()));
 
           qInfo() << "vkconfig detected and warned";
@@ -2100,8 +2101,9 @@ void MainWindow::setRemoteHost(int hostIdx)
           {
             RDDialog::critical(
                 this, tr("Unsupported Device"),
-                tr("This device is not able to support RenderDoc. Please consult the documentation "
-                   "for this type of device to see what the problem may be."));
+                tr("This device is not able to support %1. Please consult the documentation for "
+                   "this type of device to see what the problem may be.")
+                    .arg(lit(RDOC_BRAND_PRODUCT_NAME)));
           }
         });
       }
@@ -3091,7 +3093,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
   if(RENDERDOC_IsGlobalHookActive())
   {
     RDDialog::critical(this, tr("Global hook active"),
-                       tr("Cannot close RenderDoc while global hook is active."));
+                       tr("Cannot close %1 while global hook is active.")
+                           .arg(lit(RDOC_BRAND_PRODUCT_NAME)));
     event->ignore();
     return;
   }
@@ -3297,9 +3300,10 @@ void MainWindow::showLaunchError(ResultDetails result)
     case ResultCode::AndroidGrantPermissionsFailed:
       message =
           tr("%1.\n\n"
-             "Please manually allow the RenderDocCmd program storage permissions on your device "
-             "to ensure correct functionality.")
-              .arg(result.Message());
+             "Please manually allow the %2 program storage permissions on your device to ensure "
+             "correct functionality.")
+              .arg(result.Message())
+              .arg(lit(RDOC_BRAND_CMD_DISPLAY_NAME));
       break;
     case ResultCode::AndroidABINotFound:
       message = tr("%1.\n\nPlease check device connection and result.").arg(result.Message());
@@ -3321,11 +3325,15 @@ void MainWindow::showLaunchError(ResultDetails result)
           );
       break;
     default:
-      message = tr("Error encountered launching RenderDoc remote server: %1.").arg(result.Message());
+      message =
+          tr("Error encountered launching %1 remote server: %2.")
+              .arg(lit(RDOC_BRAND_PRODUCT_NAME))
+              .arg(result.Message());
       break;
   }
   GUIInvoke::call(this, [this, message]() {
-    RDDialog::warning(this, tr("Problems launching RenderDoc remote server"), message);
+    RDDialog::warning(this, tr("Problems launching %1 remote server").arg(lit(RDOC_BRAND_PRODUCT_NAME)),
+                      message);
   });
 }
 

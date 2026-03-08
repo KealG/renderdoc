@@ -23,6 +23,7 @@
  ******************************************************************************/
 
 #include "TipsDialog.h"
+#include "../../../renderdoc/common/brand_config.h"
 #include "Code/QRDUtils.h"
 #include "ui_TipsDialog.h"
 
@@ -55,6 +56,8 @@ TipsDialog::~TipsDialog()
 
 void TipsDialog::initialize()
 {
+  const QString productName = lit(RDOC_BRAND_PRODUCT_NAME);
+
   ///////////////////////////////////////////////////////////
   // This section of code is auto-generated. Modifications //
   // will be lost if made by hand.                         //
@@ -65,10 +68,11 @@ void TipsDialog::initialize()
 
   // Tip 1
   m_tips.push_back(Tip(tr("Talk to me!"),
-                       tr("RenderDoc is a labour of love and is actively developed. If you run "
+                       tr("%1 is a labour of love and is actively developed. If you run "
                           "into a bug, please file it on github and I will investigate it as best "
                           "as I can. If you have a feature request for functionality or "
-                          "improvements please file it as well so that it can be considered.")));
+                          "improvements please file it as well so that it can be considered.")
+                           .arg(productName)));
 
   // Tip 2
   m_tips.push_back(Tip(tr("Quick channel toggling"),
@@ -128,36 +132,40 @@ void TipsDialog::initialize()
   // Tip 10
   m_tips.push_back(
       Tip(tr("Shader debug information"),
-          tr("You'll get the best results in RenderDoc by stripping as little debug information as "
+          tr("You'll get the best results in %1 by stripping as little debug information as "
              "possible from shaders. Reflection data is used all over the place to produce a nicer "
              "debugging experience.\n\nIf you do strip debug or reflection information, you can "
-             "store it separately to be loaded later. More information is in the documentation.")));
+             "store it separately to be loaded later. More information is in the documentation.")
+              .arg(productName)));
 
   // Tip 11
   m_tips.push_back(
       Tip(tr("Shader editing & Replacement"),
-          tr("RenderDoc has the ability to edit and replace shaders and see the results live in "
+          tr("%1 has the ability to edit and replace shaders and see the results live in "
              "the replay. On the pipeline state view, click the edit icon next to the shader. If "
              "source is available, it will be compiled, otherwise an empty stub with resources "
              "will be generated.\n\nThe shader will be replaced everywhere it is used in the "
-             "frame, the original will be restored when the edit window is closed.\n")));
+             "frame, the original will be restored when the edit window is closed.\n")
+              .arg(productName)));
 
   // Tip 12
   m_tips.push_back(
       Tip(tr("Linear/Gamma display of textures"),
-          tr("RenderDoc interprets all textures in gamma space - even if the data is linear such "
+          tr("%1 interprets all textures in gamma space - even if the data is linear such "
              "as a normal map. This is by convention, since typically external image viewers will "
              "display a normal map as gamma data. This can be overridden by toggling the gamma "
-             "button in the texture viewer.\n")));
+             "button in the texture viewer.\n")
+              .arg(productName)));
 
   // Tip 13
   m_tips.push_back(
       Tip(tr("Seeing texture usage in a capture"),
-          tr("RenderDoc has a list of how each texture is bound and used - whether as a shader "
+          tr("%1 has a list of how each texture is bound and used - whether as a shader "
              "resource, an output target, or a copy source. When the texture is active in the "
              "texture viewer this usage will be displayed on the timeline bar at the top.\n\nYou "
              "can also right click on the thumbnails in the texture viewer to see a list of this "
-             "usage, and clicking any entry will jump to that event.\n")));
+             "usage, and clicking any entry will jump to that event.\n")
+              .arg(productName)));
 
   // Tip 14
   m_tips.push_back(
@@ -176,20 +184,22 @@ void TipsDialog::initialize()
 
   // Tip 16
   m_tips.push_back(Tip(tr("Python scripting"),
-                       tr("RenderDoc supports some amount of Python scripting. Open up the Python "
+                       tr("%1 supports some amount of Python scripting. Open up the Python "
                           "shell in the UI to either use it interactively or load and execute "
                           "python scripts.\n\nThe 'renderdoc' object is an instance of the "
-                          "'CaptureContext' class - see the documentation for more information.")));
+                          "'CaptureContext' class - see the documentation for more information.")
+                           .arg(productName)));
 
   // Tip 17
   m_tips.push_back(Tip(
       tr("Pixel history view"),
-      tr("RenderDoc supports a pixel history view, showing the list of all modification events "
+      tr("%1 supports a pixel history view, showing the list of all modification events "
          "that happened to a specified pixel. To launch it, simply pick the pixel you would like "
          "to view the history of in the texture viewer, and click the 'history' button underneath "
          "the zoomed-in pixel context.\n\nEach event will show up red or green depending on "
          "whether it affected or didn't affect the pixel. By expanding the event, you can see the "
-         "possibly several primitives within the draw that overdrew the pixel.\n")));
+         "possibly several primitives within the draw that overdrew the pixel.\n")
+          .arg(productName)));
 
   // Tip 18
   m_tips.push_back(
@@ -210,11 +220,12 @@ void TipsDialog::initialize()
   // Tip 20
   m_tips.push_back(
       Tip(tr("Gathering of per-event callstacks"),
-          tr("RenderDoc is able to gather callstacks either per-drawcall or per-API event. You can "
+          tr("%1 is able to gather callstacks either per-drawcall or per-API event. You can "
              "do this by enabling the option before launching an application capture.\n\nWhen "
              "loading the log, initially the callstacks will not be available until symbols are "
              "resolved. Go to tools -> resolve symbols to load up the pdbs matching the modules "
-             "from the application.\n")));
+             "from the application.\n")
+              .arg(productName)));
 
   // Tip 21
   m_tips.push_back(Tip(
@@ -226,28 +237,31 @@ void TipsDialog::initialize()
   // Tip 22
   m_tips.push_back(
       Tip(tr("Custom texture display shaders"),
-          tr("RenderDoc supports writing custom shaders to decode the viewed texture, which can be "
+          tr("%1 supports writing custom shaders to decode the viewed texture, which can be "
              "useful to e.g. colourise stencil values or decode a packed gbuffer texture.\n\nIn "
              "the toolbar in the texture viewer, select custom instead of RGBA on the left side, "
              "and use the UI to create a new shader. The docs contain full listings of available "
-             "constants and resources to bind.\n")));
+             "constants and resources to bind.\n")
+              .arg(productName)));
 
   // Tip 23
   m_tips.push_back(
       Tip(tr("Texture histogram"),
-          tr("RenderDoc can display a channel histogram showing the distribution of values within "
+          tr("%1 can display a channel histogram showing the distribution of values within "
              "the visible range. Simply click the graph button on the texture viewer to the right "
-             "of the range control, and it will expand to show the histogram.\n")));
+             "of the range control, and it will expand to show the histogram.\n")
+              .arg(productName)));
 
   // Tip 24
   m_tips.push_back(
       Tip(tr("Attaching to a running instance"),
-          tr("Once you have launched your program from RenderDoc, even if you close the UI you can "
+          tr("Once you have launched your program from %1, even if you close the UI you can "
              "re-connect to it once it is running via File -> Attach to Running Instance, and "
              "everything works as if you had launched it.\n\nYou can even do this across a "
              "network, by adding a remote IP or hostname. You will connect over the network and "
              "can remotely trigger captures - any files will be copied back across the network, to "
-             "be saved and replayed locally as normal.\n")));
+             "be saved and replayed locally as normal.\n")
+              .arg(productName)));
 
   // Tip 25
   m_tips.push_back(
@@ -256,8 +270,9 @@ void TipsDialog::initialize()
              "can let you quickly jump back and forth through the log between important "
              "points.\n\nWhen you have some bookmarks, shortcut buttons will appear in a small bar "
              "at the top of the browser, and the shortcut keys Ctrl-1 through Ctrl-0 jump to the "
-             "first 10 bookmarks - these shortcuts are global regardless of which RenderDoc window "
-             "is currently in focus.\n")));
+             "first 10 bookmarks - these shortcuts are global regardless of which %1 window "
+             "is currently in focus.\n")
+              .arg(productName)));
 
   // Tip 26
   m_tips.push_back(
