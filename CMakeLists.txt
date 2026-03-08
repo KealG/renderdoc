@@ -118,6 +118,8 @@ endif()
 set(RDOC_CORE_OUTPUT_NAME "${RDOC_BASE_NAME}")
 set(RDOC_GUI_TARGET_NAME "qrenderdoc")
 set(RDOC_CMD_OUTPUT_NAME "renderdoccmd")
+set(RDOC_PY_CORE_MODULE_NAME "renderdoc")
+set(RDOC_PY_GUI_MODULE_NAME "qrenderdoc")
 set(RDOC_ANDROID_OUTPUT_NAME "VkLayer_GLES_RenderDoc")
 
 if(INTERNAL_SELF_CAPTURE)

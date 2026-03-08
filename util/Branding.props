@@ -4,6 +4,8 @@
     <RDOCBaseName>renderdoc</RDOCBaseName>
     <RDOCCoreTargetName>$(RDOCBaseName)</RDOCCoreTargetName>
     <RDOCCmdTargetName>renderdoccmd</RDOCCmdTargetName>
+    <RDOCPyCoreModuleTargetName>renderdoc</RDOCPyCoreModuleTargetName>
+    <RDOCPyGuiModuleTargetName>qrenderdoc</RDOCPyGuiModuleTargetName>
     <RDOCGuiTargetName>qrenderdoc</RDOCGuiTargetName>
     <RDOCGuiStubTargetName>renderdocui</RDOCGuiStubTargetName>
     <RDOCShimBaseTargetName>renderdocshim</RDOCShimBaseTargetName>
