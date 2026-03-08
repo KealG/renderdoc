@@ -23,6 +23,7 @@
  ******************************************************************************/
 
 #include "MainWindow.h"
+#include "../../renderdoc/common/brand_config.h"
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QFileInfo>
@@ -718,9 +719,12 @@ void MainWindow::OnCaptureTrigger(const QString &exe, const QString &workingDir,
   LambdaThread *th = new LambdaThread([this, exe, workingDir, cmdLine, env, opts, callback]() {
     if(isUnshareableDeviceInUse())
     {
-      RDDialog::warning(this, tr("RenderDoc is already capturing an app on this device"),
-                        tr("A running app on this device is already being captured with RenderDoc. "
-                           "First please close the app then try to launch again."),
+      RDDialog::warning(this,
+                        tr("%1 is already capturing an app on this device")
+                            .arg(lit(RDOC_BRAND_PRODUCT_NAME)),
+                        tr("A running app on this device is already being captured with %1. "
+                           "First please close the app then try to launch again.")
+                            .arg(lit(RDOC_BRAND_PRODUCT_NAME)),
                         QMessageBox::Ok);
       return;
     }
@@ -1212,7 +1216,7 @@ void MainWindow::SetTitle(const QString &filename)
   if(m_Ctx.Replay().CurrentRemote().IsValid())
     prefix += tr("Remote: %1 - ").arg(m_Ctx.Replay().CurrentRemote().Name());
 
-  QString text = prefix + lit("RenderDoc ");
+  QString text = prefix + lit(RDOC_BRAND_PRODUCT_NAME " ");
 
   if(RENDERDOC_STABLE_BUILD)
     text += lit(FULL_VERSION_STRING);
@@ -1252,13 +1256,14 @@ bool MainWindow::HandleMismatchedVersions()
 #else
     QMessageBox::StandardButton res = RDDialog::critical(
         this, tr("Mismatched versions"),
-        tr("RenderDoc has detected mismatched versions between its internal module and UI.\n"
+        tr("%1 has detected mismatched versions between its internal module and UI.\n"
            "This is likely caused by a buggy update in the past which partially updated your "
            "install."
            "Likely because a program was running with renderdoc while the update happened.\n"
-           "You should reinstall RenderDoc immediately as this configuration is almost guaranteed "
+           "You should reinstall %1 immediately as this configuration is almost guaranteed "
            "to crash.\n\n"
-           "Would you like to open the downloads page to reinstall?"),
+           "Would you like to open the downloads page to reinstall?")
+            .arg(lit(RDOC_BRAND_PRODUCT_NAME)),
         QMessageBox::Yes | QMessageBox::No);
 
     if(res == QMessageBox::Yes)
@@ -2084,8 +2089,9 @@ void MainWindow::setRemoteHost(int hostIdx)
               RDDialog::critical(
                   this, tr("Unsupported Device Android Version"),
                   tr("This device is older than Android 6.0, the minimum required version for "
-                     "RenderDoc.\n\nThis may break or cause unknown problems - use at your own "
-                     "risk."));
+                     "%1.\n\nThis may break or cause unknown problems - use at your own "
+                     "risk.")
+                      .arg(lit(RDOC_BRAND_PRODUCT_NAME)));
             }
 
             m_Ctx.Config().UnsupportedAndroid_LastUpdate = today;
