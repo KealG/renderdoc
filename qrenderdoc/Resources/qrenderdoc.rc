@@ -1,6 +1,7 @@
 // Microsoft Visual C++ generated resource script.
 //
 #include "version.h"
+#include "../../renderdoc/common/brand_config.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -84,12 +85,12 @@ BEGIN
         BLOCK "080904b0"
         BEGIN
             VALUE "CompanyName", "Baldur Karlsson"
-            VALUE "FileDescription", "RenderDoc"
+            VALUE "FileDescription", RDOC_BRAND_PRODUCT_NAME
             VALUE "FileVersion", MAJOR_MINOR_VERSION_STRING ".0.0"
-            VALUE "InternalName", "qrenderdoc"
+            VALUE "InternalName", RDOC_BRAND_UI_INTERNAL_NAME
             VALUE "LegalCopyright", "Copyright © 2026 Baldur Karlsson"
-            VALUE "OriginalFilename", "qrenderdoc.exe"
-            VALUE "ProductName", "RenderDoc"
+            VALUE "OriginalFilename", RDOC_BRAND_UI_EXECUTABLE
+            VALUE "ProductName", RDOC_BRAND_PRODUCT_NAME
             VALUE "ProductVersion", FULL_VERSION_STRING
         END
     END

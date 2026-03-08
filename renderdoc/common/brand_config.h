@@ -12,11 +12,14 @@
 
 #define RDOC_BRAND_UI_NAME "qrenderdoc"
 #define RDOC_BRAND_UI_EXECUTABLE "qrenderdoc.exe"
+#define RDOC_BRAND_UI_INTERNAL_NAME RDOC_BRAND_UI_NAME
 
 #define RDOC_BRAND_CMD_NAME "renderdoccmd"
 #define RDOC_BRAND_CMD_EXECUTABLE "renderdoccmd.exe"
+#define RDOC_BRAND_CMD_INTERNAL_NAME RDOC_BRAND_CMD_EXECUTABLE
 
 #define RDOC_BRAND_CORE_DLL_NAME "renderdoc.dll"
+#define RDOC_BRAND_CORE_INTERNAL_NAME RDOC_BRAND_BASE_NAME
 
 #define RDOC_BRAND_SHIM_NAME "renderdocshim"
 #define RDOC_BRAND_SHIM_DLL_64 "renderdocshim64.dll"
