@@ -36,6 +36,7 @@
 #include <sys/types.h>
 #include <time.h>
 #include <unistd.h>
+#include "common/brand_config.h"
 #include "api/app/renderdoc_app.h"
 #include "api/replay/data_types.h"
 #include "common/formatting.h"
@@ -230,9 +231,9 @@ void GetDefaultFiles(const rdcstr &logBaseName, rdcstr &capture_filename, rdcstr
       temp_folder[--len] = 0;
   }
 
-  capture_filename =
-      StringFormat::Fmt("%s/RenderDoc/%s_%04d.%02d.%02d_%02d.%02d.rdc", temp_folder, mod,
-                        1900 + now.tm_year, now.tm_mon + 1, now.tm_mday, now.tm_hour, now.tm_min);
+  capture_filename = StringFormat::Fmt(
+      "%s/" RDOC_BRAND_TEMP_SUBFOLDER "/%s_%04d.%02d.%02d_%02d.%02d" RDOC_BRAND_CAPTURE_EXTENSION,
+      temp_folder, mod, 1900 + now.tm_year, now.tm_mon + 1, now.tm_mday, now.tm_hour, now.tm_min);
 
   // set by UI when launching programs so all logging goes to the same file
   rdcstr logfile_override = Process::GetEnvVariable("RENDERDOC_DEBUG_LOG_FILE");
@@ -240,8 +241,9 @@ void GetDefaultFiles(const rdcstr &logBaseName, rdcstr &capture_filename, rdcstr
     logging_filename = logfile_override;
   else
     logging_filename = StringFormat::Fmt(
-        "%s/RenderDoc/%s_%04d.%02d.%02d_%02d.%02d.%02d.log", temp_folder, logBaseName.c_str(),
-        1900 + now.tm_year, now.tm_mon + 1, now.tm_mday, now.tm_hour, now.tm_min, now.tm_sec);
+        "%s/" RDOC_BRAND_TEMP_SUBFOLDER "/%s_%04d.%02d.%02d_%02d.%02d.%02d.log", temp_folder,
+        logBaseName.c_str(), 1900 + now.tm_year, now.tm_mon + 1, now.tm_mday, now.tm_hour,
+        now.tm_min, now.tm_sec);
 }
 
 uint64_t GetModifiedTimestamp(const rdcstr &filename)

@@ -1,0 +1,48 @@
+#pragma once
+
+#define RDOC_STRINGIZE2(a) #a
+#define RDOC_STRINGIZE(a) RDOC_STRINGIZE2(a)
+
+#define RDOC_WIDEN2(a) L##a
+#define RDOC_WIDEN(a) RDOC_WIDEN2(a)
+
+#define RDOC_BRAND_PRODUCT_NAME "RenderDoc"
+#define RDOC_BRAND_BASE_NAME "renderdoc"
+#define RDOC_BRAND_BASE_NAME_UPPER "RENDERDOC"
+
+#define RDOC_BRAND_UI_NAME "qrenderdoc"
+#define RDOC_BRAND_UI_EXECUTABLE "qrenderdoc.exe"
+
+#define RDOC_BRAND_CMD_NAME "renderdoccmd"
+#define RDOC_BRAND_CMD_EXECUTABLE "renderdoccmd.exe"
+
+#define RDOC_BRAND_CORE_DLL_NAME "renderdoc.dll"
+
+#define RDOC_BRAND_SHIM_NAME "renderdocshim"
+#define RDOC_BRAND_SHIM_DLL_64 "renderdocshim64.dll"
+#define RDOC_BRAND_SHIM_DLL_32 "renderdocshim32.dll"
+
+#define RDOC_BRAND_GLOBAL_HOOK_DATA_NAME_64 "RenderDocGlobalHookData64"
+#define RDOC_BRAND_GLOBAL_HOOK_DATA_NAME_32 "RenderDocGlobalHookData32"
+
+#define RDOC_BRAND_TEMP_SUBFOLDER "RenderDoc"
+#define RDOC_BRAND_APPDATA_SUBFOLDER "renderdoc"
+#define RDOC_BRAND_CAPTURE_PROGID "RenderDoc.RDCCapture.1"
+
+#define RDOC_BRAND_CAPTURE_EXTENSION ".rdc"
+#define RDOC_BRAND_CAPTURE_FILETYPE "rdc"
+#define RDOC_BRAND_SETTINGS_EXTENSION ".cap"
+
+#define RDOC_BRAND_CRASH_EVENT_NAME "RENDERDOC_CRASHHANDLE"
+#define RDOC_BRAND_BREAKPAD_PIPE_PREFIX "RenderDocBreakpadServer"
+
+#define RDOC_BRAND_UPDATE_TEMPDIR "RenderDocUpdate"
+
+#define RDOC_BRAND_VULKAN_LAYER_NAME "VK_LAYER_RENDERDOC_Capture"
+#define RDOC_BRAND_VULKAN_CAPTURE_VAR "ENABLE_VULKAN_RENDERDOC_CAPTURE"
+
+#define RDOC_BRAND_ANDROID_LIBRARY "libVkLayer_GLES_RenderDoc.so"
+#define RDOC_BRAND_ANDROID_PACKAGE_BASE "org.renderdoc.renderdoccmd"
+
+#define RDOC_BRAND_BUGREPORT_URL "https://renderdoc.org/bugreporter"
+#define RDOC_BRAND_ANALYTICS_URL "https://renderdoc.org/analytics"

@@ -24,6 +24,7 @@
  ******************************************************************************/
 
 #include "renderdoccmd.h"
+#include "../renderdoc/common/brand_config.h"
 #include <app/renderdoc_app.h>
 #include <renderdocshim.h>
 #include <windows.h>
@@ -434,7 +435,7 @@ public:
     // run original UI exe (as admin still) and tell it an update succeeded so that it can do any last updates
     std::wstring cmdline = L"\"";
     cmdline += wide_path;
-    cmdline += L"/qrenderdoc.exe\" ";
+    cmdline += L"/" RDOC_WIDEN(RDOC_BRAND_UI_EXECUTABLE) L"\" ";
     if(successful)
       cmdline += L"--updatedone_admin";
     else
@@ -509,7 +510,7 @@ public:
           show.vt = VT_I4;
           show.lVal = SW_SHOWNORMAL;
 
-          std::wstring qrenderdoc = wide_path + L"/qrenderdoc.exe";
+          std::wstring qrenderdoc = wide_path + L"/" RDOC_WIDEN(RDOC_BRAND_UI_EXECUTABLE);
 
           BSTR path = SysAllocStringLen(qrenderdoc.c_str(), (UINT)qrenderdoc.size());
           memcpy(path, qrenderdoc.c_str(), qrenderdoc.size());
@@ -533,7 +534,7 @@ public:
 
     cmdline = L"\"";
     cmdline += wide_path;
-    cmdline += L"/qrenderdoc.exe\" --updatedone";
+    cmdline += L"/" RDOC_WIDEN(RDOC_BRAND_UI_EXECUTABLE) L"\" --updatedone";
     ZeroMemory(paramsAlloc, sizeof(wchar_t) * 512);
     wcscpy_s(paramsAlloc, 511, cmdline.c_str());
 
@@ -583,7 +584,7 @@ public:
 
     // create each parent directory separately, and use \\s
 
-    dumpFolder += L"RenderDoc";
+    dumpFolder += RDOC_WIDEN(RDOC_BRAND_TEMP_SUBFOLDER);
     CreateDirectoryW(dumpFolder.c_str(), NULL);
 
     dumpFolder += L"\\dumps";
@@ -600,7 +601,7 @@ public:
       return 1;
     }
 
-    HANDLE readyEvent = CreateEventA(NULL, TRUE, FALSE, "RENDERDOC_CRASHHANDLE");
+    HANDLE readyEvent = CreateEventA(NULL, TRUE, FALSE, RDOC_BRAND_CRASH_EVENT_NAME);
 
     if(readyEvent != NULL)
     {
@@ -729,8 +730,9 @@ public:
 
           ZeroMemory(paramsAlloc, sizeof(wchar_t) * 512);
 
-          _snwprintf_s(paramsAlloc, 511, 511, L"%s/qrenderdoc.exe --crash %s", exepath.c_str(),
-                       destjson.c_str());
+          _snwprintf_s(paramsAlloc, 511, 511,
+                       L"%s/" RDOC_WIDEN(RDOC_BRAND_UI_EXECUTABLE) L" --crash %s",
+                       exepath.c_str(), destjson.c_str());
 
           PROCESS_INFORMATION pi;
           STARTUPINFOW si;
@@ -814,12 +816,13 @@ public:
 
     wchar_t rdocpath[1024];
 
-    // fetch path to our matching renderdoc.dll
-    HMODULE rdoc = GetModuleHandleA("renderdoc.dll");
+    // fetch path to our matching core dll
+    HMODULE rdoc = GetModuleHandleA(RDOC_BRAND_CORE_DLL_NAME);
 
     if(rdoc == NULL)
     {
-      std::cerr << "globalhook couldn't find renderdoc.dll!" << std::endl;
+      std::cerr << "globalhook couldn't find " << RDOC_BRAND_CORE_DLL_NAME << "!"
+                << std::endl;
       return 1;
     }
 

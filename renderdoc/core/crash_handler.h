@@ -28,6 +28,8 @@
 
 #define RDOC_CRASH_HANDLER OPTION_ON
 
+#include "common/brand_config.h"
+
 // breakpad
 #include "breakpad/client/windows/common/ipc_protocol.h"
 #include "breakpad/client/windows/handler/exception_handler.h"
@@ -59,7 +61,8 @@ public:
 
     ///////////////////
 
-    rdcstr dumpFolder = FileIO::GetTempFolderFilename() + "RenderDoc\\dumps\\a";
+    rdcstr dumpFolder =
+        FileIO::GetTempFolderFilename() + RDOC_BRAND_TEMP_SUBFOLDER "\\dumps\\a";
     FileIO::CreateParentDirectory(dumpFolder);
     dumpFolder.pop_back();
     dumpFolder.pop_back();
@@ -128,14 +131,14 @@ public:
     si.dwFlags |= STARTF_USESHOWWINDOW;
     si.wShowWindow = SW_HIDE;
 
-    HANDLE waitEvent = CreateEventA(NULL, TRUE, FALSE, "RENDERDOC_CRASHHANDLE");
+    HANDLE waitEvent = CreateEventA(NULL, TRUE, FALSE, RDOC_BRAND_CRASH_EVENT_NAME);
 
     rdcstr dllpath;
     FileIO::GetLibraryFilename(dllpath);
 
     rdcstr cmdline = "\"";
     cmdline += get_dirname(dllpath);
-    cmdline += "/renderdoccmd.exe\" crashhandle --pipe ";
+    cmdline += "/" RDOC_BRAND_CMD_EXECUTABLE "\" crashhandle --pipe ";
     cmdline += m_PipeName;
 
     rdcwstr params = StringFormat::UTF82Wide(cmdline);
@@ -165,7 +168,8 @@ private:
 
   rdcstr NewPipeName()
   {
-    return StringFormat::Fmt("\\\\.\\pipe\\RenderDocBreakpadServer%llu", Timing::GetTick());
+    return StringFormat::Fmt("\\\\.\\pipe\\" RDOC_BRAND_BREAKPAD_PIPE_PREFIX "%llu",
+                             Timing::GetTick());
   }
 };
 

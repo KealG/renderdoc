@@ -22,6 +22,8 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
+#include "../renderdoc/common/brand_config.h"
+
 struct ShimData
 {
   wchar_t pathmatchstring[2048];
@@ -33,9 +35,9 @@ struct ShimData
 };
 
 #ifdef WIN64
-#define GLOBAL_HOOK_DATA_NAME "RenderDocGlobalHookData64"
-#define SHIM_DLL_NAME "renderdocshim64.dll"
+#define GLOBAL_HOOK_DATA_NAME RDOC_BRAND_GLOBAL_HOOK_DATA_NAME_64
+#define SHIM_DLL_NAME RDOC_BRAND_SHIM_DLL_64
 #else
-#define GLOBAL_HOOK_DATA_NAME "RenderDocGlobalHookData32"
-#define SHIM_DLL_NAME "renderdocshim32.dll"
+#define GLOBAL_HOOK_DATA_NAME RDOC_BRAND_GLOBAL_HOOK_DATA_NAME_32
+#define SHIM_DLL_NAME RDOC_BRAND_SHIM_DLL_32
 #endif

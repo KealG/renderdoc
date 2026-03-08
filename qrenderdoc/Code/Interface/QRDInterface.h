@@ -83,6 +83,7 @@ class QMenu;
 #endif
 
 // we depend on the internal RenderDoc API, but the bindings for that are imported entirely
+#include "../../../renderdoc/common/brand_config.h"
 #include "renderdoc_replay.h"
 
 typedef rdcpair<rdcstr, rdcstr> rdcstrpair;

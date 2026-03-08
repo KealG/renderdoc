@@ -30,6 +30,7 @@
 #include <QTextEdit>
 #include <QUrlQuery>
 #include <QVBoxLayout>
+#include "../../../renderdoc/common/brand_config.h"
 #include "Code/QRDUtils.h"
 #include "Windows/Dialogs/AnalyticsConfirmDialog.h"
 #include "Windows/Dialogs/AnalyticsPromptDialog.h"
@@ -595,7 +596,7 @@ void Analytics::Prompt(ICaptureContext &ctx, PersistantConfig &config)
 
       postData.addQueryItem(lit("report"), jsonReport);
 
-      QNetworkRequest request(QUrl(lit("https://renderdoc.org/analytics")));
+      QNetworkRequest request(QUrl(lit(RDOC_BRAND_ANALYTICS_URL)));
 
       request.setHeader(QNetworkRequest::ContentTypeHeader,
                         lit("application/x-www-form-urlencoded"));

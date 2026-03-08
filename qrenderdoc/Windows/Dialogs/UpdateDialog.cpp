@@ -32,6 +32,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QString>
+#include "../../../renderdoc/common/brand_config.h"
 #include "Code/QRDUtils.h"
 #include "ui_UpdateDialog.h"
 #include "version.h"
@@ -229,8 +230,8 @@ void UpdateDialog::on_update_clicked()
 
       QDir dir(QDir::tempPath());
 
-      dir.mkdir(lit("RenderDocUpdate"));
-      dir.cd(lit("RenderDocUpdate"));
+      dir.mkdir(lit(RDOC_BRAND_UPDATE_TEMPDIR));
+      dir.cd(lit(RDOC_BRAND_UPDATE_TEMPDIR));
 
       QString path = dir.absoluteFilePath(lit("update.zip"));
 
@@ -255,8 +256,8 @@ void UpdateDialog::on_update_clicked()
 
       bool success = true;
 
-      QString dll = lit("renderdoc.dll");
-      QString cmd = lit("renderdoccmd.exe");
+      QString dll = lit(RDOC_BRAND_CORE_DLL_NAME);
+      QString cmd = lit(RDOC_BRAND_CMD_EXECUTABLE);
 
       QFile::remove(dir.absoluteFilePath(dll));
       QFile::remove(dir.absoluteFilePath(cmd));
