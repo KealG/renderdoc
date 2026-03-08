@@ -27,6 +27,7 @@
   </PropertyGroup>
   <Import Project="$(SolutionDir)\util\WindowsSDKTarget.props" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <Import Project="$(SolutionDir)\util\Branding.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Development|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
@@ -70,6 +71,9 @@
   </ImportGroup>
   <Import Project="$(SolutionDir)\util\WindowsSDKFix.props" />
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <TargetName>$(RDOCCmdTargetName)</TargetName>
+  </PropertyGroup>
   <PropertyGroup>
     <IntDir>$(SolutionDir)$(Platform)\$(Configuration)\obj\$(ProjectName)\</IntDir>
   </PropertyGroup>
