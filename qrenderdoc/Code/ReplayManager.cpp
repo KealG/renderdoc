@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QMutexLocker>
 #include <QProgressDialog>
+#include "../../renderdoc/common/brand_config.h"
 #include "CaptureContext.h"
 #include "QRDUtils.h"
 
@@ -466,7 +467,7 @@ void ReplayManager::run(int proxyRenderer, const QString &capturefile, const Rep
     return;
   }
 
-  qInfo() << "QRenderDoc - renderer created for" << capturefile;
+  qInfo() << RDOC_BRAND_UI_DISPLAY_NAME " - renderer created for" << capturefile;
 
   m_Running = true;
 

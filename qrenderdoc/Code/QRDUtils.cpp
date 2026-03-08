@@ -194,7 +194,7 @@ QString ApplyBrandingToUIString(const QString &text)
   QString branded = text;
 
   branded.replace(lit("RenderDocCmd"), lit("$$_RDOC_CMD_$$"));
-  branded.replace(lit("QRenderDoc"), lit(RDOC_BRAND_PRODUCT_NAME));
+  branded.replace(lit("QRenderDoc"), lit(RDOC_BRAND_UI_DISPLAY_NAME));
   branded.replace(lit("RenderDoc"), lit(RDOC_BRAND_PRODUCT_NAME));
   branded.replace(lit("qrenderdoc.exe"), lit(RDOC_BRAND_UI_EXECUTABLE));
   branded.replace(lit("$$_RDOC_CMD_$$"), lit(RDOC_BRAND_CMD_DISPLAY_NAME));

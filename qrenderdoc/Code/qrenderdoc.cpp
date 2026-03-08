@@ -31,6 +31,7 @@
 #include <QRegularExpressionMatch>
 #include <QStandardPaths>
 #include <QSysInfo>
+#include "../../renderdoc/common/brand_config.h"
 #include "Code/CaptureContext.h"
 #include "Code/QRDUtils.h"
 #include "Code/Resources.h"
@@ -193,7 +194,7 @@ int main(int argc, char *argv[])
   // an optimisation
   qputenv("QT_NO_SUBTRACTOPAQUESIBLINGS", lit("1").toUtf8());
 
-  qInfo() << "QRenderDoc initialising.";
+  qInfo() << RDOC_BRAND_UI_DISPLAY_NAME " initialising.";
 
   if(IsRunningAsAdmin())
     qInfo() << "Running as administrator";
@@ -262,7 +263,7 @@ int main(int argc, char *argv[])
 
       Catch::Session session;
 
-      session.configData().name = "QRenderDoc";
+      session.configData().name = RDOC_BRAND_UI_DISPLAY_NAME;
       session.configData().shouldDebugBreak = Catch::isDebuggerActive();
 
       ret = session.applyCommandLine(argc, mod_argv);
@@ -325,7 +326,7 @@ int main(int argc, char *argv[])
   QApplication application(argc, argv);
 
   QCommandLineParser parser;
-  parser.setApplicationDescription(tr("Qt UI for RenderDoc"));
+  parser.setApplicationDescription(tr("Qt UI for %1").arg(lit(RDOC_BRAND_PRODUCT_NAME)));
   QCommandLineOption helpOption = parser.addHelpOption();
   QCommandLineOption versionOption = parser.addVersionOption();
 
@@ -388,7 +389,8 @@ int main(int argc, char *argv[])
 
   if(parser.isSet(versionOption))
   {
-    printf("QRenderDoc v%s (%s)\n", MAJOR_MINOR_VERSION_STRING, RENDERDOC_GetCommitHash());
+    printf(RDOC_BRAND_UI_DISPLAY_NAME " v%s (%s)\n", MAJOR_MINOR_VERSION_STRING,
+           RENDERDOC_GetCommitHash());
 #if defined(DISTRIBUTION_VERSION)
     printf("Packaged for %s - %s\n", DISTRIBUTION_NAME, DISTRIBUTION_CONTACT);
 #endif
