@@ -13,6 +13,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+import importlib
 import sys
 import os
 import re
@@ -24,6 +25,10 @@ import datetime
 #sys.path.insert(0, os.path.abspath('.'))
 
 import struct
+
+sys.path.insert(0, os.path.abspath('../util'))
+
+import rdoc_brand as brand
 
 # path to module libraries for windows
 if struct.calcsize("P") == 8:
@@ -73,13 +78,56 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-doc_project = os.environ.get('RDOC_DOC_PROJECT_NAME', 'RenderDoc')
-doc_author = os.environ.get('RDOC_DOC_AUTHOR', 'Baldur Karlsson')
-doc_title = os.environ.get('RDOC_DOC_TITLE', 'RenderDoc Documentation')
-doc_html_title = os.environ.get('RDOC_DOC_HTML_TITLE', 'RenderDoc documentation')
-doc_basename = os.environ.get('RDOC_DOC_BASENAME', 'renderdoc')
-doc_collection_name = os.environ.get('RDOC_DOC_COLLECTION_NAME', 'RenderDoc')
-doc_latex_name = os.environ.get('RDOC_DOC_LATEX_NAME', 'RenderDoc.tex')
+doc_project = os.environ.get('RDOC_DOC_PROJECT_NAME', brand.PRODUCT_NAME)
+doc_author = os.environ.get('RDOC_DOC_AUTHOR', brand.MANUFACTURER_NAME)
+doc_title = os.environ.get('RDOC_DOC_TITLE', brand.PRODUCT_NAME + ' Documentation')
+doc_html_title = os.environ.get('RDOC_DOC_HTML_TITLE', brand.PRODUCT_NAME + ' documentation')
+doc_basename = os.environ.get('RDOC_DOC_BASENAME', brand.BASE_NAME)
+doc_collection_name = os.environ.get('RDOC_DOC_COLLECTION_NAME', brand.PRODUCT_NAME)
+doc_latex_name = os.environ.get('RDOC_DOC_LATEX_NAME', brand.PRODUCT_NAME + '.tex')
+
+rst_epilog = f"""
+.. |brand_product_name| replace:: {brand.PRODUCT_NAME}
+.. |brand_core_dll| replace:: {brand.CORE_DLL_NAME}
+.. |brand_linux_core_library| replace:: {brand.LINUX_CORE_LIBRARY}
+.. |brand_apple_core_library| replace:: {brand.APPLE_CORE_LIBRARY}
+.. |brand_android_capture_library| replace:: {brand.ANDROID_CAPTURE_LIBRARY}
+.. |brand_cmd_name| replace:: {brand.CMD_NAME}
+.. |brand_ui_name| replace:: {brand.UI_NAME}
+.. |brand_python_core_module| replace:: {brand.PY_CORE_MODULE_NAME}
+.. |brand_python_gui_module| replace:: {brand.PY_GUI_MODULE_NAME}
+.. |brand_python_api_url| replace:: {brand.PYTHON_API_URL}
+.. |brand_in_application_api_url| replace:: {brand.IN_APPLICATION_API_URL}
+.. |brand_source_url| replace:: {brand.SOURCE_URL}
+.. |brand_issues_url| replace:: {brand.ISSUES_URL}
+.. |brand_homepage_url| replace:: {brand.WEBSITE_URL}
+.. |brand_builds_url| replace:: {brand.BUILDS_URL}
+.. |brand_analytics_url| replace:: {brand.ANALYTICS_URL}
+.. |brand_support_email| replace:: {brand.SUPPORT_EMAIL}
+.. |brand_support_bug_url| replace:: {brand.SUPPORT_BUG_URL}
+.. |brand_support_feedback_url| replace:: {brand.SUPPORT_FEEDBACK_URL}
+.. |brand_support_question_url| replace:: {brand.SUPPORT_QUESTION_URL}
+.. |brand_support_unrecoverable_url| replace:: {brand.SUPPORT_UNRECOVERABLE_URL}
+.. |brand_core_dll_code| replace:: ``{brand.CORE_DLL_NAME}``
+.. |brand_linux_core_library_code| replace:: ``{brand.LINUX_CORE_LIBRARY}``
+.. |brand_apple_core_library_code| replace:: ``{brand.APPLE_CORE_LIBRARY}``
+.. |brand_android_capture_library_code| replace:: ``{brand.ANDROID_CAPTURE_LIBRARY}``
+.. |brand_cmd_name_code| replace:: ``{brand.CMD_NAME}``
+.. |brand_ui_name_code| replace:: ``{brand.UI_NAME}``
+.. |brand_python_core_module_code| replace:: ``{brand.PY_CORE_MODULE_NAME}``
+.. |brand_python_gui_module_code| replace:: ``{brand.PY_GUI_MODULE_NAME}``
+.. |brand_python_gui_capturecontext_code| replace:: ``{brand.PY_GUI_MODULE_NAME}.CaptureContext``
+.. |brand_windows_ui_appdata_code| replace:: ``%APPDATA%/{brand.UI_NAME}/``
+.. |brand_posix_ui_appdata_code| replace:: ``~/.local/share/{brand.UI_NAME}``
+.. |brand_python_core_windows_binary_code| replace:: ``{brand.PY_CORE_MODULE_NAME}.pyd``
+.. |brand_python_core_posix_binary_code| replace:: ``{brand.PY_CORE_MODULE_NAME}.so``
+.. |brand_cmd_remoteserver_code| replace:: ``{brand.CMD_NAME} remoteserver``
+.. |brand_cmd_remoteserver_help_code| replace:: ``{brand.CMD_NAME} remoteserver --help``
+.. |brand_pycharm_helpers_url| replace:: {brand.SOURCE_URL}/tree/v1.x/docs/pycharm_helpers
+.. |brand_contrib_url| replace:: {brand.CONTRIB_URL}
+"""
+
+project = doc_project
 
 project = doc_project
 copyright = '{0}, {1}'.format(datetime.date.today().year, doc_author)
@@ -344,8 +392,8 @@ html_context = {
     'show_source': False,
     'html_show_sourcelink': False,
     'display_github': True,
-    'github_user': 'baldurk',
-    'github_repo': 'renderdoc',
+    'github_user': brand.SOURCE_REPO_USER,
+    'github_repo': brand.SOURCE_REPO_NAME,
     'github_version': 'v{0}'.format(version),
     'conf_py_path': '/docs/',
 }
@@ -416,17 +464,16 @@ def maybe_skip_member(app, what, name, obj, skip, options):
     return None
 
 def build_finished(app, exception):
-    import renderdoc as rd
-    import qrenderdoc as qrd
+    rd = importlib.import_module(brand.PY_CORE_MODULE_NAME)
+    qrd = importlib.import_module(brand.PY_GUI_MODULE_NAME)
+    sys.modules.setdefault('renderdoc', rd)
+    sys.modules.setdefault('qrenderdoc', qrd)
 
     from sphinx.domains.python import PythonDomain
     from sphinx.errors import SphinxError
 
     if exception is not None:
         return
-
-    print(rd)
-    print(qrd)
 
     # Get list of documented/indexed python objects
     pydomain = app.env.get_domain('py')
@@ -437,9 +484,14 @@ def build_finished(app, exception):
 
     # Enumerate the namespaced objects in both modules
     items = []
-    for module_name in ['renderdoc', 'qrenderdoc']:
+    module_names = [brand.PY_CORE_MODULE_NAME, brand.PY_GUI_MODULE_NAME]
+    if brand.PY_CORE_MODULE_NAME != 'renderdoc':
+        module_names.append('renderdoc')
+    if brand.PY_GUI_MODULE_NAME != 'qrenderdoc':
+        module_names.append('qrenderdoc')
+
+    for module_name in dict.fromkeys(module_names):
         module = sys.modules[module_name]
-        entries = dir(module)
         for item in dir(module):
             if 'INTERNAL:' not in str(module.__dict__[item].__doc__):
                 items.append('{}.{}'.format(module_name, item))

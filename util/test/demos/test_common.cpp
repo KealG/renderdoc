@@ -23,6 +23,7 @@
  ******************************************************************************/
 
 #include "test_common.h"
+#include "../../../renderdoc/common/brand_config.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <algorithm>
@@ -628,19 +629,19 @@ void GraphicsTest::Prepare(int argc, char **argv)
   pRENDERDOC_GetAPI RENDERDOC_GetAPI = NULL;
 
 #if defined(WIN32)
-  HMODULE mod = GetModuleHandleA("renderdoc.dll");
+  HMODULE mod = GetModuleHandleA(RDOC_BRAND_CORE_DLL_NAME);
   if(mod)
     RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)GetProcAddress(mod, "RENDERDOC_GetAPI");
 #elif defined(ANDROID)
-  void *mod = dlopen("libVkLayer_GLES_RenderDoc.so", RTLD_NOW | RTLD_NOLOAD);
+  void *mod = dlopen(RDOC_BRAND_ANDROID_CAPTURE_LIBRARY, RTLD_NOW | RTLD_NOLOAD);
   if(mod)
     RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)dlsym(mod, "RENDERDOC_GetAPI");
 #elif defined(__linux__)
-  void *mod = dlopen("librenderdoc.so", RTLD_NOW | RTLD_NOLOAD);
+  void *mod = dlopen(RDOC_BRAND_LINUX_CORE_LIBRARY, RTLD_NOW | RTLD_NOLOAD);
   if(mod)
     RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)dlsym(mod, "RENDERDOC_GetAPI");
 #elif defined(__APPLE__)
-  void *mod = dlopen("librenderdoc.dylib", RTLD_NOW | RTLD_NOLOAD);
+  void *mod = dlopen(RDOC_BRAND_APPLE_CORE_LIBRARY, RTLD_NOW | RTLD_NOLOAD);
   if(mod)
     RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)dlsym(mod, "RENDERDOC_GetAPI");
 #else

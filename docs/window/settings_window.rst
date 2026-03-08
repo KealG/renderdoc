@@ -7,7 +7,7 @@ The settings window contains various advanced or niche settings that configure t
 
 Some settings may not be saved until the application is closed, although most will come into immediate effect.
 
-The settings are saved in the application-specific settings directory (On windows that's ``%APPDATA%\qrenderdoc\UI.config`` and on linux that's a path like ``~/.local/share/qrenderdoc``) if you wish to back up or reset these settings.
+The settings are saved in the application-specific settings directory (On windows that's |brand_windows_ui_appdata_code| ``UI.config`` and on linux that's a path like |brand_posix_ui_appdata_code|) if you wish to back up or reset these settings.
 
 General options
 ---------------

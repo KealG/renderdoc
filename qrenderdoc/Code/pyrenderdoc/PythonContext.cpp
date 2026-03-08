@@ -31,6 +31,7 @@
 #include <Python.h>
 
 #include "3rdparty/pythoncapi_compat.h"
+#include "../../../renderdoc/common/brand_config.h"
 
 #ifdef slots_was_defined
 #define slots
@@ -51,7 +52,7 @@ PyTypeObject **SbkPySide2_QtWidgetsTypes = NULL;
 // for non-windows, this message is displayed at CMake time.
 #ifdef _MSC_VER
 #pragma message( \
-    "Building without PySide2 - Qt will not be accessible in python scripting. See https://github.com/baldurk/renderdoc/wiki/PySide2")
+    "Building without PySide2 - Qt will not be accessible in python scripting. See " RDOC_BRAND_SOURCE_URL "/wiki/PySide2")
 #endif
 
 #endif
@@ -110,7 +111,7 @@ static inline QString ToQStr(PyObject *value)
   return QString();
 }
 
-static wchar_t program_name[] = L"qrenderdoc";
+static wchar_t program_name[] = RDOC_WIDEN(RDOC_BRAND_UI_NAME);
 static wchar_t python_home[1024] = {0};
 
 struct OutputRedirector
@@ -232,8 +233,8 @@ void PythonContext::GlobalInit()
   // for the exception signal
   qRegisterMetaType<QList<QString>>("QList<QString>");
 
-  PyImport_AppendInittab("renderdoc", &PyInit_renderdoc);
-  PyImport_AppendInittab("qrenderdoc", &PyInit_qrenderdoc);
+  PyImport_AppendInittab(RDOC_BRAND_PY_CORE_MODULE_NAME, &PyInit_renderdoc);
+  PyImport_AppendInittab(RDOC_BRAND_PY_GUI_MODULE_NAME, &PyInit_qrenderdoc);
 
 #if PY_VERSION_HEX > 0x030B0000
   PyConfig config;
@@ -291,8 +292,27 @@ void PythonContext::GlobalInit()
 
   PyObject *main_module = PyImport_AddModule("__main__");
 
-  PyModule_AddObject(main_module, "renderdoc", PyImport_ImportModule("renderdoc"));
-  PyModule_AddObject(main_module, "qrenderdoc", PyImport_ImportModule("qrenderdoc"));
+  PyObject *coreModule = PyImport_ImportModule(RDOC_BRAND_PY_CORE_MODULE_NAME);
+  PyObject *guiModule = PyImport_ImportModule(RDOC_BRAND_PY_GUI_MODULE_NAME);
+
+  PyModule_AddObject(main_module, RDOC_BRAND_PY_CORE_MODULE_NAME, coreModule);
+  PyModule_AddObject(main_module, RDOC_BRAND_PY_GUI_MODULE_NAME, guiModule);
+
+  PyObject *modules = PyImport_GetModuleDict();
+
+  if(strcmp(RDOC_BRAND_PY_CORE_MODULE_NAME, "renderdoc") != 0 && coreModule)
+  {
+    PyDict_SetItemString(modules, "renderdoc", coreModule);
+    Py_INCREF(coreModule);
+    PyModule_AddObject(main_module, "renderdoc", coreModule);
+  }
+
+  if(strcmp(RDOC_BRAND_PY_GUI_MODULE_NAME, "qrenderdoc") != 0 && guiModule)
+  {
+    PyDict_SetItemString(modules, "qrenderdoc", guiModule);
+    Py_INCREF(guiModule);
+    PyModule_AddObject(main_module, "qrenderdoc", guiModule);
+  }
 
   main_dict = PyModule_GetDict(main_module);
 
@@ -529,7 +549,7 @@ bool PythonContext::CheckInterfaces(rdcstr &log)
   errors |= CheckCoreInterface(log);
   errors |= CheckQtInterface(log);
 
-  for(rdcstr module_name : {"renderdoc", "qrenderdoc"})
+  for(rdcstr module_name : {RDOC_BRAND_PY_CORE_MODULE_NAME, RDOC_BRAND_PY_GUI_MODULE_NAME})
   {
     PyObject *mod = PyImport_ImportModule(module_name.c_str());
     PyObject *dict = PyModule_GetDict(mod);

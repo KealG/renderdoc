@@ -1,7 +1,7 @@
 FAQ
 ===
 
-Here is a list of commonly asked questions about RenderDoc. Feel free to `contact me <mailto:baldurk@baldurk.org?subject=RenderDoc%20question>`_ if you have another question that isn't covered here or in this document.
+Here is a list of commonly asked questions about RenderDoc. Feel free to `contact me <|brand_support_question_url|>`_ if you have another question that isn't covered here or in this document.
 
 What are the details of RenderDoc's Anonymous Analytics?
 --------------------------------------------------------
@@ -10,7 +10,7 @@ RenderDoc has some very light anonymous analytics to allow analysis of which fea
 
 The complete details of the analytics can be found in the page about :doc:`../behind_scenes/analytics`, but the brief outline is that RenderDoc records data **only in the replay program** and does not record any data that is specific to any captured programs. The data recorded is primarily boolean flags indicating whether or not a given feature, API, or platform is used or not. You can see the precise list of data gathered on your current RenderDoc build in the settings menu under the :guilabel:`Anonymous Analytics` section.
 
-The analytics data is summarised and transmitted securely and anonymously to RenderDoc's server. The aggregated statistics are available for anyone to see at `the analytics homepage <https://renderdoc.org/analytics>`_.
+The analytics data is summarised and transmitted securely and anonymously to RenderDoc's server. The aggregated statistics are available for anyone to see at `the analytics homepage <|brand_analytics_url|>`_.
 
 Enabling the analytics is greatly appreciated, if you have any concerns about the data gathered you can choose to manually verify each report before it's submitted.
 
@@ -38,7 +38,7 @@ All of the good names were taken :-(.
 Who can I contact about bugs, feature requests, other queries?
 --------------------------------------------------------------
 
-At the moment there's just me at the wheel - feel free to `contact me <mailto:baldurk@baldurk.org?subject=RenderDoc%20feedback>`__ if you have anything you'd like to ask or suggest. I use a `GitHub repository <https://github.com/baldurk/renderdoc>`_ for tracking bugs and feature requests so that's the best place to file an issue.
+At the moment there's just me at the wheel - feel free to `contact me <|brand_support_feedback_url|>`__ if you have anything you'd like to ask or suggest. I use a `GitHub repository <|brand_source_url|>`_ for tracking bugs and feature requests so that's the best place to file an issue.
 
 I work on RenderDoc full time contracting for Valve Software, and I am happy to help with anything and work with you if you have any issues that need attention.
 
@@ -49,7 +49,7 @@ How can I associate RenderDoc's file extensions with the program?
 
 On Windows if you installed RenderDoc via the msi installer, the option is available there to associate RenderDoc's file extensions with the program.
 
-On linux the binary tarball comes with files to place under ``/usr/share`` to associate RenderDoc with files. This obviously also requires ``qrenderdoc`` to be available in your ``PATH``.
+On linux the binary tarball comes with files to place under ``/usr/share`` to associate RenderDoc with files. This obviously also requires |brand_ui_name_code| to be available in your ``PATH``.
 
 RenderDoc can be associated with ``.rdc`` and ``.cap`` files. The ``.rdc`` files are the frame capture containers generated from your application. ``.cap`` files describe the set up of a particular capture, and can be used to quickly re-launch a capture preset.
 
@@ -62,7 +62,7 @@ Currently RenderDoc supports Vulkan 1.4, D3D11 (up to D3D11.4), D3D12, OpenGL 3.
 
 Vulkan support has :doc:`a few notes <../behind_scenes/vulkan_support>`, as does :doc:`D3D12 <../behind_scenes/d3d12_support>`.
 
-Future API support is at this point not clear; Metal, WebGL, and perhaps D3D9/D3D10 all being possible. Support for new APIs will be balanced against all other work such as features for existing APIs, bugfixes. So if you care strongly about support for a new API make sure to `file an issue on GitHub <https://github.com/baldurk/renderdoc/issues>`_ or comment on an existing issue to register your interest.
+Future API support is at this point not clear; Metal, WebGL, and perhaps D3D9/D3D10 all being possible. Support for new APIs will be balanced against all other work such as features for existing APIs, bugfixes. So if you care strongly about support for a new API make sure to `file an issue on GitHub <|brand_issues_url|>`_ or comment on an existing issue to register your interest.
 
 How can I backup or restore my settings?
 ----------------------------------------
@@ -87,7 +87,7 @@ RenderDoc also uses TCP and UDP ports ``39920`` for remote replay connections, f
 Where can I get the source to RenderDoc?
 ----------------------------------------
 
-RenderDoc is licensed under the MIT license and the source is available on `GitHub <https://github.com/baldurk/renderdoc>`_.
+RenderDoc is licensed under the MIT license and the source is available on `GitHub <|brand_source_url|>`_.
 
 What are the requirements for RenderDoc?
 ----------------------------------------
@@ -182,7 +182,7 @@ Can I tell via the graphics APIs if RenderDoc is present at runtime?
 
 Yes indeed. Some APIs offer ways to do this already - ``D3DPERF_GetStatus()``, ``ID3DUserDefinedAnnotation::GetStatus()`` and ``ID3D11DeviceContext2::IsAnnotationEnabled()``.
 
-In addition to those the simplest way is to see if the RenderDoc module is loaded, using ``GetModuleHandleA("renderdoc.dll") != NULL`` or ``dlopen("librenderdoc.so, RTLD_NOW | RTLD_NOLOAD) != NULL``. There are also API specific ways to query:
+In addition to those the simplest way is to see if the |brand_product_name| module is loaded, using ``GetModuleHandleA`` on Windows with |brand_core_dll_code| or ``dlopen`` on Linux with |brand_linux_core_library_code| and the ``RTLD_NOW | RTLD_NOLOAD`` flags. There are also API specific ways to query:
 
 Querying an ``ID3D11Device`` or ``ID3D12Device`` for UUID ``{A7AA6116-9C8D-4BBA-9083-B4D816B71B78}`` will return an ``IUnknown*`` and ``S_OK`` when RenderDoc is present.
 

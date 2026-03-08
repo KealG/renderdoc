@@ -130,11 +130,12 @@ CaptureContext::CaptureContext(PersistantConfig &cfg) : m_Config(cfg)
       {
         title = tr("Device Lost error");
         text = tr("%1.\n\n"
-                  "This may be due to an application bug, a RenderDoc bug, or insufficient "
+                  "This may be due to an application bug, a %2 bug, or insufficient "
                   "resources on the system to analyse the capture.\n\n"
                   "It is recommended that you run your application with API validation enabled, as "
                   "API usage errors can cause this kind of problem.")
-                   .arg(err.Message());
+                   .arg(err.Message())
+                   .arg(lit(RDOC_BRAND_PRODUCT_NAME));
       }
       else if(err.code == ResultCode::OutOfMemory)
       {
@@ -165,10 +166,11 @@ CaptureContext::CaptureContext(PersistantConfig &cfg) : m_Config(cfg)
         if(CrashDialog::HasCaptureReady(m_Config))
         {
           text +=
-              tr("If you think this may be a RenderDoc bug please click the button below to report "
+              tr("If you think this may be a %1 bug please click the button below to report "
                  "it, "
                  "but note that this will require you to upload the capture for reproduction as "
-                 "otherwise it is impossible to tell what the problem may be.");
+                 "otherwise it is impossible to tell what the problem may be.")
+                  .arg(lit(RDOC_BRAND_PRODUCT_NAME));
 
           add_report = true;
         }
@@ -178,9 +180,12 @@ CaptureContext::CaptureContext(PersistantConfig &cfg) : m_Config(cfg)
                     "Your capture is too lage to upload as a crash report so this can't be "
                     "automatically reported. "
                     "Please email me at <a "
-                    "href=\"mailto:baldurk@baldurk.org?subject=RenderDoc%20Unrecoverable%20error\">"
-                    "baldurk@baldurk.org</a> with information and I can help investigate.</html>")
-                     .arg(text);
+                    "href=\"mailto:%2?subject=%3\">"
+                    "%2</a> with information and I can help investigate.</html>")
+                     .arg(text)
+                     .arg(lit(RDOC_BRAND_SUPPORT_EMAIL))
+                     .arg(QString::fromUtf8(QUrl::toPercentEncoding(
+                         lit(RDOC_BRAND_PRODUCT_NAME " Unrecoverable error"))));
         }
         else
         {
@@ -1035,7 +1040,8 @@ void CaptureContext::LoadCaptureThreaded(const QString &captureFile, const Repla
       {
         RDDialog::critical(NULL, tr("No wayland support"),
                            tr("Replay doesn't support Wayland surfaces - check you compiled this "
-                              "build of RenderDoc with Wayland support enabled."));
+                              "build of %1 with Wayland support enabled.")
+                               .arg(lit(RDOC_BRAND_PRODUCT_NAME)));
       }
     }
     else
@@ -2064,8 +2070,9 @@ bool CaptureContext::OpenRGPProfile(const rdcstr &filename)
   {
     RDDialog::critical(m_MainWindow, tr("Error opening RGP"),
                        tr("Invalid filename specified to open as RGP Profile\n%1\n"
-                          "Please restart RenderDoc and try again.")
-                           .arg(QString(filename)));
+                          "Please restart %2 and try again.")
+                           .arg(QString(filename))
+                           .arg(lit(RDOC_BRAND_PRODUCT_NAME)));
     return false;
   }
 

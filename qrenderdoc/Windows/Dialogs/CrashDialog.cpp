@@ -174,7 +174,7 @@ CrashDialog::CrashDialog(PersistantConfig &cfg, QVariantMap crashReportJSON, QWi
   if(m_Config.CheckUpdate_UpdateAvailable)
   {
     text +=
-        tr("<p><b><a href=\"https://renderdoc.org/builds\">An updated version of %1</a> is "
+        tr("<p><b><a href=\"" RDOC_BRAND_BUILDS_URL "\">An updated version of %1</a> is "
            "available</b>. This bug may be fixed in a newer version, it's advised that you update "
            "to see if the bug is fixed.</p>")
             .arg(lit(RDOC_BRAND_PRODUCT_NAME));
@@ -237,7 +237,7 @@ CrashDialog::CrashDialog(PersistantConfig &cfg, QVariantMap crashReportJSON, QWi
 
     text += tr("<p>There is no non-secure bug reporting system available so unfortunately we can't "
                "proceed. If you'd like to send in the capture directly you can "
-               "<a href=\"mailto:baldurk@baldurk.org\">email it to me</a> attaching "
+               "<a href=\"mailto:" RDOC_BRAND_SUPPORT_EMAIL "\">email it to me</a> attaching "
                "<a href=\"%1\">this report</a> ")
                 .arg(QUrl::fromLocalFile(m_ReportPath).toString());
 
@@ -349,8 +349,11 @@ void CrashDialog::on_send_clicked()
                "capture to reproduce the problem it's impossible to tell what "
                "went wrong so a crash report is unfortunately required.\n\n"
                "If you don't wish to share your capture that is OK. You can also email me at <a "
-               "href=\"mailto:baldurk@baldurk.org?subject=RenderDoc%20Unrecoverable%20error\">"
-               "baldurk@baldurk.org</a> with information and I can help investigate.</html>"));
+               "href=\"mailto:%1?subject=%2\">"
+               "%1</a> with information and I can help investigate.</html>")
+                .arg(lit(RDOC_BRAND_SUPPORT_EMAIL))
+                .arg(QString::fromUtf8(QUrl::toPercentEncoding(
+                    lit(RDOC_BRAND_PRODUCT_NAME " Unrecoverable error")))));
       return;
     }
   }

@@ -26,6 +26,7 @@
 
 #include <QDebug>
 #include <QStringList>
+#include "../../renderdoc/common/brand_config.h"
 #include <QVariantList>
 #include "Code/QRDUtils.h"
 #include "renderdoc_replay.h"
@@ -53,7 +54,7 @@ enum class RGPCommand
 struct RGPInteropInit
 {
   int32_t interop_version = 0;
-  QString interop_name = QStringLiteral("RenderDoc");
+  QString interop_name = QStringLiteral(RDOC_BRAND_PRODUCT_NAME);
 
   QVariantList toParams(uint32_t version) const
   {

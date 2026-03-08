@@ -2,6 +2,7 @@
 import sys
 import subprocess
 import renderdoc as rd
+import rdoc_brand as brand
 from . import util
 from .logging import log
 from pathlib import Path
@@ -104,7 +105,7 @@ class RemoteServer(ABC):
     
 class AndroidRemoteServer(RemoteServer):
     # Android app IDs for the server
-    ADRD_SERVER_APP64 = 'org.renderdoc.renderdoccmd.arm64'
+    ADRD_SERVER_APP64 = brand.CMD_ANDROID_PACKAGE_BASE + '.arm64'
     CONNECTION_RETRY_COUNT = 3
 
     def __init__(self, device) -> None:

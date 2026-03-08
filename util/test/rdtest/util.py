@@ -11,11 +11,12 @@ import subprocess
 from typing import Tuple, List
 from . import png
 from rdtest.remoteserver import RemoteServer, AndroidRemoteServer 
+import rdoc_brand as brand
 
 
 # Android app IDs for the demos
-ADRD_DEMO_APP32 = 'renderdoc.org.demos.arm32'
-ADRD_DEMO_APP64 = 'renderdoc.org.demos.arm64'
+ADRD_DEMO_APP32 = f"{brand.TEST_ANDROID_DEMO_PACKAGE_BASE}.arm32"
+ADRD_DEMO_APP64 = f"{brand.TEST_ANDROID_DEMO_PACKAGE_BASE}.arm64"
 
 
 def _timestr():

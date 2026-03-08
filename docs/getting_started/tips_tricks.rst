@@ -17,7 +17,7 @@ This page is a random hodge-podge of different tips and tricks that might not be
    Note though that by default the range will be remembered or each texture, so once you have fitted the range once for each texture you should be able to flip back and forth more easily.
 #. You can double click on a thumbnail in the texture viewer to open a :doc:`locked texture <../how/how_view_texture>` tab
 #. You can close tabs by middle clicking on them.
-#. You can trigger a capture from code. ``renderdoc.dll`` exports an :doc:`../in_application_api` for this purpose, defined in ``renderdoc_app.h`` in the distributed builds.
+#. You can trigger a capture from code. |brand_core_dll_code| exports an :doc:`../in_application_api` for this purpose, defined in ``renderdoc_app.h`` in the distributed builds.
 #. To get API debug or error messages, enable "Enable API validation" when capturing then check out the :doc:`../window/debug_messages` window.
 #. You can annotate a capture by adding bookmarks, renaming resources, and adding comments. These can all be saved and embedded in the capture, so that when you share it with someone else.
 #. Dragging an executable onto the RenderDoc window anywhere will open the :guilabel:`Launch Executable` panel with the executable path filled in.

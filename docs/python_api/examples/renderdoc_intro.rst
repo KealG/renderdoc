@@ -3,24 +3,24 @@ Getting Started (python)
 
 .. note::
 
-  This document is aimed at users getting started with loading a capture and getting access from the renderdoc module, and is generally not relevant when running within the RenderDoc UI.
+  This document is aimed at users getting started with loading a capture and getting access from the |brand_python_core_module_code| module, and is generally not relevant when running within the |brand_product_name| UI.
 
   The same APIs are available in the UI, so you can follow these steps. Be aware that loading captures while purely from script may interfere with a capture that is loaded in the UI itself, so this is not recommended.
 
 Loading the Module
 ------------------
 
-For this section we assume you have built a copy of RenderDoc and have the module (``renderdoc.pyd`` or ``renderdoc.so`` depending on your platform). For information on how to build see the `GitHub repository <https://github.com/baldurk/renderdoc>`_.
+For this section we assume you have built a copy of |brand_product_name| and have the module (|brand_python_core_windows_binary_code| or |brand_python_core_posix_binary_code| depending on your platform). For information on how to build see the `GitHub repository <|brand_source_url|>`_.
 
 .. note::
 
   You must use exactly the same version of python to load the module as was used to build it.
 
-  On windows by default RenderDoc builds against python 3.6 which is what it's distributed with.
+  On windows by default |brand_product_name| builds against python 3.6 which is what it's distributed with.
   
-  This can be overridden by setting an overridden path under the ``Python Configuration`` section in the properties of the ``qrenderdoc`` project and ``pyrenderdoc_module``/``qrenderdoc_module`` projects. It must point to a python installation.
+  This can be overridden by setting an overridden path under the ``Python Configuration`` section in the properties of the |brand_ui_name_code| project and ``pyrenderdoc_module``/``qrenderdoc_module`` projects. It must point to a python installation.
   
-  RenderDoc requires pythonXY.lib, include files such as include/Python.h, as well as a .zip of the standard library. If you installed python with an installer you have the first two, and can generate the standard library zip by zipping the contents of the Lib folder. If you downloaded the embeddable zip distribution you will only have the standard library zip, you need to obtain the include files and ``.lib`` file separately.
+  |brand_product_name| requires pythonXY.lib, include files such as include/Python.h, as well as a .zip of the standard library. If you installed python with an installer you have the first two, and can generate the standard library zip by zipping the contents of the Lib folder. If you downloaded the embeddable zip distribution you will only have the standard library zip, you need to obtain the include files and ``.lib`` file separately.
 
 Once you have the module, either place the module within your python's default library search path, or else insert the location of the python module into the path in your script. You can either set the ``PYTHONPATH`` environment variable or do it at the start of your script:
 
@@ -29,27 +29,27 @@ Once you have the module, either place the module within your python's default l
 
     import sys
 
-    sys.path.append('/path/to/renderdoc/module')
+    sys.path.append('/path/to/python/module')
 
-Additionally, the renderdoc python module needs to be able to load the main renderdoc library (``renderdoc.dll`` or ``librenderdoc.so`` depending on your platform) - the module library itself just contains stubs and python wrappers for the C++ interfaces. You can either place the renderdoc library in the system library paths, or solve it in a platform specific way. For example on windows you can either place ``renderdoc.dll`` in the same directory as the python module, or append to ``PATH``. On Python 3.8 and above ``PATH`` is no longer searched by default so you need to explicitly add the DLL folder:
+Additionally, the |brand_python_core_module_code| module needs to be able to load the main native library (|brand_core_dll_code| or |brand_linux_core_library_code| depending on your platform) - the module library itself just contains stubs and python wrappers for the C++ interfaces. You can either place the native library in the system library paths, or solve it in a platform specific way. For example on windows you can either place |brand_core_dll_code| in the same directory as the python module, or append to ``PATH``. On Python 3.8 and above ``PATH`` is no longer searched by default so you need to explicitly add the DLL folder:
 
 .. highlight:: python
 .. code:: python
 
     import os, sys
 
-    os.environ["PATH"] += os.pathsep + os.path.abspath('/path/to/renderdoc/native/library')
+    os.environ["PATH"] += os.pathsep + os.path.abspath('/path/to/native/library')
     if sys.platform == 'win32' and sys.version_info[1] >= 8:
-        os.add_dll_directory("/path/to/renderdoc/native/library")
+        os.add_dll_directory("/path/to/native/library")
 
 On linux you'd perform a similar modification to ``LD_LIBRARY_PATH``.
 
-Assuming all has gone well, you should now be able to import the renderdoc module:
+Assuming all has gone well, you should now be able to import the |brand_python_core_module_code| module:
 
 .. highlight:: python
-.. code:: python
+.. parsed-literal::
 
-    import renderdoc as rd
+    import |brand_python_core_module| as rd
 
     # Prints 'CullMode.FrontAndBack'
     print(rd.CullMode.FrontAndBack)

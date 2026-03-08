@@ -36,6 +36,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
 
   setWindowTitle(ApplyBrandingToUIString(windowTitle()));
   ui->rdocName->setText(ApplyBrandingToUIString(ui->rdocName->text()));
+  ui->contact->setText(ApplyBrandingToUIString(ui->contact->text()));
 
   QString hash = QString::fromLatin1(RENDERDOC_GetCommitHash());
 
@@ -47,7 +48,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   {
     ui->version->setText(tr("Version %1 (built from <a href='%2'>%3</a>)")
                              .arg(lit(FULL_VERSION_STRING))
-                             .arg(lit("https://github.com/baldurk/renderdoc/commit/%1").arg(hash))
+                             .arg(ApplyBrandingToUIString(lit("https://github.com/baldurk/renderdoc/commit/%1")).arg(hash))
                              .arg(hash.left(8)));
   }
 

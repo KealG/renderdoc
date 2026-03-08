@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 #
 
+import importlib
 import sys
 import re
 import os
@@ -14,6 +15,9 @@ from typing import List
 import struct
 
 os.chdir(os.path.realpath(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.abspath('../util'))
+
+import rdoc_brand as brand
 
 # path to module libraries for windows
 if struct.calcsize("P") == 8:
@@ -32,8 +36,10 @@ os.environ["PATH"] = os.path.abspath(binpath + 'Release/') + os.pathsep + os.env
 # path to module libraries for linux
 sys.path.insert(0, os.path.abspath('../build/lib'))
 
-import renderdoc as rd
-import qrenderdoc as qrd
+rd = importlib.import_module(brand.PY_CORE_MODULE_NAME)
+qrd = importlib.import_module(brand.PY_GUI_MODULE_NAME)
+sys.modules.setdefault('renderdoc', rd)
+sys.modules.setdefault('qrenderdoc', qrd)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', '--path', help="Add a path to interface files to search (can be used multiple times)", action='append')
@@ -73,8 +79,14 @@ def make_c_type(ret: str, pattern: bool, typelist: List[str]):
     orig_type = ret
 
     # strip namespace
+    if ret[0:len(brand.PY_CORE_MODULE_NAME) + 1] == brand.PY_CORE_MODULE_NAME + '.':
+        ret = ret[len(brand.PY_CORE_MODULE_NAME) + 1:]
+    if ret[0:len(brand.PY_GUI_MODULE_NAME) + 1] == brand.PY_GUI_MODULE_NAME + '.':
+        ret = ret[len(brand.PY_GUI_MODULE_NAME) + 1:]
     if ret[0:10] == 'renderdoc.':
         ret = ret[10:]
+    if ret[0:11] == 'qrenderdoc.':
+        ret = ret[11:]
 
     # Handle pipelines that are renamed
     if ret == 'D3D11State':
@@ -221,9 +233,9 @@ def check_used_types(objname, module, used_types):
                 parent_name = t[0:idx]
                 if parent_name in dir(parent):
                     parent = parent.__dict__[parent_name]
-                elif parent_name == 'renderdoc':
+                elif parent_name in [brand.PY_CORE_MODULE_NAME, 'renderdoc']:
                     parent = rd
-                elif parent_name == 'qrenderdoc':
+                elif parent_name in [brand.PY_GUI_MODULE_NAME, 'qrenderdoc']:
                     parent = qrd
                 t = t[idx+1:]
                 continue
@@ -231,10 +243,16 @@ def check_used_types(objname, module, used_types):
             count += 1
             print("Error {:3} in {}: Unrecognised reference {}".format(count, objname, type_name))
             if type_name in dir(rd):
-                print("  - Maybe missing namespace to refer to renderdoc.{}?".format(type_name))
+                print("  - Maybe missing namespace to refer to {}.{{}}?".format(brand.PY_CORE_MODULE_NAME).format(type_name))
             break
 
-for mod_name in ['renderdoc', 'qrenderdoc']:
+module_names = [brand.PY_CORE_MODULE_NAME, brand.PY_GUI_MODULE_NAME]
+if brand.PY_CORE_MODULE_NAME != 'renderdoc':
+    module_names.append('renderdoc')
+if brand.PY_GUI_MODULE_NAME != 'qrenderdoc':
+    module_names.append('qrenderdoc')
+
+for mod_name in dict.fromkeys(module_names):
     mod = sys.modules[mod_name]
     if args.verbose:
         print("===== Checks for {} =====".format(mod_name))

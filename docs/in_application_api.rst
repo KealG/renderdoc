@@ -1,22 +1,22 @@
 In-application API
 ==================
 
-Reference for RenderDoc in-application API version 1.6.0. This API is not necessary to use RenderDoc by default, but if you would like more control or custom triggering of captures this API can provide the mechanism to do so.
+Reference for |brand_product_name| in-application API version 1.6.0. This API is not necessary to use |brand_product_name| by default, but if you would like more control or custom triggering of captures this API can provide the mechanism to do so.
 
-Make sure to use a matching API header for your build - if you use a newer header, the API version may not be available. All RenderDoc builds supporting this API ship the header in their root directory.
+Make sure to use a matching API header for your build - if you use a newer header, the API version may not be available. All |brand_product_name| builds supporting this API ship the header in their root directory.
 
-This page describes the RenderDoc API exposed to applications being captured, both in overall organisation as well as a specific reference on each function.
+This page describes the |brand_product_name| API exposed to applications being captured, both in overall organisation as well as a specific reference on each function.
 
-To begin using the API you need to fetch the ``RENDERDOC_GetAPI`` function. You should do this dynamically, it is not recommended to actually link against RenderDoc's DLL as it's intended to be injected or loaded at runtime. The header does not declare ``RENDERDOC_GetAPI``, it declares a function pointer typedef ``pRENDERDOC_GetAPI`` that you can use.
+To begin using the API you need to fetch the ``RENDERDOC_GetAPI`` function. You should do this dynamically, it is not recommended to actually link against |brand_product_name|'s DLL as it's intended to be injected or loaded at runtime. The header does not declare ``RENDERDOC_GetAPI``, it declares a function pointer typedef ``pRENDERDOC_GetAPI`` that you can use.
 
-The recommended way to access the RenderDoc API is to passively check if the module is loaded, and use the API if it is. This lets you continue to use RenderDoc entirely as normal, launching your program through the UI, but you can access additional functionality to e.g. trigger captures at custom times. When your program is launched independently it will see that the RenderDoc module is not present and safely fall back.
+The recommended way to access the |brand_product_name| API is to passively check if the module is loaded, and use the API if it is. This lets you continue to use |brand_product_name| entirely as normal, launching your program through the UI, but you can access additional functionality to e.g. trigger captures at custom times. When your program is launched independently it will see that the |brand_product_name| module is not present and safely fall back.
 
-To do this you'll use your platforms dynamic library functions to see if the library is open already - e.g. ``GetModuleHandle`` on Windows, or ``dlopen`` with the ``RTLD_NOW | RTLD_NOLOAD`` flags if available on \*nix systems. On most platforms you can just search for the module name - ``renderdoc.dll`` on Windows, or ``librenderdoc.so`` on Linux, or ``libVkLayer_GLES_RenderDoc.so`` on Android should be sufficient here, so you don't need to know the path to where RenderDoc is running from. This will vary by platform however so consult your platform's OS documentation. Then you can use ``GetProcAddress`` or ``dlsym`` to fetch the ``RENDERDOC_GetAPI`` function using the typedef above.
+To do this you'll use your platforms dynamic library functions to see if the library is open already - e.g. ``GetModuleHandle`` on Windows, or ``dlopen`` with the ``RTLD_NOW | RTLD_NOLOAD`` flags if available on \*nix systems. On most platforms you can just search for the module name - |brand_core_dll_code| on Windows, or |brand_linux_core_library_code| on Linux, or |brand_android_capture_library_code| on Android should be sufficient here, so you don't need to know the path to where |brand_product_name| is running from. This will vary by platform however so consult your platform's OS documentation. Then you can use ``GetProcAddress`` or ``dlsym`` to fetch the ``RENDERDOC_GetAPI`` function using the typedef above.
 
 .. cpp:function:: int RENDERDOC_GetAPI(RENDERDOC_Version version, void **outAPIPointers)
 
 
-    This function is the only entry point actually exported from the RenderDoc module. You call this function with the desired API version, and pass it the address of a pointer to the appropriate struct type. If successful, RenderDoc will set the pointer to point to a struct containing the function pointers for the API functions (detailed below) and return 1.
+    This function is the only entry point actually exported from the |brand_product_name| module. You call this function with the desired API version, and pass it the address of a pointer to the appropriate struct type. If successful, |brand_product_name| will set the pointer to point to a struct containing the function pointers for the API functions (detailed below) and return 1.
 
     Note that version numbers follow `semantic versioning <http://semver.org>`_ which means the implementation returned may have a higher minor and/or patch version than requested.
 
@@ -25,14 +25,14 @@ To do this you'll use your platforms dynamic library functions to see if the lib
     Example code:
 
     .. highlight:: c++
-    .. code:: c++
+    .. parsed-literal::
 
        #include "renderdoc_app.h"
 
        RENDERDOC_API_1_1_2 *rdoc_api = NULL;
 
        // At init, on windows
-       if(HMODULE mod = GetModuleHandleA("renderdoc.dll"))
+       if(HMODULE mod = GetModuleHandleA("|brand_core_dll|"))
        {
            pRENDERDOC_GetAPI RENDERDOC_GetAPI =
                (pRENDERDOC_GetAPI)GetProcAddress(mod, "RENDERDOC_GetAPI");
@@ -41,8 +41,8 @@ To do this you'll use your platforms dynamic library functions to see if the lib
        }
 
        // At init, on linux/android.
-       // For android replace librenderdoc.so with libVkLayer_GLES_RenderDoc.so
-       if(void *mod = dlopen("librenderdoc.so", RTLD_NOW | RTLD_NOLOAD))
+       // For android replace |brand_linux_core_library| with |brand_android_capture_library|
+       if(void *mod = dlopen("|brand_linux_core_library|", RTLD_NOW | RTLD_NOLOAD))
        {
            pRENDERDOC_GetAPI RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)dlsym(mod, "RENDERDOC_GetAPI");
            int ret = RENDERDOC_GetAPI(eRENDERDOC_API_Version_1_1_2, (void **)&rdoc_api);

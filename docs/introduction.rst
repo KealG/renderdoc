@@ -6,7 +6,7 @@ Introduction
 License
 -------
 
-RenderDoc is released under the MIT license, so there are no restrictions on your use of it either commercially or non-commercially. This includes the source release available on `GitHub <https://github.com/baldurk/renderdoc>`_.
+RenderDoc is released under the MIT license, so there are no restrictions on your use of it either commercially or non-commercially. This includes the source release available on `GitHub <|brand_source_url|>`_.
 
 Details of the licenses of third party software used in RenderDoc are included in the LICENSE file in the RenderDoc directory as well as in the :doc:`credits_acknowledgements`.
 
@@ -23,9 +23,9 @@ Regardless of your experience or patience for documentation it's recommended tha
 Important notes
 ---------------
 
-* RenderDoc is generally stable but you will still likely encounter bugs depending on your use case, especially as with graphics there is a lot of potential surface area and interactions. I am *always* happy to spend time to fix bugs, but bear in mind that I need information about how to reproduce your specific situation. If you're able to provide public reproducible steps please file an issue on GitHub, or if you need to share information privately please `email me <mailto:baldurk@baldurk.org?subject=RenderDoc%20bug>`_.
+* RenderDoc is generally stable but you will still likely encounter bugs depending on your use case, especially as with graphics there is a lot of potential surface area and interactions. I am *always* happy to spend time to fix bugs, but bear in mind that I need information about how to reproduce your specific situation. If you're able to provide public reproducible steps please file an issue on GitHub, or if you need to share information privately please `email me <|brand_support_bug_url|>`_.
 * On the other side of the coin, please do give feedback when RenderDoc works for you and request features that would make your life easier or improve your workflow.
-* There are a few common issues you might run into, so if you have any problems check the :doc:`getting_started/faq`, or the `GitHub issues list <https://github.com/baldurk/renderdoc/issues>`_ to see if it's been reported.
+* There are a few common issues you might run into, so if you have any problems check the :doc:`getting_started/faq`, or the `GitHub issues list <|brand_issues_url|>`_ to see if it's been reported.
 
 Documentation and Tutorials
 ---------------------------
@@ -37,14 +37,14 @@ There is also a great presentation by `@Icetigris <https://twitter.com/Icetigris
 Contact info, Feedback, Bug reports
 -----------------------------------
 
-If you want to get in touch with any feature requests, suggestions, comments etc then feel free to contact me: `Contact me <mailto:baldurk@baldurk.org?subject=RenderDoc%20feedback>`_.
+If you want to get in touch with any feature requests, suggestions, comments etc then feel free to contact me: `Contact me <|brand_support_feedback_url|>`_.
 
-Bug reports can be submitted directly `via email <mailto:baldurk@baldurk.org?subject=RenderDoc%20bug>`_, or also on the `GitHub issues list <https://github.com/baldurk/renderdoc/issues>`_ where you can also find the full source code.
+Bug reports can be submitted directly `via email <|brand_support_bug_url|>`_, or also on the `GitHub issues list <|brand_issues_url|>`_ where you can also find the full source code.
 
-The `Builds page <https://renderdoc.org/builds>`_ always has the latest stable build downloads, as well as builds made from the source code each night for the bleeding edge. Stable releases update every two months or so and are the typical releases to stick to for the most reliable experience.
+The `Builds page <|brand_builds_url|>`_ always has the latest stable build downloads, as well as builds made from the source code each night for the bleeding edge. Stable releases update every two months or so and are the typical releases to stick to for the most reliable experience.
 
 See Also
 --------
 
-* `RenderDoc Homepage <https://renderdoc.org/>`_
-* `Builds page <https://renderdoc.org/builds>`_
+* `RenderDoc Homepage <|brand_homepage_url|>`_
+* `Builds page <|brand_builds_url|>`_

@@ -41,9 +41,9 @@ At minimum, this is all you must configure. However it is recommended that you c
 
 	Remote Hosts: Configuring the properties of a remote host.
 
-To configure such a command, enter it under the "Run Command" box and click ``Update``. If you haven't added the host yet, you can fill out both boxes at once and click ``Add``. This command runs under the context of the host with the UI, and is an arbitrary command. When the remote server is needed, RenderDoc will run this command to attempt to launch it without needing any manual intervention.
+To configure such a command, enter it under the "Run Command" box and click ``Update``. If you haven't added the host yet, you can fill out both boxes at once and click ``Add``. This command runs under the context of the host with the UI, and is an arbitrary command. When the remote server is needed, |brand_product_name| will run this command to attempt to launch it without needing any manual intervention.
 
-The remote server can be run with the command ``renderdoccmd remoteserver``. The exact syntax may depend on your operating system, see ``renderdoccmd remoteserver --help`` for more information, you might want to use the ``-d`` parameter to make the remote server run in the background instead of pausing interactively.
+The remote server can be run with the command |brand_cmd_remoteserver_code|. The exact syntax may depend on your operating system, see |brand_cmd_remoteserver_help_code| for more information, you might want to use the ``-d`` parameter to make the remote server run in the background instead of pausing interactively.
 
 .. note::
 
@@ -57,11 +57,11 @@ If a run command is configured you can also manually run the server from this wi
 
 An example for this for linux would be to use ``plink.exe`` and passwordless key authentication to run the command on a linux machine:
 
-.. code::
+.. parsed-literal::
 
-    plink.exe user@host DISPLAY=:0.0 renderdoccmd remoteserver -d
+    plink.exe user@host DISPLAY=:0.0 |brand_cmd_name| remoteserver -d
 
-Assuming that plink.exe is in ``PATH`` on the host machine, and ``renderdoccmd`` is on the host machine.
+Assuming that plink.exe is in ``PATH`` on the host machine, and |brand_cmd_name_code| is on the host machine.
 
 Switching to a Replay Context
 -----------------------------

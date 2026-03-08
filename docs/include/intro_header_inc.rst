@@ -5,4 +5,4 @@ Welcome to RenderDoc - a graphics debugger currently available for Vulkan, D3D11
 
 This document serves as reference guide, introductory document and explanation of which features are available in RenderDoc and how to best use them.
 
-The latest information and discussion is always available on the `GitHub repository <https://github.com/baldurk/renderdoc>`_.
+The latest information and discussion is always available on the `GitHub repository <|brand_source_url|>`_.

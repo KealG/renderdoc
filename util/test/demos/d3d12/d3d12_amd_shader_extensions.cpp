@@ -23,6 +23,7 @@
  ******************************************************************************/
 
 #include "d3d12_test.h"
+#include "../../../../renderdoc/common/brand_config.h"
 
 #include "../win32/win32_window.h"
 
@@ -132,14 +133,15 @@ void main(uint3 threadID : SV_DispatchThreadID)
     if(!agsLib)
     {
       // try in plugins folder next to renderdoc.dll
-      HMODULE rdocmod = GetModuleHandleA("renderdoc.dll");
+      HMODULE rdocmod = GetModuleHandleA(RDOC_BRAND_CORE_DLL_NAME);
       char path[MAX_PATH + 1] = {};
 
       if(rdocmod)
       {
         GetModuleFileNameA(rdocmod, path, MAX_PATH);
         std::string tmp = path;
-        tmp.resize(tmp.size() - (sizeof("/renderdoc.dll") - 1));
+        const std::string rdocdll = "/" RDOC_BRAND_CORE_DLL_NAME;
+        tmp.resize(tmp.size() - rdocdll.size());
 
         agsLib = LoadLibraryA((tmp + "/plugins/amd/ags/" + agsname).c_str());
       }

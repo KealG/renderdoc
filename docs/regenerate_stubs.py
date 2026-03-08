@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import importlib
 import os
 import sys
 import struct
@@ -17,6 +18,9 @@ os.makedirs(destpath, exist_ok=True)
     
 # do everything relative to this script
 docsdir = os.path.realpath(os.path.dirname(__file__))
+sys.path.insert(0, os.path.abspath(os.path.join(docsdir, "../util")))
+
+import rdoc_brand as brand
     
 # path to module libraries for windows
 if struct.calcsize("P") == 8:
@@ -39,8 +43,10 @@ if sys.platform == 'win32' and sys.version_info[1] >= 8:
 # path to module libraries for linux
 sys.path.insert(0, os.path.abspath(os.path.join(docsdir, '../build/lib')))
 
-import renderdoc
-import qrenderdoc
+renderdoc = importlib.import_module(brand.PY_CORE_MODULE_NAME)
+qrenderdoc = importlib.import_module(brand.PY_GUI_MODULE_NAME)
+sys.modules.setdefault('renderdoc', renderdoc)
+sys.modules.setdefault('qrenderdoc', qrenderdoc)
 
 if __name__ == '__main__':
     print(f"Generating stubs from {renderdoc.__file__} and {qrenderdoc.__file__}")
@@ -48,5 +54,5 @@ if __name__ == '__main__':
 from stubs_generation.helpers import generator3
 
 if __name__ == '__main__':
-    generator3.main(['renderdoc', '-d', destpath])
-    generator3.main(['qrenderdoc', '-d', destpath])
+    generator3.main([brand.PY_CORE_MODULE_NAME, '-d', destpath])
+    generator3.main([brand.PY_GUI_MODULE_NAME, '-d', destpath])

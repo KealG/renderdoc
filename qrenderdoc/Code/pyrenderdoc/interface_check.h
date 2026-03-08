@@ -24,6 +24,8 @@
 
 #pragma once
 
+#include "../../../renderdoc/common/brand_config.h"
+
 // verify the interface.
 // We check that docstrings aren't duplicated, which is a symptom of missing DOCUMENT()
 // macros around newly added classes/members.
@@ -76,10 +78,13 @@ inline bool checkname(rdcstr &log, const char *baseType, rdcstr name, NameType n
     return false;
 
   // remove the module prefix, if this is a type name we're checking
-  if(name.beginsWith("renderdoc."))
-    name.erase(0, 10);
-  if(name.beginsWith("qrenderdoc."))
-    name.erase(0, 11);
+  const rdcstr corePrefix = RDOC_BRAND_PY_CORE_MODULE_NAME ".";
+  const rdcstr guiPrefix = RDOC_BRAND_PY_GUI_MODULE_NAME ".";
+
+  if(name.beginsWith(corePrefix))
+    name.erase(0, corePrefix.size());
+  if(name.beginsWith(guiPrefix))
+    name.erase(0, guiPrefix.size());
 
   // skip a few well-known members
   if(name == "this" || name == "thisown")
@@ -163,7 +168,7 @@ inline bool check_interface(rdcstr &log, swig_type_info **swig_types, size_t num
     }
 
     rdcstr typeName = typeobj->tp_name;
-    errors_found |= checkname(log, "renderdoc", typeName, NameType::Type, "");
+    errors_found |= checkname(log, RDOC_BRAND_PY_CORE_MODULE_NAME, typeName, NameType::Type, "");
 
     PyObject *dict = typeobj->tp_dict;
 

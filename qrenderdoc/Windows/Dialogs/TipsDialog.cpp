@@ -313,7 +313,7 @@ void TipsDialog::showTip(int i)
   Tip &tip = m_tips[i];
   ++i;
   ui->tipTextLabel->setText(tip.tip);
-  QString url = lit("https://renderdoc.org/tips/%1").arg(i);
+  QString url = lit(RDOC_BRAND_TIPS_URL_TEMPLATE).arg(i);
   ui->tipUrlLabel->setText(lit("<a href='%1'>%1</a>").arg(url));
   ui->tipsGroupBox->setTitle(tr("Tip #%1").arg(i));
   ui->titleLabel->setText(tr("Tip #%1: %2").arg(i).arg(tip.title));

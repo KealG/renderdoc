@@ -193,6 +193,15 @@ QString ApplyBrandingToUIString(const QString &text)
 {
   QString branded = text;
 
+  branded.replace(lit("https://github.com/baldurk/renderdoc-contrib"), lit(RDOC_BRAND_CONTRIB_URL));
+  branded.replace(lit("https://github.com/baldurk/renderdoc"), lit(RDOC_BRAND_SOURCE_URL));
+  branded.replace(lit("https://renderdoc.org/analytics"), lit(RDOC_BRAND_ANALYTICS_URL));
+  branded.replace(lit("https://renderdoc.org/builds"), lit(RDOC_BRAND_BUILDS_URL));
+  branded.replace(lit("https://renderdoc.org/docs"), lit(RDOC_BRAND_DOCUMENTATION_URL));
+  branded.replace(lit("https://renderdoc.org/"), lit(RDOC_BRAND_WEBSITE_URL "/"));
+  branded.replace(lit("https://renderdoc.org"), lit(RDOC_BRAND_WEBSITE_URL));
+  branded.replace(lit("baldurk@baldurk.org"), lit(RDOC_BRAND_SUPPORT_EMAIL));
+
   branded.replace(lit("RenderDocCmd"), lit("$$_RDOC_CMD_$$"));
   branded.replace(lit("QRenderDoc"), lit(RDOC_BRAND_UI_DISPLAY_NAME));
   branded.replace(lit("RenderDoc"), lit(RDOC_BRAND_PRODUCT_NAME));

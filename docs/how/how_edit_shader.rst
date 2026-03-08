@@ -11,14 +11,14 @@ How to edit a custom shader
 
 :doc:`Custom visualisation shaders <how_custom_visualisation>` allow you to define your own transformation on any texture you're viewing before it is displayed. Mostly this is useful for decoding packed or custom-format data, or displaying some data in a more visually intuitive fashion.
 
-These shaders live as files in the application storage directory ( ``%APPDATA%/qrenderdoc/`` on windows or ``~/.local/share/qrenderdoc`` elsewhere), and can be edited in your editor of choice, any changes saved will be reloaded. Note however that there is currently no way to see the compile warnings or errors produced when editing externally.
+These shaders live as files in the application storage directory ( |brand_windows_ui_appdata_code| on windows or |brand_posix_ui_appdata_code| elsewhere), and can be edited in your editor of choice, any changes saved will be reloaded. Note however that there is currently no way to see the compile warnings or errors produced when editing externally.
 
-To edit a shader inside RenderDoc simply click the edit button |page_white_edit| when you have selected your custom shader for use. This will launch a new window with the custom shader and any changes you make to this shader will be saved to the file and compiled and reflected in the texture viewer as long as you have that custom shader selected.
+To edit a shader inside |brand_product_name| simply click the edit button |page_white_edit| when you have selected your custom shader for use. This will launch a new window with the custom shader and any changes you make to this shader will be saved to the file and compiled and reflected in the texture viewer as long as you have that custom shader selected.
 
 How to edit a scene shader
 --------------------------
 
-RenderDoc allows you to edit a shader used in the capture and make changes to it and see the effects in real-time.
+|brand_product_name| allows you to edit a shader used in the capture and make changes to it and see the effects in real-time.
 
 To launch the shader editor, go to the pipeline stage you wish to change in the :doc:`../window/pipeline_state` windows, and click on the edit button |page_white_edit| next to the shader. If there are multiple edit options, a drop-down menu will be available - see below for more information about shader processing tools.
 

@@ -443,7 +443,8 @@ if(ANDROID)
         message(FATAL_ERROR "ABI ${ANDROID_ABI} is not supported.")
     endif()
 
-    set(RENDERDOC_ANDROID_PACKAGE_NAME "renderdoc.org.demos.${ABI_EXTENSION_NAME}")
+    set(RDOC_TEST_ANDROID_PACKAGE_BASE "renderdoc.org.demos" CACHE STRING "Android package base for test demos")
+    set(RENDERDOC_ANDROID_PACKAGE_NAME "${RDOC_TEST_ANDROID_PACKAGE_BASE}.${ABI_EXTENSION_NAME}")
 
     set(APK_FILE ${CMAKE_BINARY_DIR}/bin/${RENDERDOC_ANDROID_PACKAGE_NAME}.apk)
     add_custom_target(apk ALL

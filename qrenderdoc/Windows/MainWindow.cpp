@@ -1263,15 +1263,16 @@ bool MainWindow::HandleMismatchedVersions()
         tr("%1 has detected mismatched versions between its internal module and UI.\n"
            "This is likely caused by a buggy update in the past which partially updated your "
            "install."
-           "Likely because a program was running with renderdoc while the update happened.\n"
+           "Likely because a program was running with %2 while the update happened.\n"
            "You should reinstall %1 immediately as this configuration is almost guaranteed "
            "to crash.\n\n"
            "Would you like to open the downloads page to reinstall?")
-            .arg(lit(RDOC_BRAND_PRODUCT_NAME)),
+            .arg(lit(RDOC_BRAND_PRODUCT_NAME))
+            .arg(lit(RDOC_BRAND_BASE_NAME)),
         QMessageBox::Yes | QMessageBox::No);
 
     if(res == QMessageBox::Yes)
-      QDesktopServices::openUrl(QUrl(lit("https://renderdoc.org/builds")));
+      QDesktopServices::openUrl(QUrl(lit(RDOC_BRAND_BUILDS_URL)));
 
     SetUpdateAvailable();
 #endif
@@ -1516,7 +1517,7 @@ void MainWindow::CheckUpdates(bool forceCheck, UpdateResultMethod callback)
 
   // call out to the status-check to see when the bug report was last updated
   MakeNetworkRequest(
-      QUrl(lit("https://renderdoc.org/getupdateurl/%1/%2?htmlnotes=1").arg(bitness).arg(versionCheck)),
+      QUrl(lit(RDOC_BRAND_UPDATE_URL_TEMPLATE).arg(bitness).arg(versionCheck)),
 
       // on success
       [this, callback](QByteArray replyData) {
@@ -2942,12 +2943,13 @@ void MainWindow::on_action_View_Documentation_triggered()
 
 void MainWindow::on_action_Source_on_GitHub_triggered()
 {
-  QDesktopServices::openUrl(QUrl::fromUserInput(lit("https://github.com/baldurk/renderdoc")));
+  QDesktopServices::openUrl(
+      QUrl::fromUserInput(ApplyBrandingToUIString(lit("https://github.com/baldurk/renderdoc"))));
 }
 
 void MainWindow::on_action_Build_Release_Downloads_triggered()
 {
-  QDesktopServices::openUrl(QUrl::fromUserInput(lit("https://renderdoc.org/builds")));
+  QDesktopServices::openUrl(QUrl::fromUserInput(lit(RDOC_BRAND_BUILDS_URL)));
 }
 
 void MainWindow::on_action_Show_Tips_triggered()
@@ -3028,7 +3030,7 @@ void MainWindow::on_action_Check_for_Updates_triggered()
                                   "Would you like to open the builds list in a browser?"));
 
         if(res == QMessageBox::Yes)
-          QDesktopServices::openUrl(lit("https://renderdoc.org/builds"));
+          QDesktopServices::openUrl(lit(RDOC_BRAND_BUILDS_URL));
         break;
       }
       case UpdateResult::Latest:

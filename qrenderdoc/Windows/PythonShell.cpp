@@ -23,6 +23,7 @@
  ******************************************************************************/
 
 #include "PythonShell.h"
+#include "../../renderdoc/common/brand_config.h"
 #include <QFontDatabase>
 #include <QKeyEvent>
 #include <QMenu>
@@ -1500,11 +1501,15 @@ void PythonShell::helpSearch_keypress(QKeyEvent *e)
 
 QString PythonShell::scriptHeader()
 {
-  return tr(R"(RenderDoc Python console, powered by python %1.
+  return tr(R"(%1 Python console, powered by python %2.
 The 'pyrenderdoc' object is the current CaptureContext instance.
-The 'renderdoc' and 'qrenderdoc' modules are available.
-Documentation is available: https://renderdoc.org/docs/python_api/index.html)")
-      .arg(interactiveContext->versionString());
+The '%3' and '%4' modules are available.
+Documentation is available: %5)")
+      .arg(lit(RDOC_BRAND_PRODUCT_NAME))
+      .arg(interactiveContext->versionString())
+      .arg(lit(RDOC_BRAND_PY_CORE_MODULE_NAME))
+      .arg(lit(RDOC_BRAND_PY_GUI_MODULE_NAME))
+      .arg(lit(RDOC_BRAND_PYTHON_API_URL));
 }
 
 void PythonShell::appendText(QTextEdit *output, const QString &text)

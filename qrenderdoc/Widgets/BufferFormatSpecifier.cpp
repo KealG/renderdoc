@@ -77,6 +77,7 @@ BufferFormatSpecifier::BufferFormatSpecifier(QWidget *parent)
     : QWidget(parent), ui(new Ui::BufferFormatSpecifier)
 {
   ui->setupUi(this);
+  ui->helpText->setHtml(ApplyBrandingToUIString(ui->helpText->toHtml()));
 
   formatText = new ScintillaEdit(this);
 
