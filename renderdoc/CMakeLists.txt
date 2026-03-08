@@ -634,6 +634,8 @@ target_link_libraries(renderdoc ${RDOC_LIBRARIES})
 
 add_dependencies(renderdoc renderdoc_libentry)
 
+set_target_properties(renderdoc PROPERTIES OUTPUT_NAME "${RDOC_CORE_OUTPUT_NAME}")
+
 if(UNIX AND NOT ANDROID AND NOT APPLE)
     set(RDOC_LINK_FLAGS "-Wl,--undefined,force_include_libentry -Wl,--version-script,${CMAKE_CURRENT_SOURCE_DIR}/${RDOC_BASE_NAME}.version")
 
@@ -658,10 +660,6 @@ if(APPLE)
     set_target_properties(renderdoc PROPERTIES BUILD_WITH_INSTALL_NAME_DIR TRUE)
 endif()
 
-if(INTERNAL_SELF_CAPTURE)
-    set_target_properties(renderdoc PROPERTIES OUTPUT_NAME "rdocself")
-endif()
-
 if(ANDROID)
     set(RDOC_LINK_FLAGS "-Wl,--undefined,force_include_libentry -Wl,--build-id")
     if(ENABLE_ASAN)
@@ -669,7 +667,7 @@ if(ANDROID)
     endif()
     set_target_properties(renderdoc PROPERTIES LINK_FLAGS "${RDOC_LINK_FLAGS}")
     # rename output library
-    set_target_properties(renderdoc PROPERTIES OUTPUT_NAME "VkLayer_GLES_RenderDoc")
+    set_target_properties(renderdoc PROPERTIES OUTPUT_NAME "${RDOC_ANDROID_OUTPUT_NAME}")
 
     if(STRIP_ANDROID_LIBRARY AND ANDROID_STRIP_TOOL AND RELEASE_MODE)
         add_custom_command(TARGET renderdoc POST_BUILD

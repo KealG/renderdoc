@@ -114,6 +114,15 @@ if(INTERNAL_SELF_CAPTURE)
     set(RDOC_BASE_NAME "rdocself")
     add_definitions(-DRDOC_SELFCAPTURE_LIMITEDAPI=1)
 endif()
+
+set(RDOC_CORE_OUTPUT_NAME "${RDOC_BASE_NAME}")
+set(RDOC_CMD_OUTPUT_NAME "renderdoccmd")
+set(RDOC_ANDROID_OUTPUT_NAME "VkLayer_GLES_RenderDoc")
+
+if(INTERNAL_SELF_CAPTURE)
+    set(RDOC_CMD_OUTPUT_NAME "rdocselfcmd")
+endif()
+
 string(TOUPPER ${RDOC_BASE_NAME} RDOC_BASE_NAME_UPPER)
 add_definitions(-DRDOC_BASE_NAME=${RDOC_BASE_NAME})
 
