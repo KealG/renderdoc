@@ -148,6 +148,10 @@ CaptureDialog::CaptureDialog(ICaptureContext &ctx, OnCaptureMethod captureCallba
 {
   ui->setupUi(this);
 
+  ui->androidScan->setText(ApplyBrandingToUIString(ui->androidScan->text()));
+  ui->androidWarn->setText(ApplyBrandingToUIString(ui->androidWarn->text()));
+  ui->launch->setToolTip(ApplyBrandingToUIString(ui->launch->toolTip()));
+
   ui->exePath->setFont(Formatter::PreferredFont());
   ui->workDirPath->setFont(Formatter::PreferredFont());
   ui->cmdline->setFont(Formatter::PreferredFont());

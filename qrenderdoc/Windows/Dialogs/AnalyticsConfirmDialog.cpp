@@ -36,6 +36,8 @@ AnalyticsConfirmDialog::AnalyticsConfirmDialog(QString report, QWidget *parent)
 {
   ui->setupUi(this);
 
+  ui->label->setText(ApplyBrandingToUIString(ui->label->text()));
+
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
   ui->analyticsReport->setFont(Formatter::FixedFont());

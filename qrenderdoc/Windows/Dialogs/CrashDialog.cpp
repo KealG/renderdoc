@@ -47,6 +47,9 @@ CrashDialog::CrashDialog(PersistantConfig &cfg, QVariantMap crashReportJSON, QWi
 {
   ui->setupUi(this);
 
+  setWindowTitle(ApplyBrandingToUIString(windowTitle()));
+  ui->rdocName->setText(ApplyBrandingToUIString(ui->rdocName->text()));
+
   m_NetManager = new QNetworkAccessManager(this);
 
   m_ReportPath = crashReportJSON[lit("report")].toString();

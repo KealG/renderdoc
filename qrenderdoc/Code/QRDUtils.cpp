@@ -53,6 +53,7 @@
 #include <QTextBoundaryFinder>
 #include <QTextDocument>
 #include <QtMath>
+#include "../../renderdoc/common/brand_config.h"
 #include "Code/Resources.h"
 #include "Widgets/Extended/RDListWidget.h"
 #include "Widgets/Extended/RDTreeWidget.h"
@@ -186,6 +187,19 @@ void TruncateStringFromEnd(QString &name)
     name.resize(pos);
     name += lit("...");
   }
+}
+
+QString ApplyBrandingToUIString(const QString &text)
+{
+  QString branded = text;
+
+  branded.replace(lit("RenderDocCmd"), lit("$$_RDOC_CMD_$$"));
+  branded.replace(lit("QRenderDoc"), lit(RDOC_BRAND_PRODUCT_NAME));
+  branded.replace(lit("RenderDoc"), lit(RDOC_BRAND_PRODUCT_NAME));
+  branded.replace(lit("qrenderdoc.exe"), lit(RDOC_BRAND_UI_EXECUTABLE));
+  branded.replace(lit("$$_RDOC_CMD_$$"), lit(RDOC_BRAND_CMD_DISPLAY_NAME));
+
+  return branded;
 }
 
 QString GetTruncatedResourceName(const ICaptureContext &ctx, ResourceId id)

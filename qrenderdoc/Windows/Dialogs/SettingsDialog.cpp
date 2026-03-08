@@ -43,6 +43,19 @@ SettingsDialog::SettingsDialog(ICaptureContext &ctx, QWidget *parent)
 {
   ui->setupUi(this);
 
+  auto applyTooltipBranding = [](QWidget *widget) {
+    widget->setToolTip(ApplyBrandingToUIString(widget->toolTip()));
+  };
+
+  applyTooltipBranding(ui->globalHookLabel);
+  applyTooltipBranding(ui->AllowGlobalHook);
+  applyTooltipBranding(ui->injectProcLabel);
+  applyTooltipBranding(ui->AllowProcessInject);
+  applyTooltipBranding(ui->label_8);
+  applyTooltipBranding(ui->CheckUpdate_AllowChecks);
+  applyTooltipBranding(ui->label_18);
+  applyTooltipBranding(ui->ExternalTool_RGPIntegration);
+
   m_Init = true;
 
   m_ReplayOptions = new ReplayOptionsSelector(m_Ctx, false, this);

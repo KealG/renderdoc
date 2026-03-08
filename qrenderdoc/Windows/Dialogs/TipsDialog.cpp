@@ -34,6 +34,7 @@ TipsDialog::TipsDialog(ICaptureContext &Ctx, QWidget *parent)
     : m_Ctx(Ctx), QDialog(parent), ui(new Ui::TipsDialog), m_currentTip(0)
 {
   ui->setupUi(this);
+  setWindowTitle(ApplyBrandingToUIString(windowTitle()));
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
   initialize();
 

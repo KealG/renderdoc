@@ -34,6 +34,9 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
 {
   ui->setupUi(this);
 
+  setWindowTitle(ApplyBrandingToUIString(windowTitle()));
+  ui->rdocName->setText(ApplyBrandingToUIString(ui->rdocName->text()));
+
   QString hash = QString::fromLatin1(RENDERDOC_GetCommitHash());
 
   if(hash[0] == QLatin1Char('N') && hash[1] == QLatin1Char('O'))

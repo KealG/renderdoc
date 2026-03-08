@@ -379,6 +379,8 @@ bool RichResourceTextMouseEvent(const QWidget *owner, const QVariant &var, QRect
 // can't paint rich resource text but we still want to display the string nicely
 QString RichResourceTextFormat(ICaptureContext &ctx, QVariant var);
 
+QString ApplyBrandingToUIString(const QString &text);
+
 // Register runtime conversions for custom Qt metatypes
 void RegisterMetatypeConversions();
 

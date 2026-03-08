@@ -93,6 +93,8 @@ LiveCapture::LiveCapture(ICaptureContext &ctx, const QString &hostname, const QS
 {
   ui->setupUi(this);
 
+  ui->apiIcon->setToolTip(ApplyBrandingToUIString(ui->apiIcon->toolTip()));
+
   m_Disconnect.release();
 
   QObject::connect(&childUpdateTimer, &QTimer::timeout, this, &LiveCapture::childUpdate);

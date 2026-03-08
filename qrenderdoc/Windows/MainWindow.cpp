@@ -114,6 +114,8 @@ MainWindow::MainWindow(ICaptureContext &ctx) : QMainWindow(NULL), ui(new Ui::Mai
 {
   ui->setupUi(this);
 
+  setWindowTitle(ApplyBrandingToUIString(windowTitle()));
+
   setProperty("ICaptureContext", QVariant::fromValue((void *)&ctx));
 
 #if defined(Q_OS_WIN32)
