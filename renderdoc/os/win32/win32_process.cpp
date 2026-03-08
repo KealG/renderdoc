@@ -409,7 +409,7 @@ void InjectFunctionCall(HANDLE hProcess, uintptr_t renderdoc_remote, const char 
 
   RDCDEBUG("Injecting call to %s", funcName);
 
-  HMODULE renderdoc_local = GetModuleHandleA(STRINGIZE(RDOC_BASE_NAME) ".dll");
+  HMODULE renderdoc_local = GetModuleHandleA(RDOC_BRAND_CORE_DLL_NAME);
 
   uintptr_t func_local = (uintptr_t)GetProcAddress(renderdoc_local, funcName);
 
@@ -610,7 +610,7 @@ rdcpair<RDResult, uint32_t> Process::InjectIntoProcess(uint32_t pid,
   RDCLOG("Injecting renderdoc into process %lu", pid);
 
   wchar_t renderdocPath[MAX_PATH] = {0};
-  GetModuleFileNameW(GetModuleHandleA(STRINGIZE(RDOC_BASE_NAME) ".dll"), &renderdocPath[0],
+  GetModuleFileNameW(GetModuleHandleA(RDOC_BRAND_CORE_DLL_NAME), &renderdocPath[0],
                                       MAX_PATH - 1);
 
   wchar_t renderdocPathLower[MAX_PATH] = {0};
@@ -972,9 +972,9 @@ rdcpair<RDResult, uint32_t> Process::InjectIntoProcess(uint32_t pid,
 
   InjectDLL(hProcess, renderdocPath);
 
-  const char *rdoc_dll = STRINGIZE(RDOC_BASE_NAME);
+  const char *rdoc_dll = RDOC_BRAND_CORE_DLL_NAME;
 
-  uintptr_t loc = FindRemoteDLL(pid, STRINGIZE(RDOC_BASE_NAME) ".dll");
+  uintptr_t loc = FindRemoteDLL(pid, RDOC_BRAND_CORE_DLL_NAME);
 
   rdcpair<RDResult, uint32_t> result = {ResultCode::Succeeded, 0};
 
@@ -982,7 +982,7 @@ rdcpair<RDResult, uint32_t> Process::InjectIntoProcess(uint32_t pid,
   {
     SET_ERROR_RESULT(
         result.first, ResultCode::InjectionFailed,
-        "Failed to inject %s.dll into process. Check that the process did not crash or exit "
+        "Failed to inject %s into process. Check that the process did not crash or exit "
         "early in initialisation, e.g. if the working directory is incorrectly set.",
         rdoc_dll);
   }
@@ -1131,14 +1131,14 @@ rdcpair<RDResult, uint32_t> Process::LaunchAndInjectIntoProcess(
     const CaptureOptions &opts, bool waitForExit)
 {
   void *func =
-      GetProcAddress(GetModuleHandleA(STRINGIZE(RDOC_BASE_NAME) ".dll"), "INTERNAL_SetCaptureFile");
+      GetProcAddress(GetModuleHandleA(RDOC_BRAND_CORE_DLL_NAME), "INTERNAL_SetCaptureFile");
 
   if(func == NULL)
   {
-    const char *rdoc_dll = STRINGIZE(RDOC_BASE_NAME);
+    const char *rdoc_dll = RDOC_BRAND_CORE_DLL_NAME;
     RDResult result;
     SET_ERROR_RESULT(result, ResultCode::InternalError,
-                     "Can't find required export function in %s.dll - corrupted/missing file?",
+                     "Can't find required export function in %s - corrupted/missing file?",
                      rdoc_dll);
     return {result, 0};
   }
