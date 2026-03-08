@@ -24,6 +24,7 @@
  ******************************************************************************/
 
 #include "renderdoccmd.h"
+#include "../renderdoc/common/brand_config.h"
 #include <app/renderdoc_app.h>
 #include <replay/version.h>
 #include <string>
@@ -1609,7 +1610,7 @@ int renderdoccmd(GlobalEnvironment &env, std::vector<std::string> &argv)
 
     cmdline::parser cmd;
 
-    cmd.set_program_name("renderdoccmd");
+    cmd.set_program_name(RDOC_BRAND_CMD_NAME);
     cmd.set_header(command);
 
     it->second->AddOptions(cmd);

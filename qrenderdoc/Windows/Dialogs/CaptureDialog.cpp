@@ -23,6 +23,7 @@
  ******************************************************************************/
 
 #include "CaptureDialog.h"
+#include "../../../renderdoc/common/brand_config.h"
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QSortFilterProxyModel>
@@ -493,7 +494,7 @@ void CaptureDialog::vulkanLayerWarn_mouseClick()
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
         QDir binDir = QFileInfo(qApp->applicationFilePath()).absoluteDir();
 
-        QString cmd = lit("renderdoccmd");
+        QString cmd = lit(RDOC_BRAND_CMD_NAME);
 
         if(binDir.exists(cmd))
         {

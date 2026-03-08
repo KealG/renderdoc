@@ -28,6 +28,7 @@
 #include <algorithm>
 #include "api/replay/version.h"
 #include "common/common.h"
+#include "common/brand_config.h"
 #include "common/threading.h"
 #include "core/settings.h"
 #include "hooks/hooks.h"
@@ -525,7 +526,7 @@ void RenderDoc::RecreateCrashHandler()
 
   // only create crash handler when we're not in renderdoccmd (to prevent infinite loop as
   // the crash handler itself launches renderdoccmd)
-  if(exename.contains("renderdoccmd"))
+  if(exename.contains(strlower(RDOC_BRAND_CMD_NAME)))
     return;
 
 #if ENABLED(RDOC_WIN32)
