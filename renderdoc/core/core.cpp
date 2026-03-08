@@ -523,10 +523,11 @@ void RenderDoc::RecreateCrashHandler()
   rdcstr exename;
   FileIO::GetExecutableFilename(exename);
   exename = strlower(exename);
+  rdcstr basename = get_basename(exename);
 
   // only create crash handler when we're not in renderdoccmd (to prevent infinite loop as
   // the crash handler itself launches renderdoccmd)
-  if(exename.contains(strlower(RDOC_BRAND_CMD_NAME)))
+  if(basename == strlower(RDOC_BRAND_CMD_NAME) || basename == strlower(RDOC_BRAND_CMD_EXECUTABLE))
     return;
 
 #if ENABLED(RDOC_WIN32)
@@ -850,7 +851,7 @@ void RenderDoc::InitialiseReplay(GlobalEnvironment env, const rdcarray<rdcstr> &
       RDCLOG("Parameter [%u]: %s", (uint32_t)i, args[i].c_str());
   }
 
-  if(args.contains("--crash"))
+  if(args.contains("--" RDOC_BRAND_CRASH_OPTION))
     UnloadCrashHandler();
   else
     RecreateCrashHandler();

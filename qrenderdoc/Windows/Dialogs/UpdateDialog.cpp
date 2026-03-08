@@ -277,8 +277,10 @@ void UpdateDialog::on_update_clicked()
       QDir::setCurrent(dir.absolutePath());
 
       success = RunProcessAsAdmin(
-          dir.absoluteFilePath(cmd),
-          QStringList() << lit("upgrade") << lit("--path") << appDir.absolutePath(), NULL, true);
+          dir.absoluteFilePath(cmd), QStringList()
+                                       << lit(RDOC_BRAND_UPGRADE_COMMAND)
+                                       << lit("--path") << appDir.absolutePath(),
+          NULL, true);
 
       exit(0);
     });

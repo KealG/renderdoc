@@ -138,7 +138,8 @@ public:
 
     rdcstr cmdline = "\"";
     cmdline += get_dirname(dllpath);
-    cmdline += "/" RDOC_BRAND_CMD_EXECUTABLE "\" crashhandle --pipe ";
+    cmdline += "/" RDOC_BRAND_CMD_EXECUTABLE "\" " RDOC_BRAND_CRASH_HANDLE_COMMAND
+               " --pipe ";
     cmdline += m_PipeName;
 
     rdcwstr params = StringFormat::UTF82Wide(cmdline);

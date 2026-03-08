@@ -438,9 +438,9 @@ public:
     cmdline += wide_path;
     cmdline += L"/" RDOC_WIDEN(RDOC_BRAND_UI_EXECUTABLE) L"\" ";
     if(successful)
-      cmdline += L"--updatedone_admin";
+      cmdline += L"--" RDOC_WIDEN(RDOC_BRAND_UPDATE_DONE_ADMIN_OPTION);
     else
-      cmdline += L"--updatefailed " + failReason;
+      cmdline += L"--" RDOC_WIDEN(RDOC_BRAND_UPDATE_FAILED_OPTION) L" " + failReason;
 
     wchar_t *paramsAlloc = new wchar_t[512];
 
@@ -518,7 +518,7 @@ public:
 
           VARIANT param = {};
           param.vt = VT_BSTR;
-          param.bstrVal = SysAllocString(L"--updatedone");
+          param.bstrVal = SysAllocString(L"--" RDOC_WIDEN(RDOC_BRAND_UPDATE_DONE_OPTION));
 
           // return value unclear, we just assume if we got this far that it works.
           dispatcher->ShellExecute(path, param, empty, empty, show);
@@ -535,7 +535,8 @@ public:
 
     cmdline = L"\"";
     cmdline += wide_path;
-    cmdline += L"/" RDOC_WIDEN(RDOC_BRAND_UI_EXECUTABLE) L"\" --updatedone";
+    cmdline += L"/" RDOC_WIDEN(RDOC_BRAND_UI_EXECUTABLE) L"\" --"
+               RDOC_WIDEN(RDOC_BRAND_UPDATE_DONE_OPTION);
     ZeroMemory(paramsAlloc, sizeof(wchar_t) * 512);
     wcscpy_s(paramsAlloc, 511, cmdline.c_str());
 
@@ -573,7 +574,7 @@ public:
     pipe = conv(parser.get<std::string>("pipe"));
     return true;
   }
-  virtual rdcarray<rdcstr> ReplayArgs() { return {"--crash"}; }
+  virtual rdcarray<rdcstr> ReplayArgs() { return {"--" RDOC_BRAND_CRASH_OPTION}; }
   virtual int Execute(const CaptureOptions &)
   {
     CrashGenerationServer *crashServer = NULL;
@@ -732,7 +733,8 @@ public:
           ZeroMemory(paramsAlloc, sizeof(wchar_t) * 512);
 
           _snwprintf_s(paramsAlloc, 511, 511,
-                       L"%s/" RDOC_WIDEN(RDOC_BRAND_UI_EXECUTABLE) L" --crash %s",
+                       L"%s/" RDOC_WIDEN(RDOC_BRAND_UI_EXECUTABLE) L" --"
+                       RDOC_WIDEN(RDOC_BRAND_CRASH_OPTION) L" %s",
                        exepath.c_str(), destjson.c_str());
 
           PROCESS_INFORMATION pi;
@@ -810,7 +812,8 @@ public:
     if(wpathmatch.length() < 4)
     {
       std::cerr
-          << "globalhook path match is too short/general. Danger of matching too many processes!"
+          << RDOC_BRAND_GLOBAL_HOOK_COMMAND
+          << " path match is too short/general. Danger of matching too many processes!"
           << std::endl;
       return 1;
     }
@@ -822,7 +825,8 @@ public:
 
     if(rdoc == NULL)
     {
-      std::cerr << "globalhook couldn't find " << RDOC_BRAND_CORE_DLL_NAME << "!"
+      std::cerr << RDOC_BRAND_GLOBAL_HOOK_COMMAND << " couldn't find " << RDOC_BRAND_CORE_DLL_NAME
+                << "!"
                 << std::endl;
       return 1;
     }
@@ -835,7 +839,8 @@ public:
 
     if(pipe == INVALID_HANDLE_VALUE)
     {
-      std::cerr << "globalhook couldn't open stdin pipe.\n" << std::endl;
+      std::cerr << RDOC_BRAND_GLOBAL_HOOK_COMMAND << " couldn't open stdin pipe.\n"
+                << std::endl;
       return 1;
     }
 
@@ -845,7 +850,8 @@ public:
     {
       CloseHandle(pipe);
       CloseHandle(datahandle);
-      std::cerr << "globalhook found pre-existing global data, not creating second global hook."
+      std::cerr << RDOC_BRAND_GLOBAL_HOOK_COMMAND
+                << " found pre-existing global data, not creating second global hook."
                 << std::endl;
       return 1;
     }
@@ -880,14 +886,16 @@ public:
       }
       else
       {
-        std::cerr << "globalhook couldn't map global data store." << std::endl;
+        std::cerr << RDOC_BRAND_GLOBAL_HOOK_COMMAND << " couldn't map global data store."
+                  << std::endl;
       }
 
       CloseHandle(datahandle);
     }
     else
     {
-      std::cerr << "globalhook couldn't create global data store." << std::endl;
+      std::cerr << RDOC_BRAND_GLOBAL_HOOK_COMMAND << " couldn't create global data store."
+                << std::endl;
     }
 
     CloseHandle(pipe);
@@ -939,17 +947,17 @@ int main(int, char *)
   GlobalEnvironment env;
 
   // perform an upgrade of the UI
-  add_command("upgrade", new UpgradeCommand());
+  add_command(RDOC_BRAND_UPGRADE_COMMAND, new UpgradeCommand());
 
 #if CRASH_HANDLER
   // special WIN32 option for launching the crash handler
-  add_command("crashhandle", new CrashHandlerCommand());
+  add_command(RDOC_BRAND_CRASH_HANDLE_COMMAND, new CrashHandlerCommand());
 #endif
 
   // this installs a global windows hook pointing at renderdocshim*.dll that filters all running
   // processes and loads renderdoc.dll in the target one. In any other process it unloads as soon as
   // possible
-  add_command("globalhook", new GlobalHookCommand());
+  add_command(RDOC_BRAND_GLOBAL_HOOK_COMMAND, new GlobalHookCommand());
 
   return renderdoccmd(env, argv);
 }

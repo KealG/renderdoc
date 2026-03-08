@@ -329,15 +329,29 @@ private:
     if(!RenderDoc::Inst().GetCaptureOptions().hookIntoChildren)
       return false;
 
+    static auto IsSelfTarget = [](const rdcstr &str) {
+      const char *selfNames[] = {
+          RDOC_BRAND_CMD_NAME,       RDOC_BRAND_CMD_EXECUTABLE,
+          RDOC_BRAND_UI_NAME,        RDOC_BRAND_UI_EXECUTABLE,
+          RDOC_BRAND_UI_STUB_NAME,   RDOC_BRAND_UI_STUB_EXECUTABLE,
+      };
+
+      for(const char *selfName : selfNames)
+        if(str.contains(selfName))
+          return true;
+
+      return false;
+    };
+
     bool inject = true;
 
     // sanity check to make sure we're not going to go into an infinity loop injecting into
     // ourselves.
     if(lpApplicationName)
     {
-      rdcstr app = strlower(StringFormat::Wide2UTF8(lpApplicationName));
+      rdcstr app = get_basename(strlower(StringFormat::Wide2UTF8(lpApplicationName)));
 
-      if(app.contains(RDOC_BRAND_CMD_EXECUTABLE) || app.contains(RDOC_BRAND_UI_EXECUTABLE))
+      if(IsSelfTarget(app))
       {
         inject = false;
       }
@@ -346,7 +360,7 @@ private:
     {
       rdcstr cmd = strlower(StringFormat::Wide2UTF8(lpCommandLine));
 
-      if(cmd.contains(RDOC_BRAND_CMD_EXECUTABLE) || cmd.contains(RDOC_BRAND_UI_EXECUTABLE))
+      if(IsSelfTarget(cmd))
       {
         inject = false;
       }

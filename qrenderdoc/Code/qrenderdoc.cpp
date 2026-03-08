@@ -358,19 +358,20 @@ int main(int argc, char *argv[])
   hideOption(installLayer);
   parser.addOption(installLayer);
 
-  QCommandLineOption updateFailed(lit("updatefailed"), QString(), lit("errormsg"));
+  QCommandLineOption updateFailed(lit(RDOC_BRAND_UPDATE_FAILED_OPTION), QString(),
+                                  lit("errormsg"));
   hideOption(updateFailed);
   parser.addOption(updateFailed);
 
-  QCommandLineOption updateDoneAdmin(lit("updatedone_admin"));
+  QCommandLineOption updateDoneAdmin(lit(RDOC_BRAND_UPDATE_DONE_ADMIN_OPTION));
   hideOption(updateDoneAdmin);
   parser.addOption(updateDoneAdmin);
 
-  QCommandLineOption updateDone(lit("updatedone"));
+  QCommandLineOption updateDone(lit(RDOC_BRAND_UPDATE_DONE_OPTION));
   hideOption(updateDone);
   parser.addOption(updateDone);
 
-  QCommandLineOption crashReport(lit("crash"), QString(), lit("reportpath"));
+  QCommandLineOption crashReport(lit(RDOC_BRAND_CRASH_OPTION), QString(), lit("reportpath"));
   hideOption(crashReport);
   parser.addOption(crashReport);
 
@@ -597,7 +598,7 @@ int main(int argc, char *argv[])
 #endif
       rdcarray<rdcstr> coreargs;
       if(!crashReportPath.isEmpty())
-        coreargs.push_back("--crash");
+        coreargs.push_back("--" RDOC_BRAND_CRASH_OPTION);
       for(const QString &arg : remaining)
         coreargs.push_back(arg);
 

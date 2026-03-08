@@ -1575,7 +1575,8 @@ RDResult Process::StartGlobalHook(const rdcstr &pathmatch, const rdcstr &capture
   rdcstr debugLogfile = RDCGETLOGFILE();
 
   rdcstr params = StringFormat::Fmt(
-      "\"%s\" globalhook --match \"%s\" --capfile \"%s\" --debuglog \"%s\" --capopts \"%s\"",
+      "\"%s\" " RDOC_BRAND_GLOBAL_HOOK_COMMAND
+      " --match \"%s\" --capfile \"%s\" --debuglog \"%s\" --capopts \"%s\"",
       cmdpathNative.c_str(), pathmatch.c_str(), capturefile.c_str(), debugLogfile.c_str(),
       optstr.c_str());
 
@@ -1650,7 +1651,8 @@ RDResult Process::StartGlobalHook(const rdcstr &pathmatch, const rdcstr &capture
 // repeat the process for the Wow32 renderdoccmd
 #if ENABLED(RDOC_X64)
   params = StringFormat::Fmt(
-      "\"%s\" globalhook --match \"%s\" --capfile \"%s\" --debuglog \"%s\" --capopts \"%s\"",
+      "\"%s\" " RDOC_BRAND_GLOBAL_HOOK_COMMAND
+      " --match \"%s\" --capfile \"%s\" --debuglog \"%s\" --capopts \"%s\"",
       cmdpathWow32.c_str(), pathmatch.c_str(), capturefile.c_str(), debugLogfile.c_str(),
       optstr.c_str());
 
