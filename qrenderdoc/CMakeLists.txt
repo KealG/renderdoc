@@ -91,7 +91,7 @@ endif()
 
 if(APPLE)
     set(QMAKE_RPATHDIR "@executable_path/../lib")
-    add_custom_command(OUTPUT RenderDoc.icns
+    add_custom_command(OUTPUT ${RDOC_GUI_BUNDLE_ICON_NAME}
         COMMAND echo Creating OS X Icon
         COMMAND mkdir -p RenderDoc.iconset
         COMMAND qlmanage -t -s 1024 -o . ${CMAKE_CURRENT_SOURCE_DIR}/Resources/logo.svg
@@ -108,7 +108,7 @@ if(APPLE)
         COMMAND iconutil -c icns RenderDoc.iconset
         DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Resources/logo.svg)
 else()
-    add_custom_command(OUTPUT RenderDoc.icns COMMAND touch RenderDoc.icns)
+    add_custom_command(OUTPUT ${RDOC_GUI_BUNDLE_ICON_NAME} COMMAND touch ${RDOC_GUI_BUNDLE_ICON_NAME})
 endif()
 
 include(ExternalProject)
@@ -238,7 +238,7 @@ file(WRITE
 if(APPLE)
     file(APPEND
         ${CMAKE_BINARY_DIR}/qrenderdoc/qrenderdoc_cmake.pri
-        "OSX_ICONFILE=${CMAKE_CURRENT_BINARY_DIR}/RenderDoc.icns\n"
+        "OSX_ICONFILE=${CMAKE_CURRENT_BINARY_DIR}/${RDOC_GUI_BUNDLE_ICON_NAME}\n"
         "QMAKE_MACOSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET}\n")
 endif()
 
@@ -376,7 +376,7 @@ add_custom_target(swig-bindings ALL DEPENDS ${swig_output})
 
 if(ENABLE_QRENDERDOC)
 
-set(QRD_DEPENDENCIES RenderDoc.icns)
+set(QRD_DEPENDENCIES ${RDOC_GUI_BUNDLE_ICON_NAME})
 
 if(APPLE AND CMAKE_GENERATOR STREQUAL "Xcode")
     file(GLOB_RECURSE CODE_FILES Code/*.h Code/*.cpp Code/*.mm Code/*.i)

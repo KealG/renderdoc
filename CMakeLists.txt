@@ -120,6 +120,8 @@ set(RDOC_GUI_TARGET_NAME "qrenderdoc")
 set(RDOC_CMD_OUTPUT_NAME "renderdoccmd")
 set(RDOC_PY_CORE_MODULE_NAME "renderdoc")
 set(RDOC_PY_GUI_MODULE_NAME "qrenderdoc")
+set(RDOC_GUI_BUNDLE_ICON_NAME "RenderDoc.icns")
+set(RDOC_CORE_MAC_DYLIB_NAME "lib${RDOC_CORE_OUTPUT_NAME}.dylib")
 set(RDOC_ANDROID_OUTPUT_NAME "VkLayer_GLES_RenderDoc")
 
 if(INTERNAL_SELF_CAPTURE)

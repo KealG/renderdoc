@@ -14,6 +14,7 @@ equals(QT_MAJOR_VERSION, 5): lessThan(QT_MINOR_VERSION, 6): error("requires Qt 5
 
 isEmpty(RDOC_CORE_OUTPUT_NAME): RDOC_CORE_OUTPUT_NAME = renderdoc
 isEmpty(RDOC_GUI_TARGET_NAME): RDOC_GUI_TARGET_NAME = qrenderdoc
+isEmpty(RDOC_CORE_MAC_DYLIB_NAME): RDOC_CORE_MAC_DYLIB_NAME = lib$${RDOC_CORE_OUTPUT_NAME}.dylib
 
 TARGET = $$RDOC_GUI_TARGET_NAME
 TEMPLATE = app
@@ -152,7 +153,7 @@ win32 {
 		# add qrc file with qt.conf
 		RESOURCES += Resources/qtconf.qrc
 		
-		librd.files = $$files($$DESTDIR/../lib/librenderdoc.dylib)
+		librd.files = $$files($$DESTDIR/../lib/$${RDOC_CORE_MAC_DYLIB_NAME})
 		librd.path = Contents/lib
 		QMAKE_BUNDLE_DATA += librd
 
