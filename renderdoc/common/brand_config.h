@@ -27,6 +27,7 @@
 
 #define RDOC_BRAND_GLOBAL_HOOK_DATA_NAME_64 "RenderDocGlobalHookData64"
 #define RDOC_BRAND_GLOBAL_HOOK_DATA_NAME_32 "RenderDocGlobalHookData32"
+#define RDOC_BRAND_GLOBAL_HOOK_RESTORE_FILENAME "RenderDoc_RestoreGlobalHook.reg"
 
 #define RDOC_BRAND_TEMP_SUBFOLDER "RenderDoc"
 #define RDOC_BRAND_APPDATA_SUBFOLDER "renderdoc"

@@ -1379,7 +1379,7 @@ RDResult BackupAndChangeRegistry(GlobalHookData &hookdata, const rdcstr &shimpat
   // write it to disk but don't fail if we can't, just print it to the log and keep going.
   wchar_t reg_backup[MAX_PATH];
   GetTempPathW(MAX_PATH, reg_backup);
-  wcscat_s(reg_backup, L"RenderDoc_RestoreGlobalHook.reg");
+  wcscat_s(reg_backup, RDOC_WIDEN(RDOC_BRAND_GLOBAL_HOOK_RESTORE_FILENAME));
 
   FILE *f = NULL;
   _wfopen_s(&f, reg_backup, L"w");
