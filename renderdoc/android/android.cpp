@@ -736,7 +736,7 @@ struct AndroidRemoteServer : public RemoteServer
       for(const rdcstr &line : lines)
       {
         // hide our own internal packages
-        if(strstr(line.c_str(), "package:org.renderdoc."))
+        if(strstr(line.c_str(), "package:" RENDERDOC_ANDROID_PACKAGE_BASE "."))
           continue;
 
         if(!strncmp(line.c_str(), "package:", 8))
@@ -1255,7 +1255,7 @@ struct AndroidController : public IDeviceProtocolHandler
       // Captures are portable across bitness and in some cases a 64-bit capture can't replay on a
       // 32-bit remote server.
       Android::adbExecCommand(
-          deviceID, "shell am start -n " + package + "/.Loader -e renderdoccmd remoteserver");
+          deviceID, "shell am start -n " + package + "/.Loader -e " RENDERDOC_CMD_ANDROID_EXTRA_KEY " remoteserver");
     });
 
     // allow the package to start and begin listening before we return

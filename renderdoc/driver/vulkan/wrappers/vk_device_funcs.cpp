@@ -49,9 +49,9 @@ RDOC_CONFIG(bool, Vulkan_Debug_EnableGPUVA, false,
 static VkApplicationInfo renderdocAppInfo = {
     VK_STRUCTURE_TYPE_APPLICATION_INFO,
     NULL,
-    "RenderDoc Capturing App",
+    RENDERDOC_VULKAN_CAPTURE_APP_NAME,
     VK_MAKE_VERSION(RENDERDOC_VERSION_MAJOR, RENDERDOC_VERSION_MINOR, 0),
-    "RenderDoc",
+    RENDERDOC_VULKAN_ENGINE_NAME,
     VK_MAKE_VERSION(RENDERDOC_VERSION_MAJOR, RENDERDOC_VERSION_MINOR, 0),
     VK_API_VERSION_1_0,
 };
@@ -582,7 +582,7 @@ VkResult WrappedVulkan::vkCreateInstance(const VkInstanceCreateInfo *pCreateInfo
 
   const bool internalInstance =
       (pCreateInfo->pApplicationInfo && pCreateInfo->pApplicationInfo->pApplicationName &&
-       rdcstr(pCreateInfo->pApplicationInfo->pApplicationName) == "RenderDoc forced instance");
+       rdcstr(pCreateInfo->pApplicationInfo->pApplicationName) == RENDERDOC_VULKAN_FORCED_INSTANCE_NAME);
 
   VkLayerInstanceCreateInfo *layerCreateInfo = (VkLayerInstanceCreateInfo *)pCreateInfo->pNext;
 

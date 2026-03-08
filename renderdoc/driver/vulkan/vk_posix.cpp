@@ -280,15 +280,71 @@ static rdcstr GenerateJSON(const rdcstr &sopath)
     idx = json.find(enableVarString);
   }
 
+  const rdcstr layerPrefix = "VK_LAYER_" + strupper(VulkanLayerJSONBasename) + "_Capture";
+
   const char layerNameString[] = "@VULKAN_LAYER_NAME@";
 
   idx = json.find(layerNameString);
   while(idx >= 0)
   {
-    json = json.substr(0, idx) + "VK_LAYER_" + strupper(VulkanLayerJSONBasename) + "_Capture" +
-           json.substr(idx + sizeof(layerNameString) - 1);
+    json = json.substr(0, idx) + layerPrefix + json.substr(idx + sizeof(layerNameString) - 1);
 
     idx = json.find(layerNameString);
+  }
+
+  const char layerDescriptionString[] = "@VULKAN_LAYER_DESCRIPTION@";
+
+  idx = json.find(layerDescriptionString);
+  while(idx >= 0)
+  {
+    json = json.substr(0, idx) + RENDERDOC_VULKAN_LAYER_DESCRIPTION +
+           json.substr(idx + sizeof(layerDescriptionString) - 1);
+
+    idx = json.find(layerDescriptionString);
+  }
+
+  const char getInstanceProcAddrString[] = "@VULKAN_LAYER_GET_INSTANCE_PROC_ADDR@";
+
+  idx = json.find(getInstanceProcAddrString);
+  while(idx >= 0)
+  {
+    json = json.substr(0, idx) + layerPrefix + "GetInstanceProcAddr" +
+           json.substr(idx + sizeof(getInstanceProcAddrString) - 1);
+
+    idx = json.find(getInstanceProcAddrString);
+  }
+
+  const char getDeviceProcAddrString[] = "@VULKAN_LAYER_GET_DEVICE_PROC_ADDR@";
+
+  idx = json.find(getDeviceProcAddrString);
+  while(idx >= 0)
+  {
+    json = json.substr(0, idx) + layerPrefix + "GetDeviceProcAddr" +
+           json.substr(idx + sizeof(getDeviceProcAddrString) - 1);
+
+    idx = json.find(getDeviceProcAddrString);
+  }
+
+  const char negotiateInterfaceString[] = "@VULKAN_LAYER_NEGOTIATE_INTERFACE@";
+
+  idx = json.find(negotiateInterfaceString);
+  while(idx >= 0)
+  {
+    json = json.substr(0, idx) + layerPrefix + "NegotiateLoaderLayerInterfaceVersion" +
+           json.substr(idx + sizeof(negotiateInterfaceString) - 1);
+
+    idx = json.find(negotiateInterfaceString);
+  }
+
+  const char enumerateInstanceExtString[] = "@VULKAN_LAYER_ENUM_INSTANCE_EXT@";
+
+  idx = json.find(enumerateInstanceExtString);
+  while(idx >= 0)
+  {
+    json = json.substr(0, idx) + layerPrefix + "EnumerateInstanceExtensionProperties" +
+           json.substr(idx + sizeof(enumerateInstanceExtString) - 1);
+
+    idx = json.find(enumerateInstanceExtString);
   }
 
   return json;

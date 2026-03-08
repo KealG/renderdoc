@@ -36,7 +36,7 @@
 #include <android_native_app_glue.h>
 
 #include <android/log.h>
-#define ANDROID_LOG(...) __android_log_print(ANDROID_LOG_INFO, "renderdoccmd", __VA_ARGS__);
+#define ANDROID_LOG(...) __android_log_print(ANDROID_LOG_INFO, RDOC_BRAND_CMD_NAME, __VA_ARGS__);
 
 struct android_app *android_state;
 pthread_t cmdthread_handle = 0;
@@ -415,12 +415,12 @@ std::vector<std::string> getRenderdoccmdArgs()
   jmethodID gseid =
       env->GetMethodID(icl, "getStringExtra", "(Ljava/lang/String;)Ljava/lang/String;");
 
-  jstring jsParam1 = (jstring)env->CallObjectMethod(intent, gseid, env->NewStringUTF("renderdoccmd"));
+  jstring jsParam1 = (jstring)env->CallObjectMethod(intent, gseid, env->NewStringUTF(RENDERDOC_CMD_ANDROID_EXTRA_KEY));
 
   std::vector<std::string> ret;
   if(jsParam1)    // Check if arg value found
   {
-    ret.push_back("renderdoccmd");
+    ret.push_back(RDOC_BRAND_CMD_NAME);
     const char *param1 = env->GetStringUTFChars(jsParam1, 0);
     std::istringstream iss(param1);
     while(iss)

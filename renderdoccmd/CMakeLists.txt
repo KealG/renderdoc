@@ -217,7 +217,15 @@ if(ANDROID)
         message(FATAL_ERROR "ABI ${ANDROID_ABI} is not supported.")
     endif()
 
-    set(RENDERDOC_ANDROID_PACKAGE_NAME "org.renderdoc.renderdoccmd.${ABI_EXTENSION_NAME}")
+    set(RENDERDOC_ANDROID_PACKAGE_NAME "${RDOC_ANDROID_PACKAGE_BASE}.${ABI_EXTENSION_NAME}")
+    string(REPLACE "." "/" RENDERDOC_ANDROID_PACKAGE_PATH "${RENDERDOC_ANDROID_PACKAGE_NAME}")
+    set(RENDERDOC_ANDROID_APPLICATION_LABEL "${RDOC_ANDROID_APPLICATION_LABEL}")
+    set(RENDERDOC_ANDROID_ACTIVITY_LABEL "${RDOC_ANDROID_ACTIVITY_LABEL}")
+    set(RENDERDOC_ANDROID_CMD_LIBRARY "${RDOC_CMD_OUTPUT_NAME}")
+    set(RENDERDOC_ANDROID_LAYER_LIBRARY "${RDOC_ANDROID_OUTPUT_NAME}")
+    set(RENDERDOC_ANDROID_INTENT_EXTRA_KEY "${RDOC_ANDROID_INTENT_EXTRA_KEY}")
+    set(RENDERDOC_ANDROID_APK_NAME "${RDOC_ANDROID_APK_BASENAME}.apk")
+    set(RENDERDOC_ANDROID_APK_UNALIGNED_NAME "${RDOC_ANDROID_APK_BASENAME}-unaligned.apk")
 
     set(APK_FILE ${CMAKE_BINARY_DIR}/bin/${RENDERDOC_ANDROID_PACKAGE_NAME}.apk)
     add_custom_target(apk ALL
@@ -226,7 +234,8 @@ if(ANDROID)
     option(ENABLE_CUSTOM_WRAP_SCRIPT "Enable custom wrap.sh on Android to workaround Android bug" ON)
 
     # Copy in android package files, replacing the package name with the architecture-specific package name
-    configure_file(android/Loader.java ${CMAKE_CURRENT_BINARY_DIR}/src/org/renderdoc/renderdoccmd/Loader.java)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/src/${RENDERDOC_ANDROID_PACKAGE_PATH})
+    configure_file(android/Loader.java ${CMAKE_CURRENT_BINARY_DIR}/src/${RENDERDOC_ANDROID_PACKAGE_PATH}/Loader.java)
     configure_file(android/AndroidManifest.xml ${CMAKE_CURRENT_BINARY_DIR}/AndroidManifest.xml)
     configure_file(android/icon.png ${CMAKE_CURRENT_BINARY_DIR}/res/drawable/icon.png COPYONLY)
 
@@ -300,16 +309,16 @@ if(ANDROID)
     if(NOT EXISTS ${D8_SCRIPT})
         set(DEX_COMMAND ${BUILD_TOOLS}/dx${TOOL_SCRIPT_EXTENSION} --dex --output=bin/classes.dex ./obj)
     else()
-        set(DEX_COMMAND ${D8_SCRIPT} --output ./bin/ ./obj/org/renderdoc/renderdoccmd/${ABI_EXTENSION_NAME}/*.class)
+        set(DEX_COMMAND ${D8_SCRIPT} --output ./bin/ ./obj/${RENDERDOC_ANDROID_PACKAGE_PATH}/*.class)
     endif()
 
     add_custom_command(OUTPUT ${APK_FILE} APPEND
                        COMMAND ${BUILD_TOOLS}/aapt package -f -m -S res -J src -M AndroidManifest.xml -I ${ANDROID_JAR}
-                       COMMAND ${JAVA_BIN}/javac -d ./obj -source ${JAVA_TARGET} -target ${JAVA_TARGET} -bootclasspath ${RT_JAR} -classpath "${CLASS_PATH}" -sourcepath src src/org/renderdoc/renderdoccmd/*.java
+                       COMMAND ${JAVA_BIN}/javac -d ./obj -source ${JAVA_TARGET} -target ${JAVA_TARGET} -bootclasspath ${RT_JAR} -classpath "${CLASS_PATH}" -sourcepath src src/${RENDERDOC_ANDROID_PACKAGE_PATH}/*.java
                        COMMAND ${DEX_COMMAND}
-                       COMMAND ${BUILD_TOOLS}/aapt package -f -M AndroidManifest.xml --version-code ${APK_VERSION_CODE} --version-name ${APK_VERSION_NAME} -S res -I ${ANDROID_JAR} -F RenderDocCmd-unaligned.apk bin libs
-                       COMMAND ${BUILD_TOOLS}/zipalign -f 4 RenderDocCmd-unaligned.apk RenderDocCmd.apk
-                       COMMAND ${BUILD_TOOLS}/apksigner${TOOL_SCRIPT_EXTENSION} sign --ks ${KEYSTORE} --ks-pass pass:android --key-pass pass:android --ks-key-alias rdocandroidkey RenderDocCmd.apk
-                       COMMAND ${CMAKE_COMMAND} -E copy RenderDocCmd.apk ${APK_FILE})
+                       COMMAND ${BUILD_TOOLS}/aapt package -f -M AndroidManifest.xml --version-code ${APK_VERSION_CODE} --version-name ${APK_VERSION_NAME} -S res -I ${ANDROID_JAR} -F ${RENDERDOC_ANDROID_APK_UNALIGNED_NAME} bin libs
+                       COMMAND ${BUILD_TOOLS}/zipalign -f 4 ${RENDERDOC_ANDROID_APK_UNALIGNED_NAME} ${RENDERDOC_ANDROID_APK_NAME}
+                       COMMAND ${BUILD_TOOLS}/apksigner${TOOL_SCRIPT_EXTENSION} sign --ks ${KEYSTORE} --ks-pass pass:android --key-pass pass:android --ks-key-alias rdocandroidkey ${RENDERDOC_ANDROID_APK_NAME}
+                       COMMAND ${CMAKE_COMMAND} -E copy ${RENDERDOC_ANDROID_APK_NAME} ${APK_FILE})
 
 endif()

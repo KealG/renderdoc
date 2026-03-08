@@ -855,15 +855,14 @@ namespace DXCEnumerateAndCheck {
       <MinorVersion>$(VersionFile.Substring($(MinorVersionStart)).Split('
 ')[0].Split(' ')[2])</MinorVersion>
     </PropertyGroup>
-    <Message Text="Processing layer JSON file for RenderDoc $(MajorVersion).$(MinorVersion)" Importance="High" />
+    <Message Text="Processing layer JSON file for $(RDOCProductName) $(MajorVersion).$(MinorVersion)" Importance="High" />
     <!-- Read the template json, replace the major/minor versions -->
     <PropertyGroup>
-      <VulkanLayerName>VK_LAYER_$(ProjectName.ToUpper())_Capture</VulkanLayerName>
-      <VulkanEnableVar>ENABLE_VULKAN_$(ProjectName)_CAPTURE</VulkanEnableVar>
-      <JSONContents>$([System.IO.File]::ReadAllText('$(SolutionDir)renderdoc/driver/vulkan/renderdoc.json').Replace('@RENDERDOC_VERSION_MAJOR@', '$(MajorVersion)').Replace('@RENDERDOC_VERSION_MINOR@', '$(MinorVersion)').Replace('@VULKAN_LAYER_MODULE_PATH@', '.\\$(ProjectName).dll').Replace('@VULKAN_LAYER_NAME@', $(VulkanLayerName)).Replace('@VULKAN_ENABLE_VAR@', $(VulkanEnableVar.ToUpper())))</JSONContents>
+      <VulkanLayerModulePath>.\$(RDOCCoreTargetName).dll</VulkanLayerModulePath>
+      <JSONContents>$([System.IO.File]::ReadAllText('$(SolutionDir)renderdoc/driver/vulkan/renderdoc.json').Replace('@RENDERDOC_VERSION_MAJOR@', '$(MajorVersion)').Replace('@RENDERDOC_VERSION_MINOR@', '$(MinorVersion)').Replace('@VULKAN_LAYER_MODULE_PATH@', '$(VulkanLayerModulePath)').Replace('@VULKAN_LAYER_NAME@', '$(RDOCVulkanLayerName)').Replace('@VULKAN_ENABLE_VAR@', '$(RDOCVulkanEnableVar)').Replace('@VULKAN_LAYER_DESCRIPTION@', '$(RDOCVulkanLayerDescription)').Replace('@VULKAN_LAYER_GET_INSTANCE_PROC_ADDR@', '$(RDOCVulkanGetInstanceProcAddr)').Replace('@VULKAN_LAYER_GET_DEVICE_PROC_ADDR@', '$(RDOCVulkanGetDeviceProcAddr)').Replace('@VULKAN_LAYER_NEGOTIATE_INTERFACE@', '$(RDOCVulkanNegotiateLoaderLayerInterfaceVersion)').Replace('@VULKAN_LAYER_ENUM_INSTANCE_EXT@', '$(RDOCVulkanEnumerateInstanceExtensionProperties)'))</JSONContents>
     </PropertyGroup>
     <!-- Write it out to the output directory -->
-    <WriteLinesToFile File="$(OutDir)$(ProjectName).json" Lines="$(JSONContents)" Overwrite="true" />
+    <WriteLinesToFile File="$(OutDir)$(RDOCCoreTargetName).json" Lines="$(JSONContents)" Overwrite="true" />
   </Target>
   <ItemGroup>
     <ProjectReference Include="driver\d3d11\renderdoc_d3d11.vcxproj">

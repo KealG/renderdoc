@@ -46,14 +46,14 @@
 extern "C" {
 
 // these are in vk_layer.cpp
-VK_LAYER_EXPORT VkResult VKAPI_CALL VK_LAYER_RENDERDOC_CaptureEnumerateDeviceLayerProperties(
+VK_LAYER_EXPORT VkResult VKAPI_CALL RENDERDOC_VULKAN_LAYER_FUNC(EnumerateDeviceLayerProperties)(
     VkPhysicalDevice physicalDevice, uint32_t *pPropertyCount, VkLayerProperties *pProperties);
 
-VK_LAYER_EXPORT VkResult VKAPI_CALL VK_LAYER_RENDERDOC_CaptureEnumerateDeviceExtensionProperties(
+VK_LAYER_EXPORT VkResult VKAPI_CALL RENDERDOC_VULKAN_LAYER_FUNC(EnumerateDeviceExtensionProperties)(
     VkPhysicalDevice physicalDevice, const char *pLayerName, uint32_t *pPropertyCount,
     VkExtensionProperties *pProperties);
 
-VK_LAYER_EXPORT VkResult VKAPI_CALL VK_LAYER_RENDERDOC_CaptureEnumerateInstanceExtensionProperties(
+VK_LAYER_EXPORT VkResult VKAPI_CALL RENDERDOC_VULKAN_LAYER_FUNC(EnumerateInstanceExtensionProperties)(
     const VkEnumerateInstanceExtensionPropertiesChain *pChain, const char *pLayerName,
     uint32_t *pPropertyCount, VkExtensionProperties *pProperties);
 
@@ -61,7 +61,7 @@ VK_LAYER_EXPORT VkResult VKAPI_CALL vkEnumerateDeviceLayerProperties(VkPhysicalD
                                                                      uint32_t *pPropertyCount,
                                                                      VkLayerProperties *pProperties)
 {
-  return VK_LAYER_RENDERDOC_CaptureEnumerateDeviceLayerProperties(physicalDevice, pPropertyCount,
+  return RENDERDOC_VULKAN_LAYER_FUNC(EnumerateDeviceLayerProperties)(physicalDevice, pPropertyCount,
                                                                   pProperties);
 }
 
@@ -69,23 +69,23 @@ VK_LAYER_EXPORT VkResult VKAPI_CALL
 vkEnumerateDeviceExtensionProperties(VkPhysicalDevice physicalDevice, const char *pLayerName,
                                      uint32_t *pPropertyCount, VkExtensionProperties *pProperties)
 {
-  return VK_LAYER_RENDERDOC_CaptureEnumerateDeviceExtensionProperties(physicalDevice, pLayerName,
+  return RENDERDOC_VULKAN_LAYER_FUNC(EnumerateDeviceExtensionProperties)(physicalDevice, pLayerName,
                                                                       pPropertyCount, pProperties);
 }
 
 VK_LAYER_EXPORT VkResult VKAPI_CALL vkEnumerateInstanceLayerProperties(uint32_t *pPropertyCount,
                                                                        VkLayerProperties *pProperties)
 {
-  // VK_LAYER_RENDERDOC_CaptureEnumerateDeviceLayerProperties ignores the physicalDevice parameter
+  // RENDERDOC_VULKAN_LAYER_FUNC(EnumerateDeviceLayerProperties) ignores the physicalDevice parameter
   // since the layer properties are static
-  return VK_LAYER_RENDERDOC_CaptureEnumerateDeviceLayerProperties(VK_NULL_HANDLE, pPropertyCount,
+  return RENDERDOC_VULKAN_LAYER_FUNC(EnumerateDeviceLayerProperties)(VK_NULL_HANDLE, pPropertyCount,
                                                                   pProperties);
 }
 
 VK_LAYER_EXPORT VkResult VKAPI_CALL vkEnumerateInstanceExtensionProperties(
     const char *pLayerName, uint32_t *pPropertyCount, VkExtensionProperties *pProperties)
 {
-  return VK_LAYER_RENDERDOC_CaptureEnumerateInstanceExtensionProperties(
+  return RENDERDOC_VULKAN_LAYER_FUNC(EnumerateInstanceExtensionProperties)(
       NULL, pLayerName, pPropertyCount, pProperties);
 }
 }

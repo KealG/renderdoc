@@ -2,8 +2,11 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Branding">
     <RDOCBaseName>renderdoc</RDOCBaseName>
+    <RDOCBaseNameUpper>RENDERDOC</RDOCBaseNameUpper>
+    <RDOCProductName>RenderDoc</RDOCProductName>
     <RDOCCoreTargetName>$(RDOCBaseName)</RDOCCoreTargetName>
     <RDOCCmdTargetName>renderdoccmd</RDOCCmdTargetName>
+    <RDOCCmdDisplayName>RenderDocCmd</RDOCCmdDisplayName>
     <RDOCPyCoreModuleTargetName>renderdoc</RDOCPyCoreModuleTargetName>
     <RDOCPyGuiModuleTargetName>qrenderdoc</RDOCPyGuiModuleTargetName>
     <RDOCGuiTargetName>qrenderdoc</RDOCGuiTargetName>
@@ -11,5 +14,12 @@
     <RDOCShimBaseTargetName>renderdocshim</RDOCShimBaseTargetName>
     <RDOCShim32TargetName>$(RDOCShimBaseTargetName)32</RDOCShim32TargetName>
     <RDOCShim64TargetName>$(RDOCShimBaseTargetName)64</RDOCShim64TargetName>
+    <RDOCVulkanLayerName>VK_LAYER_$(RDOCBaseNameUpper)_Capture</RDOCVulkanLayerName>
+    <RDOCVulkanEnableVar>ENABLE_VULKAN_$(RDOCBaseNameUpper)_CAPTURE</RDOCVulkanEnableVar>
+    <RDOCVulkanLayerDescription>Debugging capture layer for $(RDOCProductName)</RDOCVulkanLayerDescription>
+    <RDOCVulkanGetInstanceProcAddr>$(RDOCVulkanLayerName)GetInstanceProcAddr</RDOCVulkanGetInstanceProcAddr>
+    <RDOCVulkanGetDeviceProcAddr>$(RDOCVulkanLayerName)GetDeviceProcAddr</RDOCVulkanGetDeviceProcAddr>
+    <RDOCVulkanNegotiateLoaderLayerInterfaceVersion>$(RDOCVulkanLayerName)NegotiateLoaderLayerInterfaceVersion</RDOCVulkanNegotiateLoaderLayerInterfaceVersion>
+    <RDOCVulkanEnumerateInstanceExtensionProperties>$(RDOCVulkanLayerName)EnumerateInstanceExtensionProperties</RDOCVulkanEnumerateInstanceExtensionProperties>
   </PropertyGroup>
 </Project>

@@ -6,14 +6,14 @@
     "library_path": "@VULKAN_LAYER_MODULE_PATH@",
     "api_version": "1.4.324",
     "implementation_version": "@RENDERDOC_VERSION_MINOR@",
-    "description": "Debugging capture layer for RenderDoc",
+    "description": "@VULKAN_LAYER_DESCRIPTION@",
     "functions": {
-      "vkGetInstanceProcAddr": "VK_LAYER_RENDERDOC_CaptureGetInstanceProcAddr",
-      "vkGetDeviceProcAddr": "VK_LAYER_RENDERDOC_CaptureGetDeviceProcAddr",
-      "vkNegotiateLoaderLayerInterfaceVersion": "VK_LAYER_RENDERDOC_CaptureNegotiateLoaderLayerInterfaceVersion"
+      "vkGetInstanceProcAddr": "@VULKAN_LAYER_GET_INSTANCE_PROC_ADDR@",
+      "vkGetDeviceProcAddr": "@VULKAN_LAYER_GET_DEVICE_PROC_ADDR@",
+      "vkNegotiateLoaderLayerInterfaceVersion": "@VULKAN_LAYER_NEGOTIATE_INTERFACE@"
     },
     "pre_instance_functions": {
-      "vkEnumerateInstanceExtensionProperties": "VK_LAYER_RENDERDOC_CaptureEnumerateInstanceExtensionProperties"
+      "vkEnumerateInstanceExtensionProperties": "@VULKAN_LAYER_ENUM_INSTANCE_EXT@"
     },
     "instance_extensions": [
       {
