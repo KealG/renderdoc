@@ -137,7 +137,7 @@ struct VersionCommand : public Command
   virtual bool Parse(cmdline::parser &, GlobalEnvironment &) { return true; }
   virtual int Execute(const CaptureOptions &)
   {
-    std::cout << "renderdoccmd " << (sizeof(uintptr_t) == sizeof(uint64_t) ? "x64" : "x86")
+    std::cout << RDOC_BRAND_CMD_NAME << " " << (sizeof(uintptr_t) == sizeof(uint64_t) ? "x64" : "x86")
               << " v" MAJOR_MINOR_VERSION_STRING << " built from " << RENDERDOC_GetCommitHash()
               << std::endl;
 
@@ -292,7 +292,10 @@ public:
   {
     parser.add<uint32_t>("PID", 0, "The process ID of the process to inject.", true);
   }
-  virtual const char *Description() { return "Injects RenderDoc into a given running process."; }
+  virtual const char *Description()
+  {
+    return "Injects " RDOC_BRAND_PRODUCT_NAME " into a given running process.";
+  }
   virtual bool IsInternalOnly() { return false; }
   virtual bool IsCaptureCommand() { return true; }
   virtual bool Parse(cmdline::parser &parser, GlobalEnvironment &)
@@ -590,7 +593,8 @@ public:
       {
         std::cerr << "Error: " << result.Message() << " - Couldn't connect to " << remote_host
                   << "." << std::endl;
-        std::cerr << "       Have you run renderdoccmd remoteserver on '" << remote_host << "'?"
+        std::cerr << "       Have you run " RDOC_BRAND_CMD_NAME " remoteserver on '" << remote_host
+                  << "'?"
                   << std::endl;
         return 1;
       }
@@ -898,7 +902,7 @@ public:
   virtual int Execute(const CaptureOptions &)
   {
     if(mode == "unit")
-      return RENDERDOC_RunUnitTests("renderdoccmd test unit", args);
+      return RENDERDOC_RunUnitTests(RDOC_BRAND_CMD_NAME " test unit", args);
 #if PYTHON_VERSION_MINOR > 0
     else if(mode == "functional")
       return RENDERDOC_RunFunctionalTests(PYTHON_VERSION_MINOR, args);
@@ -1317,9 +1321,9 @@ public:
         {
           std::cerr << "** There is an unfixable problem with your vulkan layer configuration.\n\n"
                        "This is most commonly caused by having a distribution-provided package of "
-                       "RenderDoc "
+                       RDOC_BRAND_PRODUCT_NAME " "
                        "installed, which cannot be modified by another build of RenderDoc.\n\n"
-                       "Please consult the RenderDoc documentation, or package/distribution "
+                       "Please consult the " RDOC_BRAND_PRODUCT_NAME " documentation, or package/distribution "
                        "documentation on "
                        "linux."
                     << std::endl;
@@ -1342,10 +1346,12 @@ public:
         std::cerr << std::endl;
 
         if(m_Info.flags & VulkanLayerFlags::OtherInstallsRegistered)
-          std::cerr << " - Non-matching RenderDoc layer(s) are registered." << std::endl;
+          std::cerr << " - Non-matching " RDOC_BRAND_PRODUCT_NAME " layer(s) are registered."
+                    << std::endl;
 
         if(!(m_Info.flags & VulkanLayerFlags::ThisInstallRegistered))
-          std::cerr << " - This build's RenderDoc layer is not registered." << std::endl;
+          std::cerr << " - This build's " RDOC_BRAND_PRODUCT_NAME " layer is not registered."
+                    << std::endl;
 
         std::cerr << std::endl;
 
@@ -1415,7 +1421,8 @@ public:
       }
       else
       {
-        std::cerr << "The RenderDoc vulkan layer appears to be correctly registered." << std::endl;
+        std::cerr << "The " RDOC_BRAND_PRODUCT_NAME " vulkan layer appears to be correctly registered."
+                  << std::endl;
       }
 
       // don't do anything if we're just explaining the situation
@@ -1494,8 +1501,10 @@ static int command_usage(std::string command)
               << std::endl
               << std::endl;
 
-  std::cerr << "Usage: renderdoccmd <command> [args ...]" << std::endl;
-  std::cerr << "Command line tool for capture & replay with RenderDoc." << std::endl << std::endl;
+  std::cerr << "Usage: " RDOC_BRAND_CMD_NAME " <command> [args ...]" << std::endl;
+  std::cerr << "Command line tool for capture & replay with " RDOC_BRAND_PRODUCT_NAME "."
+            << std::endl
+            << std::endl;
 
   std::cerr << "Command can be one of:" << std::endl;
 
@@ -1520,7 +1529,8 @@ static int command_usage(std::string command)
   }
   std::cerr << std::endl;
 
-  std::cerr << "To see details of any command, see 'renderdoccmd <command> --help'" << std::endl
+  std::cerr << "To see details of any command, see '" RDOC_BRAND_CMD_NAME " <command> --help'"
+            << std::endl
             << std::endl;
 
   std::cerr << "For more information, see <https://renderdoc.org/>." << std::endl;
