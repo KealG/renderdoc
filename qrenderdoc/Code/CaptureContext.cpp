@@ -23,6 +23,7 @@
  ******************************************************************************/
 
 #include "CaptureContext.h"
+#include "../../renderdoc/common/brand_config.h"
 #include <QApplication>
 #include <QDir>
 #include <QDirIterator>
@@ -288,13 +289,13 @@ rdcstr CaptureContext::TempCaptureFilename(const rdcstr &appname)
   {
     dir = QDir(QDir::tempPath());
 
-    dir.mkdir(lit("RenderDoc"));
+    dir.mkdir(lit(RDOC_BRAND_TEMP_SUBFOLDER));
 
-    dir = QDir(dir.absoluteFilePath(lit("RenderDoc")));
+    dir = QDir(dir.absoluteFilePath(lit(RDOC_BRAND_TEMP_SUBFOLDER)));
   }
 
   return dir.absoluteFilePath(
-      QFormatStr("%1_%2.rdc")
+      QFormatStr("%1_%2" RDOC_BRAND_CAPTURE_EXTENSION)
           .arg(appname)
           .arg(QDateTime::currentDateTimeUtc().toString(lit("yyyy.MM.dd_HH.mm.ss"))));
 }
@@ -1242,7 +1243,7 @@ void CaptureContext::RecompressCapture()
   {
     // for remote files we open a new short-lived handle on the temporary file
     tempCap = cap = RENDERDOC_OpenCaptureFile();
-    cap->OpenFile(tempFilename, "rdc", NULL);
+    cap->OpenFile(tempFilename, RDOC_BRAND_CAPTURE_FILETYPE, NULL);
   }
 
   if(!cap)
@@ -1274,7 +1275,8 @@ void CaptureContext::RecompressCapture()
   float progress = 0.0f;
 
   LambdaThread *th = new LambdaThread([cap, destFilename, &progress]() {
-    cap->Convert(destFilename, "rdc", NULL, [&progress](float p) { progress = p; });
+    cap->Convert(destFilename, RDOC_BRAND_CAPTURE_FILETYPE, NULL,
+                 [&progress](float p) { progress = p; });
   });
   th->setName(lit("RecompressCapture"));
   th->start();
@@ -1303,7 +1305,7 @@ void CaptureContext::RecompressCapture()
     QFile::rename(destFilename, GetCaptureFilename());
 
     // and re-open
-    cap->OpenFile(GetCaptureFilename(), "rdc", NULL);
+    cap->OpenFile(GetCaptureFilename(), RDOC_BRAND_CAPTURE_FILETYPE, NULL);
   }
   else
   {
@@ -1503,7 +1505,8 @@ bool CaptureContext::ImportCapture(const CaptureFileFormat &fmt, const rdcstr &i
     }
 
     result =
-        file->Convert(rdcfile, "rdc", NULL, [&progress](float p) { progress = 0.5f + p * 0.5f; });
+        file->Convert(rdcfile, RDOC_BRAND_CAPTURE_FILETYPE, NULL,
+                      [&progress](float p) { progress = 0.5f + p * 0.5f; });
     file->Shutdown();
   });
   th->setName(lit("ImportCapture"));
@@ -1551,7 +1554,7 @@ void CaptureContext::ExportCapture(const CaptureFileFormat &fmt, const rdcstr &e
   if(!file)
   {
     local = file = RENDERDOC_OpenCaptureFile();
-    result = file->OpenFile(m_CaptureFile, "rdc", NULL);
+    result = file->OpenFile(m_CaptureFile, RDOC_BRAND_CAPTURE_FILETYPE, NULL);
   }
 
   QString filename = QFileInfo(m_CaptureFile).fileName();

@@ -24,6 +24,7 @@
 
 #include "rdcfile.h"
 #include <errno.h>
+#include "common/brand_config.h"
 #include "api/replay/version.h"
 #include "common/dds_readwrite.h"
 #include "common/formatting.h"
@@ -139,7 +140,9 @@ bool is_exr_file(const byte *headerBuffer, size_t size)
 
 */
 
-static const uint32_t MAGIC_HEADER = MAKE_FOURCC('R', 'D', 'O', 'C');
+static const uint32_t MAGIC_HEADER = MAKE_FOURCC(
+    RDOC_BRAND_CAPTURE_MAGIC_CHAR_0, RDOC_BRAND_CAPTURE_MAGIC_CHAR_1,
+    RDOC_BRAND_CAPTURE_MAGIC_CHAR_2, RDOC_BRAND_CAPTURE_MAGIC_CHAR_3);
 
 namespace
 {
@@ -1020,7 +1023,8 @@ StreamWriter *RDCFile::WriteSection(const SectionProperties &props)
         origSections.erase(0);
         origSectionLocations.erase(0);
 
-        rdcstr tempFilename = FileIO::GetTempFolderFilename() + "capture_rewrite.rdc";
+        rdcstr tempFilename =
+            FileIO::GetTempFolderFilename() + "capture_rewrite" RDOC_BRAND_CAPTURE_EXTENSION;
 
         // create the file, this will overwrite m_File with the new file and file header using the
         // existing loaded metadata

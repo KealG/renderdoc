@@ -23,6 +23,7 @@
  ******************************************************************************/
 
 #include "core/core.h"
+#include "common/brand_config.h"
 #include "jpeg-compressor/jpgd.h"
 #include "jpeg-compressor/jpge.h"
 #include "replay/replay_controller.h"
@@ -222,8 +223,9 @@ ResultDetails CaptureFile::OpenFile(const rdcstr &filename, const rdcstr &filety
   }
   else
   {
-    if(filetype != "" && filetype != "rdc")
-      RDCWARN("Opening file with unrecognised filetype '%s' - treating as 'rdc'", filetype.c_str());
+    if(filetype != "" && filetype != RDOC_BRAND_CAPTURE_FILETYPE)
+      RDCWARN("Opening file with unrecognised filetype '%s' - treating as '"
+              RDOC_BRAND_CAPTURE_FILETYPE "'", filetype.c_str());
 
     if(progress)
       progress(0.0f);
@@ -263,8 +265,9 @@ ResultDetails CaptureFile::OpenBuffer(const bytebuf &buffer, const rdcstr &filet
   }
   else
   {
-    if(filetype != "" && filetype != "rdc")
-      RDCWARN("Opening file with unrecognised filetype '%s' - treating as 'rdc'", filetype.c_str());
+    if(filetype != "" && filetype != RDOC_BRAND_CAPTURE_FILETYPE)
+      RDCWARN("Opening file with unrecognised filetype '%s' - treating as '"
+              RDOC_BRAND_CAPTURE_FILETYPE "'", filetype.c_str());
 
     if(progress)
       progress(0.0f);
@@ -461,8 +464,9 @@ ResultDetails CaptureFile::Convert(const rdcstr &filename, const rdcstr &filetyp
     }
   }
 
-  if(filetype != "" && filetype != "rdc")
-    RDCWARN("Converting file to unrecognised filetype '%s' - treating as 'rdc'", filetype.c_str());
+  if(filetype != "" && filetype != RDOC_BRAND_CAPTURE_FILETYPE)
+    RDCWARN("Converting file to unrecognised filetype '%s' - treating as '"
+            RDOC_BRAND_CAPTURE_FILETYPE "'", filetype.c_str());
 
   RDCFile output;
 

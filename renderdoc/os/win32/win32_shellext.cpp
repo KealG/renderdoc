@@ -30,6 +30,7 @@
 #include <thumbcache.h>
 #include <windows.h>
 #include "common/common.h"
+#include "common/brand_config.h"
 #include "common/dds_readwrite.h"
 #include "compressonator/CMP_Core.h"
 #include "core/core.h"
@@ -182,7 +183,9 @@ struct RDCThumbnailProvider : public IThumbnailProvider, IInitializeWithStream
   {
     // we want to support old capture files, so we decode the thumbnail by hand here with the
     // old header.
-    const uint32_t MAGIC_HEADER = MAKE_FOURCC('R', 'D', 'O', 'C');
+    const uint32_t MAGIC_HEADER = MAKE_FOURCC(
+        RDOC_BRAND_CAPTURE_MAGIC_CHAR_0, RDOC_BRAND_CAPTURE_MAGIC_CHAR_1,
+        RDOC_BRAND_CAPTURE_MAGIC_CHAR_2, RDOC_BRAND_CAPTURE_MAGIC_CHAR_3);
 
     byte *readPtr = captureHeader.data();
     byte *readEnd = readPtr + captureHeader.size();

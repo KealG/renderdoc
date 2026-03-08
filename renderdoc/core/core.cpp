@@ -1699,7 +1699,9 @@ RDCFile *RenderDoc::CreateRDC(RDCDriver driver, uint32_t frameNum, const FramePi
   if(frameNum == ~0U)
     suffix = "_capture";
 
-  m_CurrentLogFile = StringFormat::Fmt("%s%s.rdc", m_CaptureFileTemplate.c_str(), suffix.c_str());
+  m_CurrentLogFile =
+      StringFormat::Fmt("%s%s" RDOC_BRAND_CAPTURE_EXTENSION, m_CaptureFileTemplate.c_str(),
+                        suffix.c_str());
 
   // make sure we don't stomp another capture if we make multiple captures in the same frame.
   {
@@ -1710,7 +1712,8 @@ RDCFile *RenderDoc::CreateRDC(RDCDriver driver, uint32_t frameNum, const FramePi
           }) != m_Captures.end())
     {
       m_CurrentLogFile =
-          StringFormat::Fmt("%s%s_%d.rdc", m_CaptureFileTemplate.c_str(), suffix.c_str(), altnum);
+          StringFormat::Fmt("%s%s_%d" RDOC_BRAND_CAPTURE_EXTENSION,
+                            m_CaptureFileTemplate.c_str(), suffix.c_str(), altnum);
       altnum++;
     }
   }
@@ -1905,7 +1908,7 @@ rdcarray<CaptureFileFormat> RenderDoc::GetCaptureFileFormats()
 
   {
     CaptureFileFormat rdc;
-    rdc.extension = "rdc";
+    rdc.extension = RDOC_BRAND_CAPTURE_FILETYPE;
     rdc.name = "Native RDC capture file format.";
     rdc.description = "The format produced by frame-captures from applications directly.";
     rdc.openSupported = true;
@@ -2166,9 +2169,13 @@ void RenderDoc::SetCaptureFileTemplate(const rdcstr &pathtemplate)
 
   m_CaptureFileTemplate = pathtemplate;
 
-  if(m_CaptureFileTemplate.length() > 4 &&
-     m_CaptureFileTemplate.substr(m_CaptureFileTemplate.length() - 4) == ".rdc")
-    m_CaptureFileTemplate = m_CaptureFileTemplate.substr(0, m_CaptureFileTemplate.length() - 4);
+  const rdcstr captureExtension = RDOC_BRAND_CAPTURE_EXTENSION;
+
+  if(m_CaptureFileTemplate.length() > captureExtension.length() &&
+     m_CaptureFileTemplate.substr(m_CaptureFileTemplate.length() - captureExtension.length()) ==
+         captureExtension)
+    m_CaptureFileTemplate =
+        m_CaptureFileTemplate.substr(0, m_CaptureFileTemplate.length() - captureExtension.length());
 
   FileIO::CreateParentDirectory(m_CaptureFileTemplate);
 }

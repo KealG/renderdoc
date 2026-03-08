@@ -23,6 +23,7 @@
  ******************************************************************************/
 
 #include "LiveCapture.h"
+#include "../../../renderdoc/common/brand_config.h"
 #include <QDesktopServices>
 #include <QHostInfo>
 #include <QMenu>
@@ -360,8 +361,8 @@ void LiveCapture::saveCapture_triggered()
 
     if(!path.isEmpty())
     {
-      if(path.endsWith(lit(".rdc")))
-        path.chop(4);
+      if(path.endsWith(lit(RDOC_BRAND_CAPTURE_EXTENSION)))
+        path.chop(lit(RDOC_BRAND_CAPTURE_EXTENSION).count());
 
       // don't save duplicates if we have multiple captures from the same frame (possible if the
       // application is not presenting at all and using the API to capture)
@@ -386,7 +387,7 @@ void LiveCapture::saveCapture_triggered()
           existingFiles[cap->frameNumber] = 2;
         }
 
-        saveCapture(cap, QFormatStr("%1.rdc").arg(filename));
+        saveCapture(cap, QFormatStr("%1" RDOC_BRAND_CAPTURE_EXTENSION).arg(filename));
       }
     }
   }

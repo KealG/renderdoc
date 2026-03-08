@@ -498,7 +498,7 @@ MainWindow::MainWindow(ICaptureContext &ctx) : QMainWindow(NULL), ui(new Ui::Mai
 
     for(const CaptureFileFormat &fmt : formats)
     {
-      if(fmt.extension == "rdc")
+      if(fmt.extension == RDOC_BRAND_CAPTURE_FILETYPE)
         continue;
 
       if(fmt.openSupported)
@@ -602,7 +602,8 @@ void MainWindow::on_action_Open_Capture_triggered()
 
   QString filename = RDDialog::getOpenFileName(
       this, tr("Select file to open"), m_Ctx.Config().LastCaptureFilePath,
-      tr("Capture Files (*.rdc);;Image Files (*.dds *.hdr *.exr *.bmp *.jpg "
+      tr("Capture Files (*" RDOC_BRAND_CAPTURE_EXTENSION
+         ");;Image Files (*.dds *.hdr *.exr *.bmp *.jpg "
          "*.jpeg *.png *.tga *.gif *.psd);;All Files (*)"));
 
   if(!filename.isEmpty())
@@ -692,11 +693,11 @@ void MainWindow::LoadFromFilename(const QString &filename, bool temporary)
   QFileInfo path(filename);
   QString ext = path.suffix().toLower();
 
-  if(ext == lit("rdc"))
+  if(ext == lit(RDOC_BRAND_CAPTURE_FILETYPE))
   {
     LoadCapture(filename, m_Ctx.Config().DefaultReplayOptions, temporary, true);
   }
-  else if(ext == lit("cap"))
+  else if(ext == lit(RDOC_BRAND_SETTINGS_FILETYPE))
   {
     OpenCaptureConfigFile(filename, false);
   }
@@ -839,7 +840,7 @@ void MainWindow::LoadCapture(const QString &filename, const ReplayOptions &opts,
     {
       ICaptureFile *file = RENDERDOC_OpenCaptureFile();
 
-      ResultDetails result = file->OpenFile(filename, "rdc", NULL);
+      ResultDetails result = file->OpenFile(filename, RDOC_BRAND_CAPTURE_FILETYPE, NULL);
 
       if(!result.OK())
       {
@@ -1024,7 +1025,7 @@ QString MainWindow::GetSavePath(QString title, QString filter)
     title = tr("Save Capture As");
 
   if(filter.isEmpty())
-    filter = tr("Capture Files (*.rdc)");
+    filter = tr("Capture Files (*" RDOC_BRAND_CAPTURE_EXTENSION ")");
 
   QString filename = RDDialog::getSaveFileName(this, title, dir, filter);
 

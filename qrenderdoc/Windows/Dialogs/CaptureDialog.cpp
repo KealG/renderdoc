@@ -96,7 +96,7 @@ void CaptureDialog::initWarning(RDLabel *warning)
 
 QString CaptureDialog::mostRecentFilename()
 {
-  return ConfigFilePath(lit("most_recent.cap"));
+  return ConfigFilePath(lit("most_recent" RDOC_BRAND_SETTINGS_EXTENSION));
 }
 
 void CaptureDialog::PopulateMostRecent()
@@ -794,7 +794,8 @@ void CaptureDialog::on_toggleGlobal_clicked()
 
       if(res == QMessageBox::Yes)
       {
-        QString capfile = QDir::temp().absoluteFilePath(lit("global.cap"));
+        QString capfile =
+            QDir::temp().absoluteFilePath(lit("global" RDOC_BRAND_SETTINGS_EXTENSION));
 
         bool wasChecked = ui->AutoStart->isChecked();
         ui->AutoStart->setChecked(false);
@@ -878,8 +879,10 @@ void CaptureDialog::on_toggleGlobal_clicked()
 
 void CaptureDialog::on_saveSettings_clicked()
 {
-  QString filename = RDDialog::getSaveFileName(this, tr("Save Settings As"), QString(),
-                                               tr("Capture settings (*.cap)"));
+  QString filename =
+      RDDialog::getSaveFileName(this, tr("Save Settings As"), QString(),
+                                tr("Capture settings (*" RDOC_BRAND_SETTINGS_EXTENSION
+                                   ")"));
 
   if(!filename.isEmpty())
   {
@@ -895,8 +898,10 @@ void CaptureDialog::on_saveSettings_clicked()
 
 void CaptureDialog::on_loadSettings_clicked()
 {
-  QString filename = RDDialog::getOpenFileName(this, tr("Open Settings"), QString(),
-                                               tr("Capture settings (*.cap)"));
+  QString filename =
+      RDDialog::getOpenFileName(this, tr("Open Settings"), QString(),
+                                tr("Capture settings (*" RDOC_BRAND_SETTINGS_EXTENSION
+                                   ")"));
 
   if(!filename.isEmpty() && QFileInfo::exists(filename))
   {

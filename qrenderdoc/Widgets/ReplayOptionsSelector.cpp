@@ -23,6 +23,7 @@
  ******************************************************************************/
 
 #include "ReplayOptionsSelector.h"
+#include "../../renderdoc/common/brand_config.h"
 #include <QKeyEvent>
 #include "Code/QRDUtils.h"
 #include "ui_ReplayOptionsSelector.h"
@@ -200,8 +201,10 @@ void ReplayOptionsSelector::on_captureFileBrowse_clicked()
     initDir = m_Ctx.Config().LastCaptureFilePath;
   }
 
-  QString filename = RDDialog::getOpenFileName(this, tr("Select capture to open"), initDir,
-                                               tr("Capture Files (*.rdc);;All Files (*)"));
+  QString filename =
+      RDDialog::getOpenFileName(this, tr("Select capture to open"), initDir,
+                                tr("Capture Files (*" RDOC_BRAND_CAPTURE_EXTENSION
+                                   ");;All Files (*)"));
 
   if(!filename.isEmpty())
     ui->captureFile->setCurrentText(filename);
