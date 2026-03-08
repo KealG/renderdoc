@@ -13,8 +13,9 @@ lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5.6; found $$[QT_VERSION]")
 equals(QT_MAJOR_VERSION, 5): lessThan(QT_MINOR_VERSION, 6): error("requires Qt 5.6; found $$[QT_VERSION]")
 
 isEmpty(RDOC_CORE_OUTPUT_NAME): RDOC_CORE_OUTPUT_NAME = renderdoc
+isEmpty(RDOC_GUI_TARGET_NAME): RDOC_GUI_TARGET_NAME = qrenderdoc
 
-TARGET = qrenderdoc
+TARGET = $$RDOC_GUI_TARGET_NAME
 TEMPLATE = app
 
 # include path for core renderdoc API

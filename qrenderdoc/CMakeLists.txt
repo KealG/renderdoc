@@ -222,6 +222,7 @@ file(WRITE
      "LIB_SUFFIX=${LIB_SUFFIX}\n"
      "LIB_SUBFOLDER_TRAIL_SLASH=${LIB_SUBFOLDER_TRAIL_SLASH}\n"
      "RDOC_CORE_OUTPUT_NAME=${RDOC_CORE_OUTPUT_NAME}\n"
+     "RDOC_GUI_TARGET_NAME=${RDOC_GUI_TARGET_NAME}\n"
      "RDOC_CMD_OUTPUT_NAME=${RDOC_CMD_OUTPUT_NAME}\n"
      "\n"
      # search for -lrenderdoc here
@@ -424,7 +425,7 @@ add_custom_target(build-qrenderdoc ALL DEPENDS QRenderDoc DEPENDS renderdoc DEPE
 
 if(APPLE AND CMAKE_GENERATOR STREQUAL "Xcode")
     set_target_properties(build-qrenderdoc PROPERTIES XCODE_SCHEME_DEBUG_DOCUMENT_VERSIONING OFF)
-    set_target_properties(build-qrenderdoc PROPERTIES XCODE_SCHEME_EXECUTABLE ${CMAKE_BINARY_DIR}/bin/qrenderdoc.app)
+    set_target_properties(build-qrenderdoc PROPERTIES XCODE_SCHEME_EXECUTABLE ${CMAKE_BINARY_DIR}/bin/${RDOC_GUI_TARGET_NAME}.app)
     target_sources(build-qrenderdoc PRIVATE ${QRD_XCODE_SOURCES})
     source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${CODE_FILES})
     source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${STYLES_FILES})
