@@ -73,9 +73,17 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'RenderDoc'
-copyright = '{0}, Baldur Karlsson'.format(datetime.date.today().year)
-author = 'Baldur Karlsson'
+doc_project = os.environ.get('RDOC_DOC_PROJECT_NAME', 'RenderDoc')
+doc_author = os.environ.get('RDOC_DOC_AUTHOR', 'Baldur Karlsson')
+doc_title = os.environ.get('RDOC_DOC_TITLE', 'RenderDoc Documentation')
+doc_html_title = os.environ.get('RDOC_DOC_HTML_TITLE', 'RenderDoc documentation')
+doc_basename = os.environ.get('RDOC_DOC_BASENAME', 'renderdoc')
+doc_collection_name = os.environ.get('RDOC_DOC_COLLECTION_NAME', 'RenderDoc')
+doc_latex_name = os.environ.get('RDOC_DOC_LATEX_NAME', 'RenderDoc.tex')
+
+project = doc_project
+copyright = '{0}, {1}'.format(datetime.date.today().year, doc_author)
+author = doc_author
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -159,7 +167,7 @@ html_theme = 'alabaster'
 
 # The name for this set of Sphinx documents.
 # "<project> v<release> documentation" by default.
-html_title = 'RenderDoc documentation'
+html_title = doc_html_title
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
 #html_short_title = None
@@ -241,7 +249,8 @@ html_domain_indices = False
 #html_search_scorer = 'scorer.js'
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'renderdoc'
+htmlhelp_basename = doc_basename
+qthelp_basename = doc_collection_name
 
 # -- Options for LaTeX output ---------------------------------------------
 
@@ -263,8 +272,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'RenderDoc.tex', 'RenderDoc Documentation',
-     'Baldur Karlsson', 'manual'),
+    (master_doc, doc_latex_name, doc_title,
+     doc_author, 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -293,7 +302,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'renderdoc', 'RenderDoc Documentation',
+    (master_doc, doc_basename, doc_title,
      [author], 1)
 ]
 
@@ -307,8 +316,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'RenderDoc', 'RenderDoc Documentation',
-     author, 'RenderDoc', 'One line description of project.',
+    (master_doc, doc_collection_name, doc_title,
+     author, doc_collection_name, 'One line description of project.',
      'Miscellaneous'),
 ]
 

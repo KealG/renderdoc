@@ -2,10 +2,10 @@
 <?include Branding.wxi?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
   <Product Name='$(var.ProductDisplayName)' Id='*' UpgradeCode='D320753C-4B18-4905-A752-E68959943E7D'
-    Language='1033' Codepage='1252' Version='$(env.RENDERDOC_VERSION).0' Manufacturer='Baldur Karlsson'>
+    Language='1033' Codepage='1252' Version='$(env.RENDERDOC_VERSION).0' Manufacturer='$(var.ManufacturerName)'>
 
     <Package Id='*' Keywords='Installer' Description="$(var.InstallerDescription)"
-      Comments='$(var.ProductHomepageComment)' Manufacturer='Baldur Karlsson'
+      Comments='$(var.ProductHomepageComment)' Manufacturer='$(var.ManufacturerName)'
       InstallerVersion='301' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
 
     <UI>
@@ -39,7 +39,7 @@
       NOT NEWERVERSIONDETECTED
     </Condition>
 
-    <Media Id='1' Cabinet='renderdoc.cab' EmbedCab='yes' CompressionLevel='high' DiskPrompt="CD-ROM #1" />
+    <Media Id='1' Cabinet='$(var.CabinetName)' EmbedCab='yes' CompressionLevel='high' DiskPrompt="CD-ROM #1" />
     <Property Id='DiskPrompt' Value="$(var.InstallDiskPromptName) [1]" />
 
     <Directory Id='TARGETDIR' Name='SourceDir'>
@@ -137,7 +137,7 @@
           </Component>
 
           <Component Id='Documentation' Guid='CD32B446-6DC1-49E4-8FE9-509E1AFB126D'>
-            <File Id='Documentation' Name='renderdoc.chm' DiskId='1' Source='dist/Release32/renderdoc.chm' KeyPath='yes'>
+            <File Id='Documentation' Name='$(var.DocumentationFileName)' DiskId='1' Source='dist/Release32/$(var.DocumentationFileName)' KeyPath='yes'>
               <Shortcut Id="startmenuDocs" Directory="ProgramMenuDir" Name="$(var.DocumentationShortcutName)" Icon='chm.ico' Advertise="yes" />
             </File>
           </Component>

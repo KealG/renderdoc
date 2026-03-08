@@ -9,19 +9,26 @@
   <?define Shim64DllName = "renderdocshim64.dll" ?>
 
   <?define ProductDisplayName = "RenderDoc" ?>
+  <?define ManufacturerName = "Baldur Karlsson" ?>
   <?define InstallerDescription = "Installer for RenderDoc" ?>
+  <?define CabinetName = "renderdoc.cab" ?>
   <?define ProductHomepageComment = "RenderDoc Homepage is http://renderdoc.org/" ?>
   <?define ProductHomepageHelpLink = "http://renderdoc.org/" ?>
   <?define ProductHomepageUrl = "https://renderdoc.org/" ?>
+  <?define ProductDocumentationUrl = "https://renderdoc.org/docs" ?>
   <?define InstallDiskPromptName = "RenderDoc Installation" ?>
   <?define InstallDirName = "RenderDoc" ?>
+  <?define DocumentationBaseName = "renderdoc" ?>
+  <?define DocumentationFileName = "$(var.DocumentationBaseName).chm" ?>
+  <?define DocumentationCollectionName = "RenderDoc" ?>
   <?define DocumentationShortcutName = "RenderDoc Documentation" ?>
   <?define CaptureProgId = "RenderDoc.RDCCapture.1" ?>
   <?define CaptureDescription = "RenderDoc Capture Log (.rdc)" ?>
   <?define SettingsProgId = "RenderDoc.RDCSettings.1" ?>
   <?define SettingsDescription = "RenderDoc Capture Settings (.cap)" ?>
   <?define ThumbnailHandlerName = "RenderDoc Thumbnail Handler" ?>
-  <?define AndroidApkArm32Name = "org.renderdoc.renderdoccmd.arm32.apk" ?>
-  <?define AndroidApkArm64Name = "org.renderdoc.renderdoccmd.arm64.apk" ?>
+  <?define AndroidPackageBase = "org.renderdoc.renderdoccmd" ?>
+  <?define AndroidApkArm32Name = "$(var.AndroidPackageBase).arm32.apk" ?>
+  <?define AndroidApkArm64Name = "$(var.AndroidPackageBase).arm64.apk" ?>
   <?define FileAssociationsDescription = "Associate .rdc (Capture logs) and .cap (Capture settings) files with RenderDoc." ?>
 </Include>

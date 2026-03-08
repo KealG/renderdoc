@@ -6,6 +6,7 @@ SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 PAPER         ?=
 BUILDDIR      ?= ../Documentation
+DOC_QTHELP_NAME = $(if $(RDOC_DOC_COLLECTION_NAME),$(RDOC_DOC_COLLECTION_NAME),RenderDoc)
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
@@ -92,9 +93,9 @@ qthelp:
 	@echo
 	@echo "Build finished; now you can run "qcollectiongenerator" with the" \
 	      ".qhcp project file in $(BUILDDIR)/qthelp, like this:"
-	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/RenderDoc.qhcp"
+	@echo "# qcollectiongenerator $(BUILDDIR)/qthelp/$(DOC_QTHELP_NAME).qhcp"
 	@echo "To view the help file:"
-	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/RenderDoc.qhc"
+	@echo "# assistant -collectionFile $(BUILDDIR)/qthelp/$(DOC_QTHELP_NAME).qhc"
 
 .PHONY: applehelp
 applehelp:

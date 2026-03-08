@@ -51,6 +51,7 @@ fi
 
 BUILDDIR="../Documentation"
 ALLSPHINXOPTS="-d $BUILDDIR/doctrees $SPHINXOPTS ."
+DOC_QTHELP_NAME="${RDOC_DOC_COLLECTION_NAME:-RenderDoc}"
 I18NSPHINXOPTS="$SPHINXOPTS ."
 if [ z$PAPER != "z" ]; then
 	ALLSPHINXOPTS="-D latex_paper_size=$PAPER $ALLSPHINXOPTS"
@@ -170,9 +171,9 @@ if [ $1 == "qthelp" ]; then
 	echo
 	echo "Build finished; now you can run "qcollectiongenerator" with the "
 	echo ".qhcp project file in $BUILDDIR/qthelp, like this:"
-	echo "> qcollectiongenerator $BUILDDIR\qthelp\RenderDoc.qhcp"
+	echo "> qcollectiongenerator $BUILDDIR\qthelp\${DOC_QTHELP_NAME}.qhcp"
 	echo "To view the help file:"
-	echo "> assistant -collectionFile $BUILDDIR\qthelp\RenderDoc.ghc"
+	echo "> assistant -collectionFile $BUILDDIR\qthelp\${DOC_QTHELP_NAME}.ghc"
 	exit
 fi
 

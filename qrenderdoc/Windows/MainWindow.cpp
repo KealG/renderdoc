@@ -2932,11 +2932,11 @@ void MainWindow::on_action_View_Documentation_triggered()
 {
   QFileInfo fi(QGuiApplication::applicationFilePath());
 
-  if(fi.absoluteDir().exists(lit("renderdoc.chm")))
+  if(fi.absoluteDir().exists(lit(RDOC_BRAND_DOCUMENTATION_FILE)))
     QDesktopServices::openUrl(
-        QUrl::fromLocalFile(fi.absoluteDir().absoluteFilePath(lit("renderdoc.chm"))));
+        QUrl::fromLocalFile(fi.absoluteDir().absoluteFilePath(lit(RDOC_BRAND_DOCUMENTATION_FILE))));
   else
-    QDesktopServices::openUrl(QUrl::fromUserInput(lit("https://renderdoc.org/docs")));
+    QDesktopServices::openUrl(QUrl::fromUserInput(lit(RDOC_BRAND_DOCUMENTATION_URL)));
 }
 
 void MainWindow::on_action_Source_on_GitHub_triggered()

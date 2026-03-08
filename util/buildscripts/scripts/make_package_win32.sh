@@ -1,5 +1,14 @@
 #!/bin/bash
 
+CORE_DLL_NAME="${RDOC_CORE_DLL_NAME:-renderdoc.dll}"
+CORE_JSON_NAME="${RDOC_CORE_JSON_NAME:-renderdoc.json}"
+CMD_EXE_NAME="${RDOC_CMD_EXE_NAME:-renderdoccmd.exe}"
+SHIM32_DLL_NAME="${RDOC_SHIM32_DLL_NAME:-renderdocshim32.dll}"
+CORE_PDB_NAME="${RDOC_CORE_PDB_NAME:-renderdoc.pdb}"
+CMD_PDB_NAME="${RDOC_CMD_PDB_NAME:-renderdoccmd.pdb}"
+SHIM32_PDB_NAME="${RDOC_SHIM32_PDB_NAME:-renderdocshim32.pdb}"
+ANDROID_APK_GLOB="${RDOC_ANDROID_APK_GLOB:-org.renderdoc.renderdoccmd.*.apk}"
+
 FILENAME="$1"
 
 if [ $# -ne 1 ]; then
@@ -75,7 +84,7 @@ find dist/Release{32,64}/ -iname '*.iobj' -exec rm '{}' \;
 # Copy in any android APKs that were built
 mkdir -p dist/Release64/plugins/android/
 if ls build-android-* > /dev/null; then
-	find build-android-* -iname 'org.renderdoc.renderdoccmd.*.apk' -exec cp '{}' dist/Release64/plugins/android ';'
+	find build-android-* -iname "${ANDROID_APK_GLOB}" -exec cp '{}' dist/Release64/plugins/android ';'
 else
 	echo "WARNING: No android builds found, expected build-android-arm32 and build-android-arm64";
 
@@ -119,9 +128,15 @@ rm -f dist/ReleasePDBs{32,64}/*.{exp,lib,metagen} dist/Release{32,64}/*.vshost.*
 
 # In the 64bit release folder, make an x86 subfolder and copy in renderdoc 32bit
 mkdir -p dist/Release64/x86
-cp -R dist/Release32/{d3dcompiler_47.dll,renderdoc.dll,renderdoc.json,renderdocshim32.dll,renderdoccmd.exe,dbghelp.dll,symsrv.dll,symsrv.yes} dist/Release64/x86/
+x86_release_files=(d3dcompiler_47.dll "$CORE_DLL_NAME" "$CORE_JSON_NAME" "$SHIM32_DLL_NAME" "$CMD_EXE_NAME" dbghelp.dll symsrv.dll symsrv.yes)
+for file in "${x86_release_files[@]}"; do
+	cp -R "dist/Release32/$file" dist/Release64/x86/
+done
 mkdir -p dist/ReleasePDBs64/x86
-cp -R dist/ReleasePDBs32/{d3dcompiler_47.dll,renderdoc.dll,renderdoc.json,renderdoc.pdb,renderdocshim32.dll,renderdocshim32.pdb,renderdoccmd.exe,renderdoccmd.pdb,dbghelp.dll,symsrv.dll,symsrv.yes} dist/ReleasePDBs64/x86/
+x86_pdb_files=(d3dcompiler_47.dll "$CORE_DLL_NAME" "$CORE_JSON_NAME" "$CORE_PDB_NAME" "$SHIM32_DLL_NAME" "$SHIM32_PDB_NAME" "$CMD_EXE_NAME" "$CMD_PDB_NAME" dbghelp.dll symsrv.dll symsrv.yes)
+for file in "${x86_pdb_files[@]}"; do
+	cp -R "dist/ReleasePDBs32/$file" dist/ReleasePDBs64/x86/
+done
 
 VERSION=`grep -E "#define RENDERDOC_VERSION_(MAJOR|MINOR)" renderdoc/api/replay/version.h | tr -dc '[0-9\n]' | tr '\n' '.' | grep -Eo '[0-9]+\.[0-9]+'`
 

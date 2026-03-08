@@ -1,5 +1,10 @@
 #!/bin/bash
 
+CORE_DLL_NAME="${RDOC_CORE_DLL_NAME:-renderdoc.dll}"
+GUI_EXE_NAME="${RDOC_GUI_EXE_NAME:-qrenderdoc.exe}"
+CMD_EXE_NAME="${RDOC_CMD_EXE_NAME:-renderdoccmd.exe}"
+DOC_CHM_NAME="${RDOC_DOC_CHM_NAME:-renderdoc.chm}"
+
 mkdir -p "${REPO_ROOT}/dist"
 
 # pushd into the git checkout
@@ -8,7 +13,7 @@ pushd "${REPO_ROOT}"
 # Build 32-bit Release
 MSYS2_ARG_CONV_EXCL="*" msbuild.exe /nologo /m /fl4 /flp4':Verbosity=minimal;Encoding=ASCII;logfile=dist/build32.log' renderdoc.sln /t:Rebuild /p:'Configuration=Release;Platform=x86'
 
-if [ ! -f ./Win32/Release/renderdoc.dll ] || [ ! -f ./Win32/Release/qrenderdoc.exe ] || [ ! -f ./Win32/Release/renderdoccmd.exe ] ; then
+if [ ! -f ./Win32/Release/${CORE_DLL_NAME} ] || [ ! -f ./Win32/Release/${GUI_EXE_NAME} ] || [ ! -f ./Win32/Release/${CMD_EXE_NAME} ] ; then
 	echo "Failed to build 32-bit release mode.";
 	exit 1;
 fi
@@ -16,7 +21,7 @@ fi
 # Build 64-bit Release
 MSYS2_ARG_CONV_EXCL="*" msbuild.exe /nologo /m /fl4 /flp4':Verbosity=minimal;Encoding=ASCII;logfile=dist/build64.log' renderdoc.sln /t:Rebuild /p:'Configuration=Release;Platform=x64'
 
-if [ ! -f ./x64/Release/renderdoc.dll ] || [ ! -f ./x64/Release/qrenderdoc.exe ] || [ ! -f ./x64/Release/renderdoccmd.exe ] ; then
+if [ ! -f ./x64/Release/${CORE_DLL_NAME} ] || [ ! -f ./x64/Release/${GUI_EXE_NAME} ] || [ ! -f ./x64/Release/${CMD_EXE_NAME} ] ; then
 	echo "Failed to build 64-bit release mode.";
 	exit 1;
 fi
@@ -29,7 +34,7 @@ pushd docs
 popd; # docs
 
 # if we didn't produce a chm file, bail out even if sphinx didn't return an error code above
-if [ ! -f ./Documentation/htmlhelp/renderdoc.chm ]; then
+if [ ! -f ./Documentation/htmlhelp/${DOC_CHM_NAME} ]; then
 	echo "Didn't auto-build chm file. Missing HTML Help Workshop?"
 
 	if [[ "$STRICT" == "yes" ]]; then
