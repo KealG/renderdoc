@@ -1,26 +1,26 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <?include Branding.wxi?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
-  <Product Name='RenderDoc' Id='*' UpgradeCode='D320753C-4B18-4905-A752-E68959943E7D'
+  <Product Name='$(var.ProductDisplayName)' Id='*' UpgradeCode='D320753C-4B18-4905-A752-E68959943E7D'
     Language='1033' Codepage='1252' Version='$(env.RENDERDOC_VERSION).0' Manufacturer='Baldur Karlsson'>
 
-    <Package Id='*' Keywords='Installer' Description="Installer for RenderDoc"
-      Comments='RenderDoc Homepage is http://renderdoc.org/' Manufacturer='Baldur Karlsson'
+    <Package Id='*' Keywords='Installer' Description="$(var.InstallerDescription)"
+      Comments='$(var.ProductHomepageComment)' Manufacturer='Baldur Karlsson'
       InstallerVersion='301' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
 
-    <UI> 
-      <Error Id="25000">Please use the 64-bit installer - the 64-bit version of RenderDoc fully supports capturing 32-bit programs.</Error>
-    </UI> 
+    <UI>
+      <Error Id="25000">Please use the 64-bit installer - the 64-bit version of $(var.ProductDisplayName) fully supports capturing 32-bit programs.</Error>
+    </UI>
 
     <Property Id="MajorMinorVersion">$(env.RENDERDOC_VERSION)</Property>
 
-    <Property Id="REINSTALLMODE" Value="amus"/> 
+    <Property Id="REINSTALLMODE" Value="amus"/>
 
-    <CustomAction Id="Need64BitVersion" Error="25000" /> 
+    <CustomAction Id="Need64BitVersion" Error="25000" />
 
-    <InstallUISequence> 
+    <InstallUISequence>
       <Custom Action="Need64BitVersion" Before="AppSearch">VersionNT64</Custom>
-    </InstallUISequence> 
+    </InstallUISequence>
 
     <InstallExecuteSequence>
       <RemoveExistingProducts After="InstallInitialize"/>
@@ -35,49 +35,49 @@
       <UpgradeVersion OnlyDetect="yes" Property="NEWERVERSIONDETECTED" Minimum="$(env.RENDERDOC_VERSION).0" IncludeMinimum="no" />
     </Upgrade>
 
-    <Condition Message="A later version of [ProductName] is already installed"> 
+    <Condition Message="A later version of [ProductName] is already installed">
       NOT NEWERVERSIONDETECTED
-    </Condition> 
+    </Condition>
 
     <Media Id='1' Cabinet='renderdoc.cab' EmbedCab='yes' CompressionLevel='high' DiskPrompt="CD-ROM #1" />
-    <Property Id='DiskPrompt' Value="RenderDoc Installation [1]" />
+    <Property Id='DiskPrompt' Value="$(var.InstallDiskPromptName) [1]" />
 
     <Directory Id='TARGETDIR' Name='SourceDir'>
       <Directory Id='ProgramFilesFolder' Name='PFiles'>
-        <Directory Id='INSTALLDIR' Name='RenderDoc'>
+        <Directory Id='INSTALLDIR' Name='$(var.InstallDirName)'>
 
           <Component Id='QRenderDoc' Guid='0DB375D5-7712-4853-AA75-536DF863C827'>
             <File Id='qrenderdocEXE' Name='$(var.GuiExeName)' DiskId='1' Source='dist/Release32/$(var.GuiExeName)' KeyPath='yes'>
-              <Shortcut Id="startmenuRenderDoc" Directory="ProgramMenuDir" Name="RenderDoc" WorkingDirectory='INSTALLDIR' Icon="icon.ico" IconIndex="0" Advertise="yes" />
+              <Shortcut Id="startmenuRenderDoc" Directory="ProgramMenuDir" Name="$(var.ProductDisplayName)" WorkingDirectory='INSTALLDIR' Icon="icon.ico" IconIndex="0" Advertise="yes" />
             </File>
 
-            <RegistryValue Root="HKLM" Id="VerbRDC" Action="write" 
-              Key="Software\Classes\RenderDoc.RDCCapture.1\shell\open\command" 
+            <RegistryValue Root="HKLM" Id="VerbRDC" Action="write"
+              Key="Software\Classes\$(var.CaptureProgId)\shell\open\command"
               Value='"[#qrenderdocEXE]" "%1"'
               Type="expandable" />
-            <RegistryValue Root="HKLM" Id="VerbDescRDC" Action="write" 
-              Key="Software\Classes\RenderDoc.RDCCapture.1" 
-              Value='RenderDoc Capture Log (.rdc)' 
+            <RegistryValue Root="HKLM" Id="VerbDescRDC" Action="write"
+              Key="Software\Classes\$(var.CaptureProgId)"
+              Value='$(var.CaptureDescription)'
               Type="expandable" />
-            <RegistryValue Root="HKLM" Id="VerbIconRDC" Action="write" 
-              Key="Software\Classes\RenderDoc.RDCCapture.1\DefaultIcon" 
+            <RegistryValue Root="HKLM" Id="VerbIconRDC" Action="write"
+              Key="Software\Classes\$(var.CaptureProgId)\DefaultIcon"
               Value='[#qrenderdocEXE]'
               Type="expandable" />
-            <RegistryValue Root="HKLM" Id="RDCProgIDCLSID" Action="write" 
-              Key="Software\Classes\RenderDoc.RDCCapture.1\CLSID" 
-              Value='{5D6BF029-A6BA-417A-8523-120492B1DCE3}' 
+            <RegistryValue Root="HKLM" Id="RDCProgIDCLSID" Action="write"
+              Key="Software\Classes\$(var.CaptureProgId)\CLSID"
+              Value='{5D6BF029-A6BA-417A-8523-120492B1DCE3}'
               Type="expandable" />
 
-            <RegistryValue Root="HKLM" Id="VerbCAP" Action="write" 
-              Key="Software\Classes\RenderDoc.RDCSettings.1\shell\open\command" 
+            <RegistryValue Root="HKLM" Id="VerbCAP" Action="write"
+              Key="Software\Classes\$(var.SettingsProgId)\shell\open\command"
               Value='"[#qrenderdocEXE]" "%1"'
               Type="expandable" />
-            <RegistryValue Root="HKLM" Id="VerbDescCAP" Action="write" 
-              Key="Software\Classes\RenderDoc.RDCSettings.1" 
-              Value='RenderDoc Capture Settings (.cap)' 
+            <RegistryValue Root="HKLM" Id="VerbDescCAP" Action="write"
+              Key="Software\Classes\$(var.SettingsProgId)"
+              Value='$(var.SettingsDescription)'
               Type="expandable" />
-            <RegistryValue Root="HKLM" Id="VerbIconCAP" Action="write" 
-              Key="Software\Classes\RenderDoc.RDCSettings.1\DefaultIcon" 
+            <RegistryValue Root="HKLM" Id="VerbIconCAP" Action="write"
+              Key="Software\Classes\$(var.SettingsProgId)\DefaultIcon"
               Value='[#qrenderdocEXE]'
               Type="expandable" />
 
@@ -94,17 +94,17 @@
 
             <File Id='RenderDocAPIheader' Name='$(var.AppHeaderName)' DiskId='1' Source='dist/Release32/$(var.AppHeaderName)' />
 
-            <RegistryValue Root="HKLM" Id="RDCCLSID" Action="write" 
-              Key="Software\Classes\CLSID\{5D6BF029-A6BA-417A-8523-120492B1DCE3}" 
-              Value='RenderDoc Thumbnail Handler' 
+            <RegistryValue Root="HKLM" Id="RDCCLSID" Action="write"
+              Key="Software\Classes\CLSID\{5D6BF029-A6BA-417A-8523-120492B1DCE3}"
+              Value='$(var.ThumbnailHandlerName)'
               Type="expandable" />
-            <RegistryValue Root="HKLM" Id="RDCCLSIDServer" Action="write" 
-              Key="Software\Classes\CLSID\{5D6BF029-A6BA-417A-8523-120492B1DCE3}\InprocServer32" 
-              Value='[#RenderDocCPP]' 
+            <RegistryValue Root="HKLM" Id="RDCCLSIDServer" Action="write"
+              Key="Software\Classes\CLSID\{5D6BF029-A6BA-417A-8523-120492B1DCE3}\InprocServer32"
+              Value='[#RenderDocCPP]'
               Type="expandable" />
 
             <RegistryValue Root="HKLM" Id="RDCVulkanImplicitLayer" Action="write"
-              Key="Software\Khronos\Vulkan\ImplicitLayers" 
+              Key="Software\Khronos\Vulkan\ImplicitLayers"
               Name='[#RenderDocJSON]'
               Value='0'
               Type="integer" />
@@ -138,7 +138,7 @@
 
           <Component Id='Documentation' Guid='CD32B446-6DC1-49E4-8FE9-509E1AFB126D'>
             <File Id='Documentation' Name='renderdoc.chm' DiskId='1' Source='dist/Release32/renderdoc.chm' KeyPath='yes'>
-              <Shortcut Id="startmenuDocs" Directory="ProgramMenuDir" Name="RenderDoc Documentation" Icon='chm.ico' Advertise="yes" />
+              <Shortcut Id="startmenuDocs" Directory="ProgramMenuDir" Name="$(var.DocumentationShortcutName)" Icon='chm.ico' Advertise="yes" />
             </File>
           </Component>
 
@@ -184,8 +184,8 @@
 
             <Directory Id='plugins_android' Name='android'>
               <Component Id='android_plugin' Guid='D469744A-7915-46B8-88B4-4B76223EE8CB'>
-                <File Id='APKarm32' Name='org.renderdoc.renderdoccmd.arm32.apk' DiskId='1' Source='dist/Release32/plugins/android/org.renderdoc.renderdoccmd.arm32.apk' KeyPath='yes' />
-                <File Id='APKarm64' Name='org.renderdoc.renderdoccmd.arm64.apk' DiskId='1' Source='dist/Release32/plugins/android/org.renderdoc.renderdoccmd.arm64.apk' />
+                <File Id='APKarm32' Name='$(var.AndroidApkArm32Name)' DiskId='1' Source='dist/Release32/plugins/android/$(var.AndroidApkArm32Name)' KeyPath='yes' />
+                <File Id='APKarm64' Name='$(var.AndroidApkArm64Name)' DiskId='1' Source='dist/Release32/plugins/android/$(var.AndroidApkArm64Name)' />
                 <File Id='adb' Name='adb.exe' DiskId='1' Source='dist/Release32/plugins/android/adb.exe' />
                 <File Id='AdbWinApi' Name='AdbWinApi.dll' DiskId='1' Source='dist/Release32/plugins/android/AdbWinApi.dll' />
                 <File Id='AdbWinUsbApi' Name='AdbWinUsbApi.dll' DiskId='1' Source='dist/Release32/plugins/android/AdbWinUsbApi.dll' />
@@ -212,7 +212,7 @@
       </Directory>
 
       <Directory Id="ProgramMenuFolder" Name="Programs">
-        <Directory Id="ProgramMenuDir" Name="RenderDoc">
+        <Directory Id="ProgramMenuDir" Name="$(var.ProductDisplayName)">
           <Component Id="ProgramMenuDir" Guid="30CCCAB1-49D5-45B3-952C-53E3B581E691">
             <RemoveFolder Id='ProgramMenuDir' On='uninstall' />
             <RegistryValue Root='HKCU' Key='Software\[Manufacturer]\[ProductName]' Type='string' Value='' KeyPath='yes' />
@@ -258,42 +258,42 @@
           Name='.psd'  Value='' Type="string" />
 
         <RegistryValue Root="HKLM" Id="RDCOpenWithProgidDDS" Action="write"
-          Key="Software\Classes\.dds\OpenWithProgids" Name='RenderDoc.RDCCapture.1'  Value='' Type="string" />
+          Key="Software\Classes\.dds\OpenWithProgids" Name='$(var.CaptureProgId)'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithProgidHDR" Action="write"
-          Key="Software\Classes\.hdr\OpenWithProgids" Name='RenderDoc.RDCCapture.1'  Value='' Type="string" />
+          Key="Software\Classes\.hdr\OpenWithProgids" Name='$(var.CaptureProgId)'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithProgidJPG" Action="write"
-          Key="Software\Classes\.jpg\OpenWithProgids" Name='RenderDoc.RDCCapture.1'  Value='' Type="string" />
+          Key="Software\Classes\.jpg\OpenWithProgids" Name='$(var.CaptureProgId)'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithProgidJPEG" Action="write"
-          Key="Software\Classes\.jpeg\OpenWithProgids" Name='RenderDoc.RDCCapture.1' Value='' Type="string" />
+          Key="Software\Classes\.jpeg\OpenWithProgids" Name='$(var.CaptureProgId)' Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithProgidPNG" Action="write"
-          Key="Software\Classes\.png\OpenWithProgids" Name='RenderDoc.RDCCapture.1'  Value='' Type="string" />
+          Key="Software\Classes\.png\OpenWithProgids" Name='$(var.CaptureProgId)'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithProgidEXR" Action="write"
-          Key="Software\Classes\.exr\OpenWithProgids" Name='RenderDoc.RDCCapture.1'  Value='' Type="string" />
+          Key="Software\Classes\.exr\OpenWithProgids" Name='$(var.CaptureProgId)'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithProgidTGA" Action="write"
-          Key="Software\Classes\.tga\OpenWithProgids" Name='RenderDoc.RDCCapture.1'  Value='' Type="string" />
+          Key="Software\Classes\.tga\OpenWithProgids" Name='$(var.CaptureProgId)'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithProgidBMP" Action="write"
-          Key="Software\Classes\.bmp\OpenWithProgids" Name='RenderDoc.RDCCapture.1'  Value='' Type="string" />
+          Key="Software\Classes\.bmp\OpenWithProgids" Name='$(var.CaptureProgId)'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithProgidGIF" Action="write"
-          Key="Software\Classes\.gif\OpenWithProgids" Name='RenderDoc.RDCCapture.1'  Value='' Type="string" />
+          Key="Software\Classes\.gif\OpenWithProgids" Name='$(var.CaptureProgId)'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithProgidPSD" Action="write"
-          Key="Software\Classes\.psd\OpenWithProgids" Name='RenderDoc.RDCCapture.1'  Value='' Type="string" />
+          Key="Software\Classes\.psd\OpenWithProgids" Name='$(var.CaptureProgId)'  Value='' Type="string" />
       </Component>
 
       <Component Id="ImageThumbnailProvider" Guid="51E29C24-61F0-4F40-AB17-D66A97B3D543">
         <RegistryValue Root="HKLM" Id="RDCProvider" Action="write" KeyPath='yes'
-          Key="Software\Classes\RenderDoc.RDCCapture.1\ShellEx\{e357fccd-a995-4576-b01f-234630154e96}" 
-          Value='{5D6BF029-A6BA-417A-8523-120492B1DCE3}' 
+          Key="Software\Classes\$(var.CaptureProgId)\ShellEx\{e357fccd-a995-4576-b01f-234630154e96}"
+          Value='{5D6BF029-A6BA-417A-8523-120492B1DCE3}'
           Type="expandable" />
       </Component>
 
       <Component Id="FileExtensionRDC" Guid="5F21081F-59A8-43EE-8E95-170335FC3EF4">
-        <ProgId Id='RenderDoc.RDCCapture.1' Description='RenderDoc Capture Log (.rdc)'>
+        <ProgId Id='$(var.CaptureProgId)' Description='$(var.CaptureDescription)'>
           <Extension Id='rdc' />
         </ProgId>
       </Component>
 
       <Component Id="FileExtensionCAP"  Guid="3A373912-99D7-4A1C-B81C-6C69BA6B8733">
-        <ProgId Id='RenderDoc.RDCSettings.1' Description='RenderDoc Capture Settings (.cap)'>
+        <ProgId Id='$(var.SettingsProgId)' Description='$(var.SettingsDescription)'>
           <Extension Id='cap' />
         </ProgId>
       </Component>
@@ -345,7 +345,7 @@
       <Custom Action="RemoveHash" Before="LaunchConditions"/>
     </InstallUISequence>
 
-    <Feature Id='Complete' Title='RenderDoc' Description='Everything included.' AllowAdvertise='no' Absent='disallow' Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
+    <Feature Id='Complete' Title='$(var.ProductDisplayName)' Description='Everything included.' AllowAdvertise='no' Absent='disallow' Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
       <Feature Id='MainProgram' Title='Program' Description='The main executable with everything needed to capture and replay.' AllowAdvertise='no' Absent='disallow' Level='1'>
         <ComponentRef Id='QRenderDoc' />
         <ComponentRef Id='RenderDocCPP' />
@@ -384,7 +384,7 @@
         <ComponentRef Id='Documentation' />
       </Feature>
 
-      <Feature Id='FileExts' Title='File Associations' Description='Associate .rdc (Capture logs) and .cap (Capture settings) files with RenderDoc.' Level='1'>
+      <Feature Id='FileExts' Title='File Associations' Description='$(var.FileAssociationsDescription)' Level='1'>
         <ComponentRef Id='ImageThumbnailProvider' />
         <ComponentRef Id='FileExtensionRDC' />
         <ComponentRef Id='FileExtensionCAP' />
@@ -403,7 +403,7 @@
     <Icon Id="chm.ico"  SourceFile="util/installer/chm.ico" />
     <Icon Id="icon.ico" SourceFile="qrenderdoc/Resources/icon.ico" />
     <Property Id="ARPPRODUCTICON" Value="icon.ico" />
-    <Property Id="ARPHELPLINK" Value="http://renderdoc.org/" />
+    <Property Id="ARPHELPLINK" Value="$(var.ProductHomepageHelpLink)" />
 
   </Product>
 </Wix>
