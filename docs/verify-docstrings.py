@@ -38,8 +38,6 @@ sys.path.insert(0, os.path.abspath('../build/lib'))
 
 rd = importlib.import_module(brand.PY_CORE_MODULE_NAME)
 qrd = importlib.import_module(brand.PY_GUI_MODULE_NAME)
-sys.modules.setdefault('renderdoc', rd)
-sys.modules.setdefault('qrenderdoc', qrd)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-p', '--path', help="Add a path to interface files to search (can be used multiple times)", action='append')
@@ -247,10 +245,6 @@ def check_used_types(objname, module, used_types):
             break
 
 module_names = [brand.PY_CORE_MODULE_NAME, brand.PY_GUI_MODULE_NAME]
-if brand.PY_CORE_MODULE_NAME != 'renderdoc':
-    module_names.append('renderdoc')
-if brand.PY_GUI_MODULE_NAME != 'qrenderdoc':
-    module_names.append('qrenderdoc')
 
 for mod_name in dict.fromkeys(module_names):
     mod = sys.modules[mod_name]

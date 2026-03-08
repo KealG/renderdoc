@@ -1,4 +1,4 @@
-import renderdoc as rd
+from brand_import import rd
 import os
 import datetime
 import rdtest

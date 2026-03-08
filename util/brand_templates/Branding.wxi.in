@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Include xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+  <?define GuiExeName = "@RDOC_UI_EXECUTABLE@" ?>
+  <?define CoreDllName = "@RDOC_CORE_DLL_NAME@" ?>
+  <?define CoreJsonName = "@RDOC_CORE_JSON_NAME@" ?>
+  <?define CmdExeName = "@RDOC_CMD_EXECUTABLE@" ?>
+  <?define CompatBaseName = "@RDOC_COMPAT_BASE_NAME@" ?>
+  <?define AppHeaderName = "@RDOC_COMPAT_APP_HEADER_NAME@" ?>
+  <?define Shim32DllName = "@RDOC_SHIM_DLL_32@" ?>
+  <?define Shim64DllName = "@RDOC_SHIM_DLL_64@" ?>
+
+  <?define ProductDisplayName = "@RDOC_PRODUCT_NAME@" ?>
+  <?define ManufacturerName = "@RDOC_MANUFACTURER_NAME@" ?>
+  <?define InstallerDescription = "Installer for @RDOC_PRODUCT_NAME@" ?>
+  <?define CabinetName = "@RDOC_BASE_NAME@.cab" ?>
+  <?define ProductHomepageComment = "@RDOC_PRODUCT_NAME@ Homepage is @RDOC_WEBSITE_URL@/" ?>
+  <?define ProductHomepageHelpLink = "@RDOC_WEBSITE_URL@/" ?>
+  <?define ProductHomepageUrl = "@RDOC_WEBSITE_URL@/" ?>
+  <?define ProductDocumentationUrl = "@RDOC_DOCUMENTATION_URL@" ?>
+  <?define InstallDiskPromptName = "@RDOC_PRODUCT_NAME@ Installation" ?>
+  <?define InstallDirName = "@RDOC_PRODUCT_NAME@" ?>
+  <?define DocumentationBaseName = "@RDOC_DOCUMENTATION_BASENAME@" ?>
+  <?define DocumentationFileName = "@RDOC_DOCUMENTATION_FILE@" ?>
+  <?define DocumentationCollectionName = "@RDOC_DOCUMENTATION_COLLECTION_NAME@" ?>
+  <?define DocumentationShortcutName = "@RDOC_DOCUMENTATION_TITLE@" ?>
+  <?define CaptureProgId = "@RDOC_CAPTURE_PROGID@" ?>
+  <?define CaptureDescription = "@RDOC_PRODUCT_NAME@ Capture Log (@RDOC_CAPTURE_EXTENSION@)" ?>
+  <?define SettingsProgId = "@RDOC_SETTINGS_PROGID@" ?>
+  <?define SettingsDescription = "@RDOC_PRODUCT_NAME@ Capture Settings (@RDOC_SETTINGS_EXTENSION@)" ?>
+  <?define ThumbnailHandlerName = "@RDOC_THUMBNAIL_HANDLER_NAME@" ?>
+  <?define AndroidPackageBase = "@RDOC_ANDROID_PACKAGE_BASE@" ?>
+  <?define AndroidApkArm32Name = "$(var.AndroidPackageBase).arm32.apk" ?>
+  <?define AndroidApkArm64Name = "$(var.AndroidPackageBase).arm64.apk" ?>
+  <?define FileAssociationsDescription = "@RDOC_FILE_ASSOCIATIONS_DESCRIPTION@" ?>
+</Include>

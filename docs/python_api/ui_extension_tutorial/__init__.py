@@ -22,8 +22,15 @@
 # THE SOFTWARE.
 ###############################################################################
 
-import qrenderdoc as qrd
-import renderdoc as rd
+import importlib
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', 'util')))
+import rdoc_brand as brand
+
+qrd = importlib.import_module(brand.PY_GUI_MODULE_NAME)
+rd = importlib.import_module(brand.PY_CORE_MODULE_NAME)
 from typing import Optional
 
 

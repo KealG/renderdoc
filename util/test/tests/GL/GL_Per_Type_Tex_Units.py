@@ -1,6 +1,6 @@
 import struct
 from typing import List
-import renderdoc as rd
+from brand_import import rd
 import rdtest
 
 

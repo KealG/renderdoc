@@ -1,4 +1,4 @@
-import renderdoc as rd
+from brand_import import rd
 import rdtest
 
 # Not a real test, re-used by API-specific tests

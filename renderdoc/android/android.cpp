@@ -443,7 +443,7 @@ RDResult InstallRenderDocServer(const rdcstr &deviceID)
   rdcstr suff = GetPlainABIName(abis[0]);
 
   paths.push_back(libDir + "/plugins/android/");                                  // Windows install
-  paths.push_back(libDir + "/../share/renderdoc/plugins/android/");               // Linux install
+  paths.push_back(libDir + "/../" RDOC_BRAND_ANDROID_PLUGINS_SHARE_SUBDIR "/");               // Linux install
   paths.push_back(libDir + "/../plugins/android/");                               // macOS install
   paths.push_back(libDir + "/../../build-android/bin/");                          // Local build
   paths.push_back(libDir + "/../../build-android-" + suff + "/bin/");             // Local ABI build
@@ -1222,7 +1222,7 @@ struct AndroidController : public IDeviceProtocolHandler
 
       // Attempt to prevent the user needing to click through on permissions
       rdcstr auto_grant_permissions =
-          Android::adbExecCommand(deviceID, "shell getprop debug.renderdoc.autograntpermissions")
+          Android::adbExecCommand(deviceID, "shell getprop " RDOC_BRAND_ANDROID_AUTOGRANT_PERMISSIONS_PROPERTY)
               .strStdout.trimmed();
       if(apiVersion >= 30 && atoi(auto_grant_permissions.c_str()) == 1)
       {
@@ -1247,9 +1247,9 @@ struct AndroidController : public IDeviceProtocolHandler
       rdcstr folderName = Android::GetFolderName(deviceID);
 
       // push settings file into our folder
-      Android::adbExecCommand(deviceID, "push \"" + FileIO::GetAppFolderFilename("renderdoc.conf") +
+      Android::adbExecCommand(deviceID, "push \"" + FileIO::GetAppFolderFilename(RDOC_BRAND_SETTINGS_FILENAME) +
                                             "\" /sdcard/Android/" + folderName + package +
-                                            "/files/renderdoc.conf");
+                                            "/files/" RDOC_BRAND_SETTINGS_FILENAME);
 
       // launch the last ABI, as the 64-bit version where possible, or 32-bit version where not.
       // Captures are portable across bitness and in some cases a 64-bit capture can't replay on a
@@ -1429,7 +1429,7 @@ ExecuteResult AndroidRemoteServer::ExecuteAndInject(const rdcstr &packageAndActi
           m_deviceID, "shell settings put global gpu_debug_layers_gles " RENDERDOC_ANDROID_LIBRARY);
 
       // don't ignore the layers by default, only if we encounter an error
-      Android::adbExecCommand(m_deviceID, "shell setprop debug.rdoc.IGNORE_LAYERS 0");
+      Android::adbExecCommand(m_deviceID, "shell setprop " RDOC_BRAND_ANDROID_IGNORE_LAYERS_PROPERTY " 0");
 
       Process::ProcessResult check =
           Android::adbExecCommand(m_deviceID, "shell settings list global");
@@ -1471,7 +1471,7 @@ ExecuteResult AndroidRemoteServer::ExecuteAndInject(const rdcstr &packageAndActi
 
         // need to tell the hooks to ignore the fact that layers are present because they're not
         // working.
-        Android::adbExecCommand(m_deviceID, "shell setprop debug.rdoc.IGNORE_LAYERS 1");
+        Android::adbExecCommand(m_deviceID, "shell setprop " RDOC_BRAND_ANDROID_IGNORE_LAYERS_PROPERTY " 1");
       }
     }
 
@@ -1502,13 +1502,13 @@ ExecuteResult AndroidRemoteServer::ExecuteAndInject(const rdcstr &packageAndActi
     // set our property with the capture options encoded, to be picked up by the library on the
     // device
     Android::adbExecCommand(m_deviceID,
-                            StringFormat::Fmt("shell setprop debug.rdoc.RENDERDOC_CAPOPTS %s",
+                            StringFormat::Fmt("shell setprop " RDOC_BRAND_ANDROID_CAPTURE_OPTIONS_PROPERTY " %s",
                                               opts.EncodeAsString().c_str()));
 
     // try to push our settings file into the appdata folder
-    Android::adbExecCommand(m_deviceID, "push \"" + FileIO::GetAppFolderFilename("renderdoc.conf") +
+    Android::adbExecCommand(m_deviceID, "push \"" + FileIO::GetAppFolderFilename(RDOC_BRAND_SETTINGS_FILENAME) +
                                             "\" /sdcard/Android/" + folderName + processName +
-                                            "/files/renderdoc.conf");
+                                            "/files/" RDOC_BRAND_SETTINGS_FILENAME);
 
     rdcstr installedPath = Android::GetPathForPackage(m_deviceID, packageName);
 

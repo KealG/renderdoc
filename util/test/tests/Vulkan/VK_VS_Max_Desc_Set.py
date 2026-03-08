@@ -1,5 +1,5 @@
 import rdtest
-import renderdoc as rd
+from brand_import import rd
 
 
 class VK_VS_Max_Desc_Set(rdtest.TestCase):

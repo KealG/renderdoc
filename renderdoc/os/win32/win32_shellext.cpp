@@ -186,12 +186,22 @@ struct RDCThumbnailProvider : public IThumbnailProvider, IInitializeWithStream
     const uint32_t MAGIC_HEADER = MAKE_FOURCC(
         RDOC_BRAND_CAPTURE_MAGIC_CHAR_0, RDOC_BRAND_CAPTURE_MAGIC_CHAR_1,
         RDOC_BRAND_CAPTURE_MAGIC_CHAR_2, RDOC_BRAND_CAPTURE_MAGIC_CHAR_3);
+#if RDOC_BRAND_READ_LEGACY_CAPTURE_MAGIC
+    const uint32_t LEGACY_MAGIC_HEADER = MAKE_FOURCC(
+        RDOC_BRAND_LEGACY_CAPTURE_MAGIC_CHAR_0, RDOC_BRAND_LEGACY_CAPTURE_MAGIC_CHAR_1,
+        RDOC_BRAND_LEGACY_CAPTURE_MAGIC_CHAR_2, RDOC_BRAND_LEGACY_CAPTURE_MAGIC_CHAR_3);
+#endif
 
     byte *readPtr = captureHeader.data();
     byte *readEnd = readPtr + captureHeader.size();
 
-    if(captureHeader.size() < sizeof(MAGIC_HEADER) ||
-       memcmp(&MAGIC_HEADER, readPtr, sizeof(MAGIC_HEADER)) != 0)
+    bool validMagic = captureHeader.size() >= sizeof(MAGIC_HEADER) &&
+                      memcmp(&MAGIC_HEADER, readPtr, sizeof(MAGIC_HEADER)) == 0;
+#if RDOC_BRAND_READ_LEGACY_CAPTURE_MAGIC
+    validMagic = validMagic || (captureHeader.size() >= sizeof(LEGACY_MAGIC_HEADER) &&
+                                memcmp(&LEGACY_MAGIC_HEADER, readPtr, sizeof(LEGACY_MAGIC_HEADER)) == 0);
+#endif
+    if(!validMagic)
     {
       RDCDEBUG("Legacy header did not have expected magic number");
       return;

@@ -466,8 +466,6 @@ def maybe_skip_member(app, what, name, obj, skip, options):
 def build_finished(app, exception):
     rd = importlib.import_module(brand.PY_CORE_MODULE_NAME)
     qrd = importlib.import_module(brand.PY_GUI_MODULE_NAME)
-    sys.modules.setdefault('renderdoc', rd)
-    sys.modules.setdefault('qrenderdoc', qrd)
 
     from sphinx.domains.python import PythonDomain
     from sphinx.errors import SphinxError
@@ -485,10 +483,6 @@ def build_finished(app, exception):
     # Enumerate the namespaced objects in both modules
     items = []
     module_names = [brand.PY_CORE_MODULE_NAME, brand.PY_GUI_MODULE_NAME]
-    if brand.PY_CORE_MODULE_NAME != 'renderdoc':
-        module_names.append('renderdoc')
-    if brand.PY_GUI_MODULE_NAME != 'qrenderdoc':
-        module_names.append('qrenderdoc')
 
     for module_name in dict.fromkeys(module_names):
         module = sys.modules[module_name]

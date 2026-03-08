@@ -160,7 +160,7 @@ rdcstr Process::GetEnvVariable(const rdcstr &name)
   // we fake environment variables with properties
   Process::ProcessResult result;
   Process::LaunchProcess("getprop", ".",
-                         StringFormat::Fmt("debug.rdoc.%s variable_is_not_set", name.c_str()), true,
+                         StringFormat::Fmt(RDOC_BRAND_ANDROID_PROPERTY_PREFIX ".%s variable_is_not_set", name.c_str()), true,
                          &result);
 
   rdcstr settingsOutput;

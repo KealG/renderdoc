@@ -1,4 +1,4 @@
-import renderdoc as rd
+from brand_import import rd
 import rdtest
 
 class VK_Ray_Query(rdtest.TestCase):

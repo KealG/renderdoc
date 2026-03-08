@@ -169,7 +169,7 @@ void sharedLogOutput(QtMsgType type, const QMessageLogContext &context, const QS
 
 static QString tr(const char *string)
 {
-  return QApplication::translate("qrenderdoc", string);
+  return QApplication::translate(RDOC_BRAND_UI_NAME, string);
 }
 
 void hideOption(QCommandLineOption &opt)

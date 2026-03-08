@@ -143,6 +143,11 @@ bool is_exr_file(const byte *headerBuffer, size_t size)
 static const uint32_t MAGIC_HEADER = MAKE_FOURCC(
     RDOC_BRAND_CAPTURE_MAGIC_CHAR_0, RDOC_BRAND_CAPTURE_MAGIC_CHAR_1,
     RDOC_BRAND_CAPTURE_MAGIC_CHAR_2, RDOC_BRAND_CAPTURE_MAGIC_CHAR_3);
+#if RDOC_BRAND_READ_LEGACY_CAPTURE_MAGIC
+static const uint32_t LEGACY_MAGIC_HEADER = MAKE_FOURCC(
+    RDOC_BRAND_LEGACY_CAPTURE_MAGIC_CHAR_0, RDOC_BRAND_LEGACY_CAPTURE_MAGIC_CHAR_1,
+    RDOC_BRAND_LEGACY_CAPTURE_MAGIC_CHAR_2, RDOC_BRAND_LEGACY_CAPTURE_MAGIC_CHAR_3);
+#endif
 
 namespace
 {
@@ -323,7 +328,12 @@ void RDCFile::Init(StreamReader &reader)
     return;
   }
 
-  if(header.magic != MAGIC_HEADER)
+  bool validMagic = header.magic == MAGIC_HEADER;
+#if RDOC_BRAND_READ_LEGACY_CAPTURE_MAGIC
+  validMagic = validMagic || header.magic == LEGACY_MAGIC_HEADER;
+#endif
+
+  if(!validMagic)
   {
     SET_ERROR_RESULT(m_Error, ResultCode::FileUnrecognised,
                      "Unrecognised file type. File magic number is %08x.", (uint32_t)header.magic);

@@ -1,4 +1,4 @@
-import renderdoc as rd
+from brand_import import rd
 import rdtest
 
 prevProgress = -1.0

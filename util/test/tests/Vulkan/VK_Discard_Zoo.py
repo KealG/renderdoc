@@ -1,6 +1,6 @@
 import rdtest
 import struct
-import renderdoc as rd
+from brand_import import rd
 
 
 class VK_Discard_Zoo(rdtest.Discard_Zoo):

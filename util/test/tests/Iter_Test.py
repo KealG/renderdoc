@@ -3,7 +3,7 @@ import os
 import random
 import struct
 from typing import List
-import renderdoc as rd
+from brand_import import rd
 
 
 class Iter_Test(rdtest.TestCase):

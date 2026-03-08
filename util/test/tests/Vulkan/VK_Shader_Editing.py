@@ -1,7 +1,7 @@
 import copy
 import rdtest
 import struct
-import renderdoc as rd
+from brand_import import rd
 from typing import Tuple
 
 

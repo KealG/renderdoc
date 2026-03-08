@@ -559,7 +559,7 @@ bool PersistantConfig::Load(const rdcstr &filename)
     searchPaths << appDir.absoluteFilePath(lit("../../plugins-win32/spirv/"));
 #elif defined(Q_OS_LINUX)
     // linux installation
-    searchPaths << appDir.absoluteFilePath(lit("../share/renderdoc/plugins/spirv/"));
+    searchPaths << appDir.absoluteFilePath(lit("../" RDOC_BRAND_PLUGINS_SHARE_SUBDIR "/spirv/"));
     // linux local
     searchPaths << appDir.absoluteFilePath(lit("../../plugins-linux64/spirv/"));
 #endif

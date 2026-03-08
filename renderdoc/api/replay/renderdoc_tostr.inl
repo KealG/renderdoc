@@ -22,6 +22,8 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
+#include "../../common/brand_config.h"
+
 template <>
 rdcstr DoStringise(const SDBasic &el)
 {
@@ -1117,18 +1119,18 @@ rdcstr DoStringise(const SectionType &el)
 {
   BEGIN_ENUM_STRINGISE(SectionType);
   {
-    STRINGISE_ENUM_CLASS_NAMED(FrameCapture, "renderdoc/internal/framecapture");
-    STRINGISE_ENUM_CLASS_NAMED(ResolveDatabase, "renderdoc/internal/resolvedb");
-    STRINGISE_ENUM_CLASS_NAMED(Bookmarks, "renderdoc/ui/bookmarks");
-    STRINGISE_ENUM_CLASS_NAMED(Notes, "renderdoc/ui/notes");
-    STRINGISE_ENUM_CLASS_NAMED(ResourceRenames, "renderdoc/ui/resrenames");
+    STRINGISE_ENUM_CLASS_NAMED(FrameCapture, RDOC_BRAND_SECTION_FRAMECAPTURE);
+    STRINGISE_ENUM_CLASS_NAMED(ResolveDatabase, RDOC_BRAND_SECTION_RESOLVEDB);
+    STRINGISE_ENUM_CLASS_NAMED(Bookmarks, RDOC_BRAND_SECTION_BOOKMARKS);
+    STRINGISE_ENUM_CLASS_NAMED(Notes, RDOC_BRAND_SECTION_NOTES);
+    STRINGISE_ENUM_CLASS_NAMED(ResourceRenames, RDOC_BRAND_SECTION_RESRENAMES);
     STRINGISE_ENUM_CLASS_NAMED(AMDRGPProfile, "amd/rgp/profile");
-    STRINGISE_ENUM_CLASS_NAMED(ExtendedThumbnail, "renderdoc/internal/exthumb");
-    STRINGISE_ENUM_CLASS_NAMED(EmbeddedLogfile, "renderdoc/internal/logfile");
-    STRINGISE_ENUM_CLASS_NAMED(EditedShaders, "renderdoc/ui/edits");
-    STRINGISE_ENUM_CLASS_NAMED(D3D12Core, "renderdoc/internal/d3d12core");
-    STRINGISE_ENUM_CLASS_NAMED(D3D12SDKLayers, "renderdoc/internal/d3d12sdklayers");
-    STRINGISE_ENUM_CLASS_NAMED(EmbeddedExternalFiles, "renderdoc/internal/embeddedexternalfiles");
+    STRINGISE_ENUM_CLASS_NAMED(ExtendedThumbnail, RDOC_BRAND_SECTION_EXTHUMB);
+    STRINGISE_ENUM_CLASS_NAMED(EmbeddedLogfile, RDOC_BRAND_SECTION_LOGFILE);
+    STRINGISE_ENUM_CLASS_NAMED(EditedShaders, RDOC_BRAND_SECTION_EDITS);
+    STRINGISE_ENUM_CLASS_NAMED(D3D12Core, RDOC_BRAND_SECTION_D3D12CORE);
+    STRINGISE_ENUM_CLASS_NAMED(D3D12SDKLayers, RDOC_BRAND_SECTION_D3D12SDKLAYERS);
+    STRINGISE_ENUM_CLASS_NAMED(EmbeddedExternalFiles, RDOC_BRAND_SECTION_EMBEDDED_EXTERNALS);
   }
   END_ENUM_STRINGISE();
 }

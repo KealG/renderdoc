@@ -1,6 +1,6 @@
 import copy
 import rdtest
-import renderdoc as rd
+from brand_import import rd
 
 
 class D3D11_Vertex_Attr_Zoo(rdtest.TestCase):

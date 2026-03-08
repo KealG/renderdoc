@@ -248,7 +248,7 @@ void PythonContext::GlobalInit()
   {
     QDir bin = QFileInfo(QCoreApplication::applicationFilePath()).absoluteDir();
 
-    QString pylibs = QDir::cleanPath(bin.absoluteFilePath(lit("../share/renderdoc/pylibs")));
+    QString pylibs = QDir::cleanPath(bin.absoluteFilePath(lit("../" RDOC_BRAND_PYLIBS_SHARE_SUBDIR)));
 
     pylibs.toWCharArray(python_home);
 
@@ -298,21 +298,6 @@ void PythonContext::GlobalInit()
   PyModule_AddObject(main_module, RDOC_BRAND_PY_CORE_MODULE_NAME, coreModule);
   PyModule_AddObject(main_module, RDOC_BRAND_PY_GUI_MODULE_NAME, guiModule);
 
-  PyObject *modules = PyImport_GetModuleDict();
-
-  if(strcmp(RDOC_BRAND_PY_CORE_MODULE_NAME, "renderdoc") != 0 && coreModule)
-  {
-    PyDict_SetItemString(modules, "renderdoc", coreModule);
-    Py_INCREF(coreModule);
-    PyModule_AddObject(main_module, "renderdoc", coreModule);
-  }
-
-  if(strcmp(RDOC_BRAND_PY_GUI_MODULE_NAME, "qrenderdoc") != 0 && guiModule)
-  {
-    PyDict_SetItemString(modules, "qrenderdoc", guiModule);
-    Py_INCREF(guiModule);
-    PyModule_AddObject(main_module, "qrenderdoc", guiModule);
-  }
 
   main_dict = PyModule_GetDict(main_module);
 

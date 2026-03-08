@@ -1,5 +1,5 @@
 import rdtest
-import renderdoc as rd
+from brand_import import rd
 
 
 class D3D11_Mesh_Zoo(rdtest.TestCase):

@@ -16,8 +16,8 @@ mkdir /io/pymodules
 cp -R lib/*.so /io/pymodules
 
 # Copy python lib folder, and trim
-mkdir -p /io/dist/share/renderdoc/pylibs/lib
-cd /io/dist/share/renderdoc/pylibs/lib
+mkdir -p /io/dist/share/ripperk/pylibs/lib
+cd /io/dist/share/ripperk/pylibs/lib
 cp -R /usr/lib/python3.6/ .
 cd python3.6
 # remove cache files

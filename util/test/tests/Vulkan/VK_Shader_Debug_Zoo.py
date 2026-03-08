@@ -1,4 +1,4 @@
-import renderdoc as rd
+from brand_import import rd
 from typing import List
 import rdtest
 import struct

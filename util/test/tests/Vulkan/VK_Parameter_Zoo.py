@@ -1,5 +1,6 @@
-import renderdoc as rd
+from brand_import import rd
 import rdtest
+import rdoc_brand as brand
 
 
 class VK_Parameter_Zoo(rdtest.TestCase):
@@ -162,9 +163,9 @@ class VK_Parameter_Zoo(rdtest.TestCase):
         action = self.find_action("Tools available")
 
         self.check(len(action.children) > 1)
-        self.check(any([d.customName == 'RenderDoc' for d in action.children]))
+        self.check(any([d.customName == brand.PRODUCT_NAME for d in action.children]))
 
-        rdtest.log.success("RenderDoc tool was listed as available")
+        rdtest.log.success(f"{brand.PRODUCT_NAME} tool was listed as available")
 
         for variant in [1, 2]:
             action = self.find_action(f"ASM Draw {variant}")

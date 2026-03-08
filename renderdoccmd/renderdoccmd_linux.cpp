@@ -219,7 +219,7 @@ void DisplayRendererPreview(IReplayController *renderer, TextureDisplay &display
   xcb_intern_atom_reply_t *atom_wm_delete_window = xcb_intern_atom_reply(connection, cookie2, 0);
 
   xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, XCB_ATOM_WM_NAME, XCB_ATOM_STRING,
-                      8, sizeof("renderdoccmd") - 1, "renderdoccmd");
+                      8, sizeof(RDOC_BRAND_CMD_NAME) - 1, RDOC_BRAND_CMD_NAME);
 
   xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, (*reply).atom, 4, 32, 1,
                       &(*atom_wm_delete_window).atom);

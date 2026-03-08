@@ -114,7 +114,7 @@ Capture files made with a recent version of RenderDoc will store a coarse type o
 Configuring the Remote Server
 -----------------------------
 
-The remote server can be configured by a file in ``~/.renderdoc`` or ``%APPDATA%/renderdoc`` called ``remoteserver.conf``. This allows you to restrict which IPs can connect to the server, as well as whether execution is allowed.
+The remote server can be configured by a file in ``~/.ripperk`` or ``%APPDATA%/ripperk`` called ``remoteserver.conf``. This allows you to restrict which IPs can connect to the server, as well as whether execution is allowed.
 
 To whitelist an IP range, add a line such as this:
 

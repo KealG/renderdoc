@@ -5,7 +5,7 @@
   <?define CoreJsonName = "ripperk.json" ?>
   <?define CmdExeName = "ripperkcmd.exe" ?>
   <?define CompatBaseName = "ripperk" ?>
-  <?define AppHeaderName = "$(var.CompatBaseName)_app.h" ?>
+  <?define AppHeaderName = "ripperk_app.h" ?>
   <?define Shim32DllName = "ripperkshim32.dll" ?>
   <?define Shim64DllName = "ripperkshim64.dll" ?>
 
@@ -13,14 +13,14 @@
   <?define ManufacturerName = "Baldur Karlsson" ?>
   <?define InstallerDescription = "Installer for ripperK" ?>
   <?define CabinetName = "ripperk.cab" ?>
-  <?define ProductHomepageComment = "ripperK Homepage is http://renderdoc.org/" ?>
-  <?define ProductHomepageHelpLink = "http://renderdoc.org/" ?>
+  <?define ProductHomepageComment = "ripperK Homepage is https://renderdoc.org/" ?>
+  <?define ProductHomepageHelpLink = "https://renderdoc.org/" ?>
   <?define ProductHomepageUrl = "https://renderdoc.org/" ?>
   <?define ProductDocumentationUrl = "https://renderdoc.org/docs" ?>
   <?define InstallDiskPromptName = "ripperK Installation" ?>
   <?define InstallDirName = "ripperK" ?>
   <?define DocumentationBaseName = "ripperk" ?>
-  <?define DocumentationFileName = "$(var.DocumentationBaseName).chm" ?>
+  <?define DocumentationFileName = "ripperk.chm" ?>
   <?define DocumentationCollectionName = "ripperK" ?>
   <?define DocumentationShortcutName = "ripperK Documentation" ?>
   <?define CaptureProgId = "ripperK.RDCCapture.1" ?>

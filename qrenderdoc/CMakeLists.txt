@@ -434,17 +434,39 @@ if(APPLE AND CMAKE_GENERATOR STREQUAL "Xcode")
     source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${THIRDPARTY_FILES})
 endif()
 
-install (PROGRAMS ${CMAKE_BINARY_DIR}/bin/qrenderdoc DESTINATION bin)
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/share)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/share/renderdoc.desktop
+               ${CMAKE_CURRENT_BINARY_DIR}/share/${RDOC_DESKTOP_FILE_NAME} @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/share/renderdoc.thumbnailer
+               ${CMAKE_CURRENT_BINARY_DIR}/share/${RDOC_THUMBNAILER_FILE_NAME} @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/share/renderdoc-capture.xml
+               ${CMAKE_CURRENT_BINARY_DIR}/share/${RDOC_CAPTURE_XML_FILE_NAME} @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/share/magic
+               ${CMAKE_CURRENT_BINARY_DIR}/share/magic @ONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/share/menu
+               ${CMAKE_CURRENT_BINARY_DIR}/share/${RDOC_MENU_FILE_NAME} @ONLY)
+
+install (PROGRAMS ${CMAKE_BINARY_DIR}/bin/${RDOC_GUI_TARGET_NAME} DESTINATION bin)
 
 # Install supporting files for file associations etc
-install (FILES share/application-x-renderdoc-capture.svg DESTINATION share/icons/hicolor/scalable/mimetypes/)
-install (FILES share/renderdoc-icon-16x16.xpm DESTINATION share/pixmaps/)
-install (FILES share/renderdoc-icon-32x32.xpm DESTINATION share/pixmaps/)
-install (FILES share/magic DESTINATION share/doc/renderdoc)
-install (FILES share/menu DESTINATION share/menu RENAME renderdoc)
-install (FILES share/renderdoc.desktop DESTINATION share/applications)
-install (FILES share/renderdoc.thumbnailer DESTINATION share/thumbnailers)
-install (FILES share/renderdoc-capture.xml DESTINATION share/mime/packages)
+install (FILES share/application-x-renderdoc-capture.svg
+         DESTINATION share/icons/hicolor/scalable/mimetypes/
+         RENAME ${RDOC_MIME_ICON_NAME}.svg)
+install (FILES share/renderdoc-icon-16x16.xpm
+         DESTINATION share/pixmaps/
+         RENAME ${RDOC_PIXMAP_ICON_16_FILE_NAME})
+install (FILES share/renderdoc-icon-32x32.xpm
+         DESTINATION share/pixmaps/
+         RENAME ${RDOC_PIXMAP_ICON_32_FILE_NAME})
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/share/magic DESTINATION share/doc/${RDOC_POSIX_SHARE_DIR})
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/share/${RDOC_MENU_FILE_NAME}
+         DESTINATION share/menu RENAME ${RDOC_MENU_FILE_NAME})
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/share/${RDOC_DESKTOP_FILE_NAME}
+         DESTINATION share/applications)
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/share/${RDOC_THUMBNAILER_FILE_NAME}
+         DESTINATION share/thumbnailers)
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/share/${RDOC_CAPTURE_XML_FILE_NAME}
+         DESTINATION share/mime/packages)
 
 install (CODE "MESSAGE(\"You now need to update some caches.\")")
 install (CODE "MESSAGE(\"e.g.\")")

@@ -28,6 +28,7 @@
 #include "android/android.h"
 #include "api/replay/renderdoc_replay.h"
 #include "api/replay/version.h"
+#include "common/brand_config.h"
 #include "common/threading.h"
 #include "core/core.h"
 #include "core/settings.h"
@@ -308,7 +309,7 @@ static void ActiveRemoteClientThread(ClientThread *threadData,
     reader.ConfigureStructuredExport(&GetRemoteServerChunkName, false, 0, 1.0);
     writer.ConfigureStructuredExport(&GetRemoteServerChunkName, false, 0, 1.0);
 
-    rdcstr filename = FileIO::GetTempFolderFilename() + "/RenderDoc/RemoteServer_Server.log";
+    rdcstr filename = FileIO::GetTempFolderFilename() + "/" RDOC_BRAND_TEMP_SUBFOLDER "/RemoteServer_Server.log";
 
     RDCLOG("Logging remote server work to '%s'", filename.c_str());
 
@@ -1137,7 +1138,7 @@ void RenderDoc::BecomeRemoteServer(const rdcstr &listenhost, uint16_t port,
   {
     RDCLOG("No whitelist IP ranges configured - using default private IP ranges.");
     RDCLOG(
-        "Create a config file remoteserver.conf in ~/.renderdoc or %%APPDATA%%/renderdoc to "
+        "Create a config file " RDOC_BRAND_REMOTE_SERVER_CONFIG_FILENAME " in ~/" RDOC_BRAND_POSIX_CONFIG_DIR " or %%APPDATA%%/" RDOC_BRAND_APPDATA_SUBFOLDER " to "
         "narrow "
         "this down or accept connections from more ranges.");
 
@@ -1416,7 +1417,7 @@ RemoteServer::RemoteServer(Network::Socket *sock, const rdcstr &deviceID)
     reader->ConfigureStructuredExport(&GetRemoteServerChunkName, false, 0, 1.0);
     writer->ConfigureStructuredExport(&GetRemoteServerChunkName, false, 0, 1.0);
 
-    rdcstr filename = FileIO::GetTempFolderFilename() + "/RenderDoc/RemoteServer_Client.log";
+    rdcstr filename = FileIO::GetTempFolderFilename() + "/" RDOC_BRAND_TEMP_SUBFOLDER "/RemoteServer_Client.log";
 
     RDCLOG("Logging remote server work to '%s'", filename.c_str());
 

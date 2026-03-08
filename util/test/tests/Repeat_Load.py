@@ -1,6 +1,6 @@
 import rdtest
 import os
-import renderdoc as rd
+from brand_import import rd
 
 
 class Repeat_Load(rdtest.TestCase):

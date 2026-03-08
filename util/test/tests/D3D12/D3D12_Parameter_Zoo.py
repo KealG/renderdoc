@@ -1,6 +1,6 @@
 import struct
 import math
-import renderdoc as rd
+from brand_import import rd
 import rdtest
 
 

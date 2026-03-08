@@ -2,7 +2,7 @@ import os
 import signal
 import datetime
 import time
-import renderdoc as rd
+from brand_import import rd
 from . import util
 from .logging import log
 from time import sleep

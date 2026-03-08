@@ -9,7 +9,7 @@ import threading
 import queue
 import datetime
 import time
-import renderdoc as rd
+from brand_import import rd
 import rdoc_brand as brand
 from . import util
 from . import testcase
@@ -224,7 +224,7 @@ def run_tests(test_include: str, test_exclude: str, in_process: bool, slow_tests
     if plat == 'nt' or 'Windows' in platform.platform():
         plat = 'win32'
 
-    log.header("Tests running for RenderDoc Version {} ({})".format(rd.GetVersionString(), rd.GetCommitHash()))
+    log.header("Tests running for {} Version {} ({})".format(brand.PRODUCT_NAME, rd.GetVersionString(), rd.GetCommitHash()))
     log.header("On {}".format(platform.platform()))
 
     log.comment("plat={} git={}".format(platform.platform(), rd.GetCommitHash()))
@@ -374,14 +374,14 @@ def run_tests(test_include: str, test_exclude: str, in_process: bool, slow_tests
 
         logfile = server.retrieve_latest_server_log(util.get_tmp_dir())
         if logfile is not None and os.path.exists(logfile):
-            log.inline_file('Replay RenderDoc log', logfile)
+            log.inline_file(f'Replay {brand.PRODUCT_NAME} log', logfile)
 
         # Do not inline this, as it is usually massive
         server.retrieve_comms_log()
 
     logfile = rd.GetLogFile()
     if os.path.exists(logfile):
-        log.inline_file('{} RenderDoc log'.format("Host" if server is not None else ""), logfile)
+        log.inline_file('{} {} log'.format("Host" if server is not None else "", brand.PRODUCT_NAME), logfile)
 
     log.comment("total={} fail={} skip={} time={}".format(len(testcases), len(failedcases), len(skippedcases), int(duration.total_seconds())))
     log.header("Tests complete summary: {} passed out of {} run from {} total in {}"
@@ -471,7 +471,7 @@ def internal_run_test(test_name):
                                                           None)
 
             if logfile is not None and os.path.exists(logfile):
-                log.inline_file('{} RenderDoc log'.format("Test" if server is not None else ""), logfile)
+                log.inline_file('{} {} log'.format("Test" if server is not None else "", brand.PRODUCT_NAME), logfile)
 
             log.end_test(test_name, print_footer=False)
 

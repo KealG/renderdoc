@@ -66,7 +66,7 @@ if args.renderdoc is not None:
     elif os.path.isdir(args.renderdoc):
         renderdoc_dirpath = os.path.abspath(args.renderdoc)
     else:
-        raise RuntimeError("'{}' is not a valid path to the renderdoc library".format(args.renderdoc))
+        raise RuntimeError("'{}' is not a valid path to the {} library".format(args.renderdoc, brand.CORE_DLL_NAME))
     os.environ["PATH"] += os.pathsep + renderdoc_dirpath
     # Python 3.8 doesn't search PATH so add it to the DLL search path
     if sys.platform == 'win32' and sys.version_info[1] >= 8:
@@ -102,7 +102,6 @@ artifacts_dir = os.path.realpath(args.artifacts)
 
 try:
     branded_module = importlib.import_module(brand.PY_CORE_MODULE_NAME)
-    sys.modules.setdefault('renderdoc', branded_module)
     import rdtest
 except (ModuleNotFoundError, ImportError) as ex:
     # very simple output, to ensure we have *something*

@@ -1,6 +1,6 @@
-?package(local.renderdoc):needs="x11" section="Applications/Programming" \
-	title="RenderDoc" \
-	command="qrenderdoc" \
-	icon="/usr/share/pixmaps/renderdoc-icon-32x32.xpm" \
-	icon16x16="/usr/share/pixmaps/renderdoc-icon-16x16.xpm" \
-	icon32x32="/usr/share/pixmaps/renderdoc-icon-32x32.xpm"
+?package(local.@RDOC_BASE_NAME@):needs="x11" section="Applications/Programming" \
+	title="@RDOC_PRODUCT_NAME@" \
+	command="@RDOC_UI_NAME@" \
+	icon="/usr/share/pixmaps/@RDOC_PIXMAP_ICON_32_FILENAME@" \
+	icon16x16="/usr/share/pixmaps/@RDOC_PIXMAP_ICON_16_FILENAME@" \
+	icon32x32="/usr/share/pixmaps/@RDOC_PIXMAP_ICON_32_FILENAME@"

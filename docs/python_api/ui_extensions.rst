@@ -11,7 +11,7 @@ We start off with the basic registration function. Create an ``__init__.py`` in 
 .. highlight:: python
 .. code:: python
 
-    import qrenderdoc as qrd
+    import qripperk as qrd
 
     extiface_version = ''
 
@@ -190,7 +190,7 @@ To start with we can identify the resource on the UI thread, so let's do that:
 .. highlight:: python
 .. code:: python
 
-    import renderdoc as rd
+    import ripperk as rd
 
     def menu_callback(ctx: qrd.CaptureContext, data):
         texid = rd.ResourceId.Null()

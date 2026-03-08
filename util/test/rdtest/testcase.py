@@ -3,7 +3,7 @@ import traceback
 import copy
 import re
 import datetime
-import renderdoc as rd
+from brand_import import rd
 from . import util
 from . import analyse
 from . import capture

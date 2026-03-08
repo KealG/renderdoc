@@ -441,7 +441,7 @@ void CrashDialog::sendReport()
         file->setParent(multiPart);
 
         capture.setHeader(QNetworkRequest::ContentTypeHeader,
-                          lit("application/x-renderdoc-capture"));
+                          lit(RDOC_BRAND_MIME_TYPE));
         capture.setHeader(
             QNetworkRequest::ContentDispositionHeader,
             lit("form-data; name=\"capture\"; filename=\"capture"

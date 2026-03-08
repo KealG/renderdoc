@@ -1,13 +1,13 @@
 [Desktop Entry]
 Version=1.0
-Name=RenderDoc
+Name=@RDOC_PRODUCT_NAME@
 Comment=A stand-alone graphics API debugger
 GenericName=Graphics Debugger
-Exec=qrenderdoc %f
-Icon=application-x-renderdoc-capture
+Exec=@RDOC_UI_NAME@ %f
+Icon=@RDOC_MIME_ICON_NAME@
 Terminal=false
 Type=Application
 X-MultipleArgs=false
 Categories=Development;
 StartupNotify=true
-MimeType=application/x-renderdoc-capture;
+MimeType=@RDOC_MIME_TYPE@;

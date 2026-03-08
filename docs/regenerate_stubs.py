@@ -45,8 +45,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(docsdir, '../build/lib')))
 
 renderdoc = importlib.import_module(brand.PY_CORE_MODULE_NAME)
 qrenderdoc = importlib.import_module(brand.PY_GUI_MODULE_NAME)
-sys.modules.setdefault('renderdoc', renderdoc)
-sys.modules.setdefault('qrenderdoc', qrenderdoc)
 
 if __name__ == '__main__':
     print(f"Generating stubs from {renderdoc.__file__} and {qrenderdoc.__file__}")

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Branding">
+    <RDOCBaseName>@RDOC_BASE_NAME@</RDOCBaseName>
+    <RDOCBaseNameUpper>@RDOC_BASE_NAME_UPPER@</RDOCBaseNameUpper>
+    <RDOCProductName>@RDOC_PRODUCT_NAME@</RDOCProductName>
+    <RDOCCompatBaseName>@RDOC_COMPAT_BASE_NAME@</RDOCCompatBaseName>
+    <RDOCCompatBaseNameUpper>@RDOC_COMPAT_BASE_NAME_UPPER@</RDOCCompatBaseNameUpper>
+    <RDOCCompatAppHeaderName>@RDOC_COMPAT_APP_HEADER_NAME@</RDOCCompatAppHeaderName>
+    <RDOCCompatReplayHeaderName>@RDOC_COMPAT_REPLAY_HEADER_NAME@</RDOCCompatReplayHeaderName>
+    <RDOCCompatGetAPIName>@RDOC_COMPAT_GETAPI_NAME@</RDOCCompatGetAPIName>
+    <RDOCCompatReplayMarkerName>@RDOC_COMPAT_REPLAY_MARKER_NAME@</RDOCCompatReplayMarkerName>
+    <RDOCCoreTargetName>$(RDOCBaseName)</RDOCCoreTargetName>
+    <RDOCCmdTargetName>@RDOC_CMD_NAME@</RDOCCmdTargetName>
+    <RDOCCmdDisplayName>@RDOC_CMD_DISPLAY_NAME@</RDOCCmdDisplayName>
+    <RDOCPyCoreModuleTargetName>@RDOC_PY_CORE_MODULE_NAME@</RDOCPyCoreModuleTargetName>
+    <RDOCPyGuiModuleTargetName>@RDOC_PY_GUI_MODULE_NAME@</RDOCPyGuiModuleTargetName>
+    <RDOCGuiTargetName>@RDOC_UI_NAME@</RDOCGuiTargetName>
+    <RDOCGuiStubTargetName>@RDOC_UI_STUB_NAME@</RDOCGuiStubTargetName>
+    <RDOCShimBaseTargetName>@RDOC_SHIM_NAME@</RDOCShimBaseTargetName>
+    <RDOCShim32TargetName>$(RDOCShimBaseTargetName)32</RDOCShim32TargetName>
+    <RDOCShim64TargetName>$(RDOCShimBaseTargetName)64</RDOCShim64TargetName>
+    <RDOCVulkanLayerName>@RDOC_VULKAN_LAYER_NAME@</RDOCVulkanLayerName>
+    <RDOCVulkanEnableVar>@RDOC_VULKAN_CAPTURE_VAR@</RDOCVulkanEnableVar>
+    <RDOCVulkanLayerDescription>@RDOC_VULKAN_LAYER_DESCRIPTION@</RDOCVulkanLayerDescription>
+    <RDOCVulkanGetInstanceProcAddr>$(RDOCVulkanLayerName)GetInstanceProcAddr</RDOCVulkanGetInstanceProcAddr>
+    <RDOCVulkanGetDeviceProcAddr>$(RDOCVulkanLayerName)GetDeviceProcAddr</RDOCVulkanGetDeviceProcAddr>
+    <RDOCVulkanNegotiateLoaderLayerInterfaceVersion>$(RDOCVulkanLayerName)NegotiateLoaderLayerInterfaceVersion</RDOCVulkanNegotiateLoaderLayerInterfaceVersion>
+    <RDOCVulkanEnumerateInstanceExtensionProperties>$(RDOCVulkanLayerName)EnumerateInstanceExtensionProperties</RDOCVulkanEnumerateInstanceExtensionProperties>
+  </PropertyGroup>
+</Project>

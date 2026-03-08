@@ -1,13 +1,13 @@
 #!/bin/bash
 
 CORE_DLL_NAME="${RDOC_CORE_DLL_NAME:-renderdoc.dll}"
-CORE_JSON_NAME="${RDOC_CORE_JSON_NAME:-renderdoc.json}"
-CMD_EXE_NAME="${RDOC_CMD_EXE_NAME:-renderdoccmd.exe}"
+CORE_JSON_NAME="${RDOC_CORE_JSON_NAME:-ripperk.json}"
+CMD_EXE_NAME="${RDOC_CMD_EXE_NAME:-ripperkcmd.exe}"
 SHIM32_DLL_NAME="${RDOC_SHIM32_DLL_NAME:-renderdocshim32.dll}"
 CORE_PDB_NAME="${RDOC_CORE_PDB_NAME:-renderdoc.pdb}"
-CMD_PDB_NAME="${RDOC_CMD_PDB_NAME:-renderdoccmd.pdb}"
+CMD_PDB_NAME="${RDOC_CMD_PDB_NAME:-ripperkcmd.pdb}"
 SHIM32_PDB_NAME="${RDOC_SHIM32_PDB_NAME:-renderdocshim32.pdb}"
-ANDROID_APK_GLOB="${RDOC_ANDROID_APK_GLOB:-org.renderdoc.renderdoccmd.*.apk}"
+ANDROID_APK_GLOB="${RDOC_ANDROID_APK_GLOB:-org.ripperk.ripperkcmd.*.apk}"
 
 FILENAME="$1"
 

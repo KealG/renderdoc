@@ -73,7 +73,7 @@ The UI stores data in a ``qrenderdoc`` folder underneath your OS's user settings
 
 Deleting this folder will also reset the RenderDoc UI to the defaults - if you uninstall RenderDoc this folder will not be deleted.
 
-The core code may save cached data in a ``renderdoc`` folder - either ``%APPDATA%/renderdoc`` or ``~/.renderdoc/`` but this doesn't contain settings, so is not important to back up.
+The core code may save cached data in a ``renderdoc`` folder - either ``%APPDATA%/ripperk`` or ``~/.ripperk/`` but this doesn't contain settings, so is not important to back up.
 
 RenderDoc doesn't install any registry keys on windows aside from those required to set up file associations.
 

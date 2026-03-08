@@ -1,5 +1,5 @@
 import rdtest
-import renderdoc as rd
+from brand_import import rd
 
 
 class GL_CBuffer_Zoo(rdtest.TestCase):

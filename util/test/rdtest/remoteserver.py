@@ -1,7 +1,7 @@
 
 import sys
 import subprocess
-import renderdoc as rd
+from brand_import import rd
 import rdoc_brand as brand
 from . import util
 from .logging import log
@@ -243,7 +243,7 @@ class AndroidRemoteServer(RemoteServer):
         return self._base_path + util.get_current_test() + '/' + name
 
     def get_renderdoc_path(self):
-        return self._data_path + '/' + AndroidRemoteServer.ADRD_SERVER_APP64 + '/files/RenderDoc/'
+        return self._data_path + '/' + AndroidRemoteServer.ADRD_SERVER_APP64 + f'/files/{brand.PRODUCT_NAME}/'
 
     def run_demos(self, args: [str], timeout=10):
         raw = subprocess.run(['adb', '-s', self.device, 'shell', 'echo', '$EPOCHREALTIME'],
@@ -252,7 +252,7 @@ class AndroidRemoteServer(RemoteServer):
         # Run the command, blocking
         proc = subprocess.run(['adb', '-s', self.device,
                                'shell', 'am', 'start', '-W', '-n', f'{util.get_android_demo_app_name()}/.Loader',
-                               '-e', 'demos', 'RenderDoc', '-e', 'rd_demos'] + args,
+                               '-e', 'demos', brand.PRODUCT_NAME, '-e', 'rd_demos'] + args,
                               check=True, stdout=subprocess.DEVNULL)
         # Extract the log data
         raw = subprocess.run(['adb', '-s', self.device, 'shell',
@@ -280,7 +280,7 @@ class AndroidRemoteServer(RemoteServer):
 
     def inject_and_run_exe(self, cmdline, envmods, opts):
         package_and_activity = f"{util.get_android_demo_app_name()}/.Loader"
-        args = "-e demos RenderDoc -e rd_demos \'\"" + cmdline + "\"\'"
+        args = f"-e demos {brand.PRODUCT_NAME} -e rd_demos '\"" + cmdline + "\"'"
 
         log.print("Running package:'{}' cmd:'{}' with env:'{}'".format(
             package_and_activity, cmdline, envmods))
@@ -306,8 +306,8 @@ class AndroidRemoteServer(RemoteServer):
         if not self.is_connected():
             return None
 
-        src = self._base_path + '/RenderDoc'
-        raw = subprocess.run(['adb', '-s', self.device, 'shell', f'cd {src}; ls -t RenderDoc_* | head -1'],
+        src = self._base_path + f'/{brand.PRODUCT_NAME}'
+        raw = subprocess.run(['adb', '-s', self.device, 'shell', f'cd {src}; ls -t {brand.PRODUCT_NAME}_* | head -1'],
                              check=True, stdout=subprocess.PIPE, timeout=timeout).stdout
         latestlog = str(raw, 'utf-8').strip()
         if not latestlog:
@@ -328,7 +328,7 @@ class AndroidRemoteServer(RemoteServer):
             return None
 
         src = self.get_renderdoc_path()
-        raw = subprocess.run(['adb', '-s', self.device, 'shell', f'cd {src}; ls -t RenderDoc_* | head -1'],
+        raw = subprocess.run(['adb', '-s', self.device, 'shell', f'cd {src}; ls -t {brand.PRODUCT_NAME}_* | head -1'],
                              check=True, stdout=subprocess.PIPE, timeout=timeout).stdout
         latestlog = str(raw, 'utf-8').strip()
         if not latestlog:
@@ -355,7 +355,7 @@ class AndroidRemoteServer(RemoteServer):
 
         os.makedirs(util.get_tmp_dir(), exist_ok=True)
 
-        dst = os.path.join(util.get_tmp_dir(), 'RenderDoc_Server.log')
+        dst = os.path.join(util.get_tmp_dir(), f'{brand.PRODUCT_NAME}_Server.log')
         log.print("Copying remote server comms log from '{}' to '{}'".format(src, dst))
         self.CopyCaptureFromRemote(src, dst, None)
 
