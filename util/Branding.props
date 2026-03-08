@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Branding">
-    <RDOCBaseName>renderdoc</RDOCBaseName>
-    <RDOCBaseNameUpper>RENDERDOC</RDOCBaseNameUpper>
-    <RDOCProductName>RenderDoc</RDOCProductName>
+    <RDOCBaseName>ripperk</RDOCBaseName>
+    <RDOCBaseNameUpper>RIPPERK</RDOCBaseNameUpper>
+    <RDOCProductName>ripperK</RDOCProductName>
+    <RDOCCompatBaseName>ripperk</RDOCCompatBaseName>
+    <RDOCCompatBaseNameUpper>RIPPERK</RDOCCompatBaseNameUpper>
+    <RDOCCompatAppHeaderName>$(RDOCCompatBaseName)_app.h</RDOCCompatAppHeaderName>
+    <RDOCCompatReplayHeaderName>$(RDOCCompatBaseName)_replay.h</RDOCCompatReplayHeaderName>
+    <RDOCCompatGetAPIName>$(RDOCCompatBaseNameUpper)_GetAPI</RDOCCompatGetAPIName>
+    <RDOCCompatReplayMarkerName>$(RDOCCompatBaseName)__replay__marker</RDOCCompatReplayMarkerName>
     <RDOCCoreTargetName>$(RDOCBaseName)</RDOCCoreTargetName>
-    <RDOCCmdTargetName>renderdoccmd</RDOCCmdTargetName>
-    <RDOCCmdDisplayName>RenderDocCmd</RDOCCmdDisplayName>
-    <RDOCPyCoreModuleTargetName>renderdoc</RDOCPyCoreModuleTargetName>
-    <RDOCPyGuiModuleTargetName>qrenderdoc</RDOCPyGuiModuleTargetName>
-    <RDOCGuiTargetName>qrenderdoc</RDOCGuiTargetName>
-    <RDOCGuiStubTargetName>renderdocui</RDOCGuiStubTargetName>
-    <RDOCShimBaseTargetName>renderdocshim</RDOCShimBaseTargetName>
+    <RDOCCmdTargetName>ripperkcmd</RDOCCmdTargetName>
+    <RDOCCmdDisplayName>ripperKCmd</RDOCCmdDisplayName>
+    <RDOCPyCoreModuleTargetName>ripperk</RDOCPyCoreModuleTargetName>
+    <RDOCPyGuiModuleTargetName>qripperk</RDOCPyGuiModuleTargetName>
+    <RDOCGuiTargetName>qripperk</RDOCGuiTargetName>
+    <RDOCGuiStubTargetName>ripperkui</RDOCGuiStubTargetName>
+    <RDOCShimBaseTargetName>ripperkshim</RDOCShimBaseTargetName>
     <RDOCShim32TargetName>$(RDOCShimBaseTargetName)32</RDOCShim32TargetName>
     <RDOCShim64TargetName>$(RDOCShimBaseTargetName)64</RDOCShim64TargetName>
     <RDOCVulkanLayerName>VK_LAYER_$(RDOCBaseNameUpper)_Capture</RDOCVulkanLayerName>

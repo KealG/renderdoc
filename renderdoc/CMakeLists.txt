@@ -100,7 +100,7 @@ endif()
 
 set(sources
     api/app/renderdoc_app.h
-    api/app/ripperk_app.h
+    api/app/${RDOC_COMPAT_APP_HEADER_NAME}
     api/replay/apidefs.h
     api/replay/capture_options.h
     api/replay/common_pipestate.h
@@ -122,7 +122,8 @@ set(sources
     api/replay/gl_pipestate.h
     api/replay/vk_pipestate.h
     api/replay/renderdoc_replay.h
-    api/replay/ripperk_replay.h
+    api/replay/compat_config.h
+    api/replay/${RDOC_COMPAT_REPLAY_HEADER_NAME}
     api/replay/renderdoc_tostr.inl
     common/common.cpp
     common/common.h
@@ -683,4 +684,4 @@ install (TARGETS renderdoc DESTINATION lib${LIB_SUFFIX}/${LIB_SUBFOLDER})
 
 # Copy in application API header to include
 install (FILES api/app/renderdoc_app.h DESTINATION include RENAME renderdoc_app.h)
-install (FILES api/app/ripperk_app.h DESTINATION include RENAME ripperk_app.h)
+install (FILES api/app/${RDOC_COMPAT_APP_HEADER_NAME} DESTINATION include RENAME ${RDOC_COMPAT_APP_HEADER_NAME})

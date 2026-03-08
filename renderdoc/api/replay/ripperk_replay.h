@@ -66,3 +66,4 @@
 #define RIPPERK_VertexOffset RENDERDOC_VertexOffset
 #define pRIPPERK_AllocArrayMem pRENDERDOC_AllocArrayMem
 #define pRIPPERK_FreeArrayMem pRENDERDOC_FreeArrayMem
+#define RIPPERK_REPLAY_PROGRAM_MARKER() REPLAY_PROGRAM_MARKER()

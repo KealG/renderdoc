@@ -26,6 +26,7 @@
 // win32_libentry.cpp : Defines the entry point for the DLL
 #include <tchar.h>
 #include <windows.h>
+#include "api/replay/compat_config.h"
 #include "common/common.h"
 #include "core/core.h"
 #include "hooks/hooks.h"
@@ -51,7 +52,7 @@ static BOOL add_hooks()
 
   auto IsReplayApp = []() {
     return LibraryHooks::Detect(STRINGIZE(RDOC_BASE_NAME) "__replay__marker") ||
-           LibraryHooks::Detect("ripperk__replay__marker");
+           LibraryHooks::Detect(RDOC_COMPAT_REPLAY_MARKER_STRING);
   };
 
   // search for an exported symbol with this name, typically renderdoc__replay__marker

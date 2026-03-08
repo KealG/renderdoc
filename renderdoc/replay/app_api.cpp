@@ -25,6 +25,7 @@
 #include <string.h>
 #include "api/app/renderdoc_app.h"
 #include "api/replay/apidefs.h"    // for RENDERDOC_API to export the RENDERDOC_GetAPI function
+#include "api/replay/compat_config.h"
 #include "common/common.h"
 #include "common/formatting.h"
 #include "core/core.h"
@@ -459,8 +460,8 @@ extern "C" RENDERDOC_API int RENDERDOC_CC RENDERDOC_GetAPI(RENDERDOC_Version ver
   return GetAPIImpl(version, outAPIPointers);
 }
 
-extern "C" RENDERDOC_API int RENDERDOC_CC RIPPERK_GetAPI(RENDERDOC_Version version,
-                                                         void **outAPIPointers)
+extern "C" RENDERDOC_API int RENDERDOC_CC RDOC_COMPAT_GETAPI_NAME_TOKEN(
+    RENDERDOC_Version version, void **outAPIPointers)
 {
   return GetAPIImpl(version, outAPIPointers);
 }

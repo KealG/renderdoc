@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
+#include "api/replay/compat_config.h"
 #include "core/core.h"
 #include "hooks/hooks.h"
 #include "os/os_specific.h"
@@ -33,7 +34,7 @@ void library_loaded()
 {
   auto IsReplayApp = []() {
     return LibraryHooks::Detect(STRINGIZE(RDOC_BASE_NAME) "__replay__marker") ||
-           LibraryHooks::Detect("ripperk__replay__marker");
+           LibraryHooks::Detect(RDOC_COMPAT_REPLAY_MARKER_STRING);
   };
 
   if(IsReplayApp())

@@ -26,6 +26,7 @@
 #include "android/android.h"
 #include "api/replay/renderdoc_replay.h"
 #include "api/replay/version.h"
+#include "api/replay/compat_config.h"
 #include "common/common.h"
 #include "common/formatting.h"
 #include "common/threading.h"
@@ -543,7 +544,7 @@ extern "C" RENDERDOC_API bool RENDERDOC_CC RENDERDOC_CanSelfHostedCapture(const 
 
 static pRENDERDOC_GetAPI GetAPIFunc(void *module)
 {
-  const char *getAPINames[] = {"RIPPERK_GetAPI", "RENDERDOC_GetAPI"};
+  const char *getAPINames[] = {RDOC_COMPAT_GETAPI_NAME_STRING, "RENDERDOC_GetAPI"};
 
   for(const char *getAPIName : getAPINames)
   {

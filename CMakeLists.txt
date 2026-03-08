@@ -109,23 +109,29 @@ set(VULKAN_JSON_SUFFIX "" CACHE STRING "Suffix for the vulkan implicit_layer jso
 
 option(INTERNAL_SELF_CAPTURE "Internal option: enable self-capture" OFF)
 
-set(RDOC_BASE_NAME "renderdoc")
+set(RDOC_BASE_NAME "ripperk")
 if(INTERNAL_SELF_CAPTURE)
     set(RDOC_BASE_NAME "rdocself")
     add_definitions(-DRDOC_SELFCAPTURE_LIMITEDAPI=1)
 endif()
 
-set(RDOC_PRODUCT_NAME "RenderDoc")
-set(RDOC_CMD_NAME "renderdoccmd")
-set(RDOC_CMD_DISPLAY_NAME "RenderDocCmd")
+set(RDOC_PRODUCT_NAME "ripperK")
+set(RDOC_CMD_NAME "ripperkcmd")
+set(RDOC_CMD_DISPLAY_NAME "ripperKCmd")
+set(RDOC_COMPAT_BASE_NAME "ripperk")
+set(RDOC_COMPAT_BASE_NAME_UPPER "RIPPERK")
+set(RDOC_COMPAT_APP_HEADER_NAME "${RDOC_COMPAT_BASE_NAME}_app.h")
+set(RDOC_COMPAT_REPLAY_HEADER_NAME "${RDOC_COMPAT_BASE_NAME}_replay.h")
+set(RDOC_COMPAT_GETAPI_NAME "${RDOC_COMPAT_BASE_NAME_UPPER}_GetAPI")
+set(RDOC_COMPAT_REPLAY_MARKER_NAME "${RDOC_COMPAT_BASE_NAME}__replay__marker")
 set(RDOC_CORE_OUTPUT_NAME "${RDOC_BASE_NAME}")
-set(RDOC_GUI_TARGET_NAME "qrenderdoc")
-set(RDOC_CMD_OUTPUT_NAME "renderdoccmd")
-set(RDOC_PY_CORE_MODULE_NAME "renderdoc")
-set(RDOC_PY_GUI_MODULE_NAME "qrenderdoc")
+set(RDOC_GUI_TARGET_NAME "qripperk")
+set(RDOC_CMD_OUTPUT_NAME "ripperkcmd")
+set(RDOC_PY_CORE_MODULE_NAME "ripperk")
+set(RDOC_PY_GUI_MODULE_NAME "qripperk")
 set(RDOC_GUI_BUNDLE_ICON_NAME "RenderDoc.icns")
 set(RDOC_CORE_MAC_DYLIB_NAME "lib${RDOC_CORE_OUTPUT_NAME}.dylib")
-set(RDOC_ANDROID_OUTPUT_NAME "VkLayer_GLES_RenderDoc")
+set(RDOC_ANDROID_OUTPUT_NAME "VkLayer_GLES_ripperK")
 
 if(INTERNAL_SELF_CAPTURE)
     set(RDOC_CMD_OUTPUT_NAME "rdocselfcmd")
@@ -172,7 +178,7 @@ if(NOT BUILD_VERSION_DIST_CONTACT STREQUAL "")
 endif()
 
 if(NOT RENDERDOC_PLUGINS_PATH STREQUAL "")
-    message(STATUS "Detected custom path to RenderDoc plugins: ${RENDERDOC_PLUGINS_PATH}")
+    message(STATUS "Detected custom path to ${RDOC_PRODUCT_NAME} plugins: ${RENDERDOC_PLUGINS_PATH}")
     add_definitions(-DRENDERDOC_PLUGINS_PATH="${RENDERDOC_PLUGINS_PATH}")
 endif()
 
@@ -289,7 +295,7 @@ string(REGEX MATCH "[0-9]+" RENDERDOC_VERSION_MINOR "${MINOR_VERSION_LINE}")
 
 set(RENDERDOC_VERSION "${RENDERDOC_VERSION_MAJOR}.${RENDERDOC_VERSION_MINOR}")
 
-message(STATUS "Building RenderDoc version ${RENDERDOC_VERSION}")
+message(STATUS "Building ${RDOC_PRODUCT_NAME} version ${RENDERDOC_VERSION}")
 
 if(RENDERDOC_VERSION_MAJOR STREQUAL "")
     message(FATAL_ERROR "Couldn't calculate major version")
@@ -379,7 +385,7 @@ if(cmake_build_type_lower STREQUAL "release" OR
    cmake_build_type_lower STREQUAL "relwithdebinfo" OR
    cmake_build_type_lower STREQUAL "minsizerel")
     add_definitions(-DRELEASE)
-    message(STATUS "Building RenderDoc in Release mode: ${CMAKE_BUILD_TYPE}")
+    message(STATUS "Building ${RDOC_PRODUCT_NAME} in Release mode: ${CMAKE_BUILD_TYPE}")
     set(RELEASE_MODE 1)
 endif()
 

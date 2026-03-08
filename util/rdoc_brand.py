@@ -10,21 +10,33 @@ def _mailto_url(subject: str) -> str:
     return f"mailto:{SUPPORT_EMAIL}?subject={quote(subject)}"
 
 
-PRODUCT_NAME = _getenv("RDOC_PRODUCT_NAME", "RenderDoc")
-BASE_NAME = _getenv("RDOC_BASE_NAME", "renderdoc")
+PRODUCT_NAME = _getenv("RDOC_PRODUCT_NAME", "ripperK")
+BASE_NAME = _getenv("RDOC_BASE_NAME", "ripperk")
+COMPAT_BASE_NAME = _getenv("RDOC_COMPAT_BASE_NAME", "ripperk")
+COMPAT_BASE_NAME_UPPER = _getenv("RDOC_COMPAT_BASE_NAME_UPPER", COMPAT_BASE_NAME.upper())
+COMPAT_APP_HEADER_NAME = _getenv("RDOC_COMPAT_APP_HEADER_NAME", COMPAT_BASE_NAME + "_app.h")
+COMPAT_REPLAY_HEADER_NAME = _getenv(
+    "RDOC_COMPAT_REPLAY_HEADER_NAME",
+    COMPAT_BASE_NAME + "_replay.h",
+)
+COMPAT_GETAPI_NAME = _getenv("RDOC_COMPAT_GETAPI_NAME", COMPAT_BASE_NAME_UPPER + "_GetAPI")
+COMPAT_REPLAY_MARKER_NAME = _getenv(
+    "RDOC_COMPAT_REPLAY_MARKER_NAME",
+    COMPAT_BASE_NAME + "__replay__marker",
+)
 MANUFACTURER_NAME = _getenv("RDOC_MANUFACTURER_NAME", "Baldur Karlsson")
-UI_NAME = _getenv("RDOC_UI_NAME", "qrenderdoc")
-UI_DISPLAY_NAME = _getenv("RDOC_UI_DISPLAY_NAME", "QRenderDoc")
-UI_EXECUTABLE = _getenv("RDOC_UI_EXECUTABLE", "qrenderdoc.exe")
-CMD_NAME = _getenv("RDOC_CMD_NAME", "renderdoccmd")
-CMD_DISPLAY_NAME = _getenv("RDOC_CMD_DISPLAY_NAME", "RenderDocCmd")
-CMD_EXECUTABLE = _getenv("RDOC_CMD_EXECUTABLE", "renderdoccmd.exe")
-PY_CORE_MODULE_NAME = _getenv("RDOC_PY_CORE_MODULE_NAME", "renderdoc")
-PY_GUI_MODULE_NAME = _getenv("RDOC_PY_GUI_MODULE_NAME", "qrenderdoc")
-CORE_DLL_NAME = _getenv("RDOC_CORE_DLL_NAME", "renderdoc.dll")
-LINUX_CORE_LIBRARY = _getenv("RDOC_LINUX_CORE_LIBRARY", "librenderdoc.so")
-APPLE_CORE_LIBRARY = _getenv("RDOC_APPLE_CORE_LIBRARY", "librenderdoc.dylib")
-ANDROID_CAPTURE_LIBRARY = _getenv("RDOC_ANDROID_CAPTURE_LIBRARY", "libVkLayer_GLES_RenderDoc.so")
+UI_NAME = _getenv("RDOC_UI_NAME", "qripperk")
+UI_DISPLAY_NAME = _getenv("RDOC_UI_DISPLAY_NAME", "QripperK")
+UI_EXECUTABLE = _getenv("RDOC_UI_EXECUTABLE", "qripperk.exe")
+CMD_NAME = _getenv("RDOC_CMD_NAME", "ripperkcmd")
+CMD_DISPLAY_NAME = _getenv("RDOC_CMD_DISPLAY_NAME", "ripperKCmd")
+CMD_EXECUTABLE = _getenv("RDOC_CMD_EXECUTABLE", "ripperkcmd.exe")
+PY_CORE_MODULE_NAME = _getenv("RDOC_PY_CORE_MODULE_NAME", "ripperk")
+PY_GUI_MODULE_NAME = _getenv("RDOC_PY_GUI_MODULE_NAME", "qripperk")
+CORE_DLL_NAME = _getenv("RDOC_CORE_DLL_NAME", "ripperk.dll")
+LINUX_CORE_LIBRARY = _getenv("RDOC_LINUX_CORE_LIBRARY", "libripperk.so")
+APPLE_CORE_LIBRARY = _getenv("RDOC_APPLE_CORE_LIBRARY", "libripperk.dylib")
+ANDROID_CAPTURE_LIBRARY = _getenv("RDOC_ANDROID_CAPTURE_LIBRARY", "libVkLayer_GLES_ripperK.so")
 WEBSITE_URL = _getenv("RDOC_WEBSITE_URL", "https://renderdoc.org")
 DOCUMENTATION_URL = _getenv("RDOC_DOCUMENTATION_URL", WEBSITE_URL + "/docs")
 PYTHON_API_URL = _getenv("RDOC_PYTHON_API_URL", DOCUMENTATION_URL + "/python_api/index.html")
@@ -52,9 +64,9 @@ SUPPORT_UNRECOVERABLE_URL = _getenv(
 )
 CMD_ANDROID_PACKAGE_BASE = _getenv(
     "RDOC_CMD_ANDROID_PACKAGE_BASE",
-    "org.renderdoc.renderdoccmd",
+    "org.ripperk.ripperkcmd",
 )
 TEST_ANDROID_DEMO_PACKAGE_BASE = _getenv(
     "RDOC_TEST_ANDROID_DEMO_PACKAGE_BASE",
-    "renderdoc.org.demos",
+    "ripperk.org.demos",
 )
