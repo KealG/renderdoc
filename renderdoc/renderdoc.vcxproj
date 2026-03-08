@@ -915,6 +915,8 @@ namespace DXCEnumerateAndCheck {
   <Target Name="AfterBuild" AfterTargets="Build">
     <Copy SourceFiles="$(ProjectDir)api\app\renderdoc_app.h" DestinationFolder="$(OutDir)">
     </Copy>
+    <Copy SourceFiles="$(ProjectDir)api\app\ripperk_app.h" DestinationFolder="$(OutDir)">
+    </Copy>
     <Copy SourceFiles="$(ProjectDir)3rdparty\dbghelp\$(Platform)\symsrv.dll" DestinationFolder="$(OutDir)">
     </Copy>
     <Copy SourceFiles="$(ProjectDir)3rdparty\dbghelp\$(Platform)\symsrv.yes" DestinationFolder="$(OutDir)">

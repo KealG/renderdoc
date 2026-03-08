@@ -401,8 +401,7 @@ void Init_1_7_0()
   api.SetCommandAnnotation = &SetCommandAnnotation;
 }
 
-extern "C" RENDERDOC_API int RENDERDOC_CC RENDERDOC_GetAPI(RENDERDOC_Version version,
-                                                           void **outAPIPointers)
+static int GetAPIImpl(RENDERDOC_Version version, void **outAPIPointers)
 {
   if(outAPIPointers == NULL)
   {
@@ -452,4 +451,16 @@ extern "C" RENDERDOC_API int RENDERDOC_CC RENDERDOC_GetAPI(RENDERDOC_Version ver
   RDCERR("Unrecognised API version '%d'. Supported versions:%s", version, supportedVersions.c_str());
 
   return 0;
+}
+
+extern "C" RENDERDOC_API int RENDERDOC_CC RENDERDOC_GetAPI(RENDERDOC_Version version,
+                                                           void **outAPIPointers)
+{
+  return GetAPIImpl(version, outAPIPointers);
+}
+
+extern "C" RENDERDOC_API int RENDERDOC_CC RIPPERK_GetAPI(RENDERDOC_Version version,
+                                                         void **outAPIPointers)
+{
+  return GetAPIImpl(version, outAPIPointers);
 }

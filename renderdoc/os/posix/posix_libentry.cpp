@@ -31,7 +31,12 @@ void ResetHookingEnvVars();
 // DllMain equivalent
 void library_loaded()
 {
-  if(LibraryHooks::Detect(STRINGIZE(RDOC_BASE_NAME) "__replay__marker"))
+  auto IsReplayApp = []() {
+    return LibraryHooks::Detect(STRINGIZE(RDOC_BASE_NAME) "__replay__marker") ||
+           LibraryHooks::Detect("ripperk__replay__marker");
+  };
+
+  if(IsReplayApp())
   {
     RDCDEBUG("Not creating hooks - in replay app");
 

@@ -541,6 +541,21 @@ extern "C" RENDERDOC_API bool RENDERDOC_CC RENDERDOC_CanSelfHostedCapture(const 
   return Process::IsModuleLoaded(dllname);
 }
 
+static pRENDERDOC_GetAPI GetAPIFunc(void *module)
+{
+  const char *getAPINames[] = {"RIPPERK_GetAPI", "RENDERDOC_GetAPI"};
+
+  for(const char *getAPIName : getAPINames)
+  {
+    pRENDERDOC_GetAPI get = (pRENDERDOC_GetAPI)Process::GetFunctionAddress(module, getAPIName);
+
+    if(get != NULL)
+      return get;
+  }
+
+  return NULL;
+}
+
 extern "C" RENDERDOC_API void RENDERDOC_CC RENDERDOC_StartSelfHostCapture(const rdcstr &dllname)
 {
   if(!Process::IsModuleLoaded(dllname))
@@ -551,8 +566,7 @@ extern "C" RENDERDOC_API void RENDERDOC_CC RENDERDOC_StartSelfHostCapture(const 
   if(module == NULL)
     return;
 
-  pRENDERDOC_GetAPI get =
-      (pRENDERDOC_GetAPI)Process::GetFunctionAddress(module, "RENDERDOC_GetAPI");
+  pRENDERDOC_GetAPI get = GetAPIFunc(module);
 
   if(get == NULL)
     return;
@@ -577,8 +591,7 @@ extern "C" RENDERDOC_API void RENDERDOC_CC RENDERDOC_EndSelfHostCapture(const rd
   if(module == NULL)
     return;
 
-  pRENDERDOC_GetAPI get =
-      (pRENDERDOC_GetAPI)Process::GetFunctionAddress(module, "RENDERDOC_GetAPI");
+  pRENDERDOC_GetAPI get = GetAPIFunc(module);
 
   if(get == NULL)
     return;
