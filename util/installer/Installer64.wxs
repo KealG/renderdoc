@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='windows-1252'?>
+<?include Branding.wxi?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi'>
   <Product Name='RenderDoc' Id='*' UpgradeCode='D320753C-4B18-4905-A752-E68959943E7D'
     Language='1033' Codepage='1252' Version='$(env.RENDERDOC_VERSION).0' Manufacturer='Baldur Karlsson'>
@@ -36,7 +37,7 @@
         <Directory Id='INSTALLDIR' Name='RenderDoc'>
 
           <Component Id='QRenderDoc' Win64="yes" Guid='44398F0D-3FE3-470A-A137-BDFDFE82353D'>
-            <File Id='qrenderdocEXE' Name='qrenderdoc.exe' DiskId='1' Source='dist/Release64/qrenderdoc.exe' KeyPath='yes'>
+            <File Id='qrenderdocEXE' Name='$(var.GuiExeName)' DiskId='1' Source='dist/Release64/$(var.GuiExeName)' KeyPath='yes'>
               <Shortcut Id="startmenuRenderDoc" Directory="ProgramMenuDir" Name="RenderDoc" WorkingDirectory='INSTALLDIR' Icon="icon.ico" IconIndex="0" Advertise="yes" />
             </File>
 
@@ -73,15 +74,15 @@
           </Component>
 
           <Component Id='RenderDocCPP' Win64="yes" Guid='9D5949F9-0447-47B6-829D-77465E1FDAD9'>
-            <File Id='RenderDocCPP' Name='renderdoc.dll' DiskId='1' Source='dist/Release64/renderdoc.dll' KeyPath='yes' />
-            <File Id='RenderDocJSON' Name='renderdoc.json' DiskId='1' Source='dist/Release64/renderdoc.json' />
+            <File Id='RenderDocCPP' Name='$(var.CoreDllName)' DiskId='1' Source='dist/Release64/$(var.CoreDllName)' KeyPath='yes' />
+            <File Id='RenderDocJSON' Name='$(var.CoreJsonName)' DiskId='1' Source='dist/Release64/$(var.CoreJsonName)' />
             <File Id='D3DCompiler47DLL64' Name='d3dcompiler_47.dll' DiskId='1' Source='dist/Release64/d3dcompiler_47.dll' />
-            <File Id='RenderDocSHIM' Name='renderdocshim64.dll' DiskId='1' Source='dist/Release64/renderdocshim64.dll' />
+            <File Id='RenderDocSHIM' Name='$(var.Shim64DllName)' DiskId='1' Source='dist/Release64/$(var.Shim64DllName)' />
             <File Id='dbghelpDLL' Name='dbghelp.dll' DiskId='1' Source='dist/Release64/dbghelp.dll' />
             <File Id='symsrvDLL' Name='symsrv.dll' DiskId='1' Source='dist/Release64/symsrv.dll' />
             <File Id='symsrvYES' Name='symsrv.yes' DiskId='1' Source='dist/Release64/symsrv.yes' />
 
-            <File Id='RenderDocAPIheader' Name='renderdoc_app.h' DiskId='1' Source='dist/Release64/renderdoc_app.h' />
+            <File Id='RenderDocAPIheader' Name='$(var.AppHeaderName)' DiskId='1' Source='dist/Release64/$(var.AppHeaderName)' />
 
             <RegistryValue Root="HKLM" Id="RDCCLSID" Action="write"
               Key="Software\Classes\CLSID\{5D6BF029-A6BA-417A-8523-120492B1DCE3}"
@@ -104,7 +105,7 @@
           </Component>
 
           <Component Id='RenderDocCMD' Win64="yes" Guid='3443061F-2B11-4661-8535-4319D97B375C'>
-            <File Id='RenderDocCMD' Name='renderdoccmd.exe' DiskId='1' Source='dist/Release64/renderdoccmd.exe' KeyPath='yes' />
+            <File Id='RenderDocCMD' Name='$(var.CmdExeName)' DiskId='1' Source='dist/Release64/$(var.CmdExeName)' KeyPath='yes' />
           </Component>
 
           <Component Id='Qt' Win64="yes" Guid='E1BC516F-F611-4C7B-8F3E-A459F026FC4E'>
@@ -217,10 +218,10 @@
 
           <Directory Id='renderdocX86' Name='x86'>
             <Component Id='renderdocX86Bins' Win64="yes" Guid='EB58A048-899A-4239-B229-DA9781C431F8'>
-              <File Id='renderdocX86DLL' Name='renderdoc.dll' DiskId='1' Source='dist/Release64/x86/renderdoc.dll' KeyPath='yes' />
+              <File Id='renderdocX86DLL' Name='$(var.CoreDllName)' DiskId='1' Source='dist/Release64/x86/$(var.CoreDllName)' KeyPath='yes' />
               <File Id='renderdocX86JSON' Name='renderdoc.json' DiskId='1' Source='dist/Release64/x86/renderdoc.json' />
-              <File Id='renderdocshimX86DLL' Name='renderdocshim32.dll' DiskId='1' Source='dist/Release64/x86/renderdocshim32.dll' />
-              <File Id='renderdocX86CMD' Name='renderdoccmd.exe' DiskId='1' Source='dist/Release64/x86/renderdoccmd.exe' />
+              <File Id='renderdocshimX86DLL' Name='$(var.Shim32DllName)' DiskId='1' Source='dist/Release64/x86/$(var.Shim32DllName)' />
+              <File Id='renderdocX86CMD' Name='$(var.CmdExeName)' DiskId='1' Source='dist/Release64/x86/$(var.CmdExeName)' />
               <File Id='dbghelp32DLL' Name='dbghelp.dll' DiskId='1' Source='dist/Release64/x86/dbghelp.dll' />
               <File Id='symsrv32DLL' Name='symsrv.dll' DiskId='1' Source='dist/Release64/x86/symsrv.dll' />
               <File Id='symsrv32YES' Name='symsrv.yes' DiskId='1' Source='dist/Release64/x86/symsrv.yes' />
@@ -259,39 +260,39 @@
       </Directory>
       <Component Id="ImageOpenWith" Guid="BD518767-45FB-412F-86E8-E741AAA48906">
         <RegistryValue Root="HKLM" Id="RDCOpenWithCommand" Action="write" KeyPath='yes'
-          Key="Software\Classes\Applications\qrenderdoc.exe\shell\open\command"
+          Key="Software\Classes\Applications\$(var.GuiExeName)\shell\open\command"
           Value='"[#qrenderdocEXE]" "%1"'
           Type="string" />
 
         <RegistryValue Root="HKLM" Id="RDCOpenWithDDS" Action="write"
-          Key="Software\Classes\Applications\qrenderdoc.exe\SupportedTypes"
+          Key="Software\Classes\Applications\$(var.GuiExeName)\SupportedTypes"
           Name='.dds'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithHDR" Action="write"
-          Key="Software\Classes\Applications\qrenderdoc.exe\SupportedTypes"
+          Key="Software\Classes\Applications\$(var.GuiExeName)\SupportedTypes"
           Name='.hdr'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithJPG" Action="write"
-          Key="Software\Classes\Applications\qrenderdoc.exe\SupportedTypes"
+          Key="Software\Classes\Applications\$(var.GuiExeName)\SupportedTypes"
           Name='.jpg'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithJPEG" Action="write"
-          Key="Software\Classes\Applications\qrenderdoc.exe\SupportedTypes"
+          Key="Software\Classes\Applications\$(var.GuiExeName)\SupportedTypes"
           Name='.jpeg'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithPNG" Action="write"
-          Key="Software\Classes\Applications\qrenderdoc.exe\SupportedTypes"
+          Key="Software\Classes\Applications\$(var.GuiExeName)\SupportedTypes"
           Name='.png'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithEXR" Action="write"
-          Key="Software\Classes\Applications\qrenderdoc.exe\SupportedTypes"
+          Key="Software\Classes\Applications\$(var.GuiExeName)\SupportedTypes"
           Name='.exr'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithTGA" Action="write"
-          Key="Software\Classes\Applications\qrenderdoc.exe\SupportedTypes"
+          Key="Software\Classes\Applications\$(var.GuiExeName)\SupportedTypes"
           Name='.tga'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithBMP" Action="write"
-          Key="Software\Classes\Applications\qrenderdoc.exe\SupportedTypes"
+          Key="Software\Classes\Applications\$(var.GuiExeName)\SupportedTypes"
           Name='.bmp'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithGIF" Action="write"
-          Key="Software\Classes\Applications\qrenderdoc.exe\SupportedTypes"
+          Key="Software\Classes\Applications\$(var.GuiExeName)\SupportedTypes"
           Name='.gif'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithPSD" Action="write"
-          Key="Software\Classes\Applications\qrenderdoc.exe\SupportedTypes"
+          Key="Software\Classes\Applications\$(var.GuiExeName)\SupportedTypes"
           Name='.psd'  Value='' Type="string" />
         <RegistryValue Root="HKLM" Id="RDCOpenWithProgidDDS" Action="write"
           Key="Software\Classes\.dds\OpenWithProgids" Name='RenderDoc.RDCCapture.1'  Value='' Type="string" />

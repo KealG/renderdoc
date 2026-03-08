@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Include xmlns='http://schemas.microsoft.com/wix/2006/wi'>
+  <?define GuiExeName = "qrenderdoc.exe" ?>
+  <?define CoreDllName = "renderdoc.dll" ?>
+  <?define CoreJsonName = "renderdoc.json" ?>
+  <?define CmdExeName = "renderdoccmd.exe" ?>
+  <?define AppHeaderName = "renderdoc_app.h" ?>
+  <?define Shim32DllName = "renderdocshim32.dll" ?>
+  <?define Shim64DllName = "renderdocshim64.dll" ?>
+</Include>
