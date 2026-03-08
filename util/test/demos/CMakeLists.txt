@@ -443,15 +443,17 @@ if(ANDROID)
         message(FATAL_ERROR "ABI ${ANDROID_ABI} is not supported.")
     endif()
 
-    set(RDOC_TEST_ANDROID_PACKAGE_BASE "renderdoc.org.demos" CACHE STRING "Android package base for test demos")
+    set(RDOC_TEST_ANDROID_PACKAGE_BASE "${RDOC_BASE_NAME}.org.demos" CACHE STRING "Android package base for test demos")
     set(RENDERDOC_ANDROID_PACKAGE_NAME "${RDOC_TEST_ANDROID_PACKAGE_BASE}.${ABI_EXTENSION_NAME}")
+    string(REPLACE "." "/" RENDERDOC_ANDROID_PACKAGE_PATH "${RENDERDOC_ANDROID_PACKAGE_NAME}")
 
     set(APK_FILE ${CMAKE_BINARY_DIR}/bin/${RENDERDOC_ANDROID_PACKAGE_NAME}.apk)
     add_custom_target(apk ALL
                       DEPENDS ${APK_FILE})
 
     # Copy in android package files, replacing the package name with the architecture-specific package name
-    configure_file(android/Loader.java ${CMAKE_CURRENT_BINARY_DIR}/src/renderdoc/org/demos/Loader.java)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/src/${RENDERDOC_ANDROID_PACKAGE_PATH})
+    configure_file(android/Loader.java ${CMAKE_CURRENT_BINARY_DIR}/src/${RENDERDOC_ANDROID_PACKAGE_PATH}/Loader.java)
     configure_file(android/AndroidManifest.xml ${CMAKE_CURRENT_BINARY_DIR}/AndroidManifest.xml)
     configure_file(android/icon.png ${CMAKE_CURRENT_BINARY_DIR}/res/drawable/icon.png COPYONLY)
 

@@ -24,6 +24,7 @@
 
 #include "StyleData.h"
 #include <QApplication>
+#include "../../renderdoc/common/brand_config.h"
 #include "Code/QRDUtils.h"
 #include "RDStyle/RDStyle.h"
 #include "RDTweakedNativeStyle/RDTweakedNativeStyle.h"
@@ -34,13 +35,13 @@ const ThemeDescriptor availStyles[] = {
     ThemeDescriptor(
         lit("RDLight"), QApplication::translate("RDStyle", "Light"),
         QApplication::translate(
-            "RDStyle", "Light: Cross-platform custom RenderDoc dark theme (black-on-white)."),
+            "RDStyle", "Light: Cross-platform custom " RDOC_BRAND_PRODUCT_NAME " dark theme (black-on-white)."),
         []() { return new RDStyle(RDStyle::Light); }),
 
     ThemeDescriptor(
         lit("RDDark"), QApplication::translate("RDStyle", "Dark"),
         QApplication::translate(
-            "RDStyle", "Dark: Cross-platform custom RenderDoc dark theme (white-on-black)."),
+            "RDStyle", "Dark: Cross-platform custom " RDOC_BRAND_PRODUCT_NAME " dark theme (white-on-black)."),
         []() { return new RDStyle(RDStyle::Dark); }),
 
     ThemeDescriptor(
