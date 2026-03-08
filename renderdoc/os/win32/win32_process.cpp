@@ -711,8 +711,9 @@ rdcpair<RDResult, uint32_t> Process::InjectIntoProcess(uint32_t pid,
       CloseHandle(hProcess);
       RDResult result;
       SET_ERROR_RESULT(result, ResultCode::IncompatibleProcess,
-                       "Can't capture 64-bit program with 32-bit build of RenderDoc. Please run a "
-                       "64-bit build of RenderDoc");
+                       "Can't capture 64-bit program with 32-bit build of "
+                       RDOC_BRAND_PRODUCT_NAME ". Please run a 64-bit build of "
+                       RDOC_BRAND_PRODUCT_NAME);
       return {result, 0};
     }
   }
@@ -926,12 +927,13 @@ rdcpair<RDResult, uint32_t> Process::InjectIntoProcess(uint32_t pid,
       RDResult result;
 #if RENDERDOC_OFFICIAL_BUILD
       SET_ERROR_RESULT(result, ResultCode::InternalError,
-                       "Can't run 32-bit renderdoccmd to capture 32-bit program.");
+                       "Can't run 32-bit " RDOC_BRAND_CMD_NAME " to capture 32-bit program.");
 #else
       SET_ERROR_RESULT(
           result, ResultCode::InternalError,
-          "Can't run 32-bit renderdoccmd to capture 32-bit program."
-          "If this is a locally built RenderDoc you must build both 32-bit and 64-bit versions.");
+          "Can't run 32-bit " RDOC_BRAND_CMD_NAME " to capture 32-bit program."
+          "If this is a locally built " RDOC_BRAND_PRODUCT_NAME
+          " you must build both 32-bit and 64-bit versions.");
 #endif
       CloseHandle(hProcess);
       return {result, 0};
@@ -963,7 +965,8 @@ rdcpair<RDResult, uint32_t> Process::InjectIntoProcess(uint32_t pid,
       ResultCode code = (ResultCode)exitCode;
 
       RDResult result;
-      SET_ERROR_RESULT(result, code, "32-bit renderdoccmd returned '%s'", ToStr(code).c_str());
+      SET_ERROR_RESULT(result, code, "32-bit " RDOC_BRAND_CMD_NAME " returned '%s'",
+                       ToStr(code).c_str());
       return {code, 0};
     }
 
@@ -1247,8 +1250,10 @@ RDResult BackupAndChangeRegistry(GlobalHookData &hookdata, const rdcstr &shimpat
   {
     RETURN_ERROR_RESULT(
         ResultCode::FileIOFailed,
-        "RenderDoc is installed on a volume or system that has short paths disabled.\n"
-        "For the global hook, short paths must be enabled where RenderDoc is installed.");
+        RDOC_BRAND_PRODUCT_NAME " is installed on a volume or system that has short paths "
+        "disabled.\n"
+        "For the global hook, short paths must be enabled where " RDOC_BRAND_PRODUCT_NAME
+        " is installed.");
   }
 
   if(!shimpathWow32.empty())
@@ -1260,8 +1265,10 @@ RDResult BackupAndChangeRegistry(GlobalHookData &hookdata, const rdcstr &shimpat
     {
       RETURN_ERROR_RESULT(
           ResultCode::FileIOFailed,
-          "RenderDoc is installed on a volume or system that has short paths disabled.\n"
-          "For the global hook, short paths must be enabled where RenderDoc is installed.");
+          RDOC_BRAND_PRODUCT_NAME " is installed on a volume or system that has short paths "
+          "disabled.\n"
+          "For the global hook, short paths must be enabled where " RDOC_BRAND_PRODUCT_NAME
+          " is installed.");
     }
   }
 
@@ -1630,7 +1637,8 @@ RDResult Process::StartGlobalHook(const rdcstr &pathmatch, const rdcstr &capture
   {
     CloseHandle(hookdata.dataNative.pipe);
     RestoreRegistry(hookdata);
-    RETURN_ERROR_RESULT(ResultCode::InternalError, "Can't launch renderdoccmd from '%s' (err %u)",
+    RETURN_ERROR_RESULT(ResultCode::InternalError, "Can't launch " RDOC_BRAND_CMD_NAME
+                                                   " from '%s' (err %u)",
                         cmdpathNative.c_str(), err);
   }
 
@@ -1691,7 +1699,8 @@ RDResult Process::StartGlobalHook(const rdcstr &pathmatch, const rdcstr &capture
     CloseHandle(hookdata.dataNative.pipe);
     CloseHandle(hookdata.dataWow32.pipe);
     RestoreRegistry(hookdata);
-    RETURN_ERROR_RESULT(ResultCode::InternalError, "Can't launch renderdoccmd from '%s' (err %u)",
+    RETURN_ERROR_RESULT(ResultCode::InternalError, "Can't launch " RDOC_BRAND_CMD_NAME
+                                                   " from '%s' (err %u)",
                         cmdpathWow32.c_str(), err);
   }
 
