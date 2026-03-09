@@ -460,6 +460,62 @@
        </widget>
       </item>
       <item>
+       <widget class="QFrame" name="LaunchInjectModeFrame">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+        <layout class="QHBoxLayout" name="LaunchInjectModeLayout">
+         <property name="spacing">
+          <number>4</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QComboBox" name="LaunchInjectMode">
+           <property name="toolTip">
+            <string>Select how launch-time DLL injection should be attempted for local Windows captures.</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="LaunchInjectModeLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip">
+            <string>Select how launch-time DLL injection should be attempted for local Windows captures.</string>
+           </property>
+           <property name="text">
+            <string>Launch Injection</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="CaptureCallstacks">
         <property name="toolTip">
          <string>Collect a callstack on every API call</string>

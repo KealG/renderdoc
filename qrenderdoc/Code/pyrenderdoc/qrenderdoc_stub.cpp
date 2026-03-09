@@ -38,6 +38,7 @@ CaptureSettings::CaptureSettings()
 {
   inject = false;
   autoStart = false;
+  launchInjectMode = (uint32_t)LaunchInjectMode::Automatic;
   queuedFrameCap = 0;
   numQueuedFrames = 0;
   RENDERDOC_GetDefaultCaptureOptions(&options);

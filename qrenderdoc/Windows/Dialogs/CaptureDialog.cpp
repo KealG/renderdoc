@@ -157,6 +157,16 @@ CaptureDialog::CaptureDialog(ICaptureContext &ctx, OnCaptureMethod captureCallba
   ui->cmdline->setFont(Formatter::PreferredFont());
   ui->processList->setFont(Formatter::PreferredFont());
 
+  ui->LaunchInjectMode->addItem(tr("Automatic"));
+  ui->LaunchInjectMode->addItem(tr("Suspended Only"));
+  ui->LaunchInjectMode->addItem(tr("Resume && Retry"));
+  ui->LaunchInjectMode->addItem(tr("Late Attach"));
+  ui->LaunchInjectMode->setToolTip(
+      tr("Controls how launch-time injection is attempted for local Windows captures.\n"
+         "Automatic first tries the suspended launch path, then falls back to retrying after "
+         "resume and a later attach once startup has settled."));
+  ui->LaunchInjectModeLabel->setToolTip(ui->LaunchInjectMode->toolTip());
+
   // setup FlowLayout for options group
   {
     QLayout *oldLayout = ui->optionsGroup->layout();
@@ -256,6 +266,8 @@ void CaptureDialog::SetInjectMode(bool inject)
 
     ui->globalGroup->setVisible(false);
 
+    UpdateLaunchInjectModeUI();
+
     fillProcessList();
 
     ui->launch->setText(lit("Inject"));
@@ -271,9 +283,24 @@ void CaptureDialog::SetInjectMode(bool inject)
 
     ui->globalGroup->setVisible(m_Ctx.Config().AllowGlobalHook);
 
+    UpdateLaunchInjectModeUI();
+
     ui->launch->setText(lit("Launch"));
     this->setWindowTitle(lit("Launch Application"));
   }
+}
+
+void CaptureDialog::UpdateLaunchInjectModeUI()
+{
+  bool localCapture = !m_Ctx.Replay().CurrentRemote().IsValid();
+
+#if defined(Q_OS_WIN32)
+  bool supported = localCapture && !IsInjectMode();
+#else
+  bool supported = false;
+#endif
+
+  ui->LaunchInjectModeFrame->setVisible(supported);
 }
 
 void CaptureDialog::on_CaptureCallstacks_toggled(bool checked)
@@ -950,6 +977,11 @@ void CaptureDialog::SetSettings(CaptureSettings settings)
   ui->AutoStart->setChecked(settings.autoStart);
   ui->SoftMemoryLimit->setValue(settings.options.softMemoryLimit);
 
+  if(settings.launchInjectMode < (uint32_t)LaunchInjectMode::Count)
+    ui->LaunchInjectMode->setCurrentIndex((int)settings.launchInjectMode);
+  else
+    ui->LaunchInjectMode->setCurrentIndex((int)LaunchInjectMode::Automatic);
+
   // force flush this state
   on_CaptureCallstacks_toggled(ui->CaptureCallstacks->isChecked());
 
@@ -979,6 +1011,7 @@ CaptureSettings CaptureDialog::Settings()
   ret.inject = IsInjectMode();
 
   ret.autoStart = ui->AutoStart->isChecked();
+  ret.launchInjectMode = (uint32_t)ui->LaunchInjectMode->currentIndex();
 
   ret.executable = ui->exePath->text();
   ret.workingDir = ui->workDirPath->text();
@@ -1168,6 +1201,8 @@ void CaptureDialog::UpdateRemoteHost()
     ui->cmdLineLabel->setText(tr("Intent Arguments"));
   else
     ui->cmdLineLabel->setText(tr("Command-line Arguments"));
+
+  UpdateLaunchInjectModeUI();
 }
 
 void CaptureDialog::SetEnvironmentModifications(const rdcarray<EnvironmentModification> &modifications)
@@ -1189,6 +1224,8 @@ void CaptureDialog::SetEnvironmentModifications(const rdcarray<EnvironmentModifi
 
 void CaptureDialog::TriggerCapture()
 {
+  CaptureSettings settings = Settings();
+
   if(IsInjectMode())
   {
     QModelIndexList sel = ui->processList->selectionModel()->selectedRows();
@@ -1203,8 +1240,8 @@ void CaptureDialog::TriggerCapture()
       QString name = m_ProcessModel->data(m_ProcessModel->index(item.row(), 0)).toString();
       uint32_t PID = m_ProcessModel->data(m_ProcessModel->index(item.row(), 1)).toUInt();
 
-      m_InjectCallback(
-          PID, Settings().environment, name, Settings().options, [this](LiveCapture *live) {
+      m_InjectCallback(PID, settings.environment, name, settings.options,
+                       [this](LiveCapture *live) {
             if(ui->queueFrameCap->isChecked())
               live->QueueCapture((int)ui->queuedFrame->value(), (int)ui->numFrames->value());
           });
@@ -1276,7 +1313,8 @@ void CaptureDialog::TriggerCapture()
       }
     }
 
-    m_CaptureCallback(exe, workingDir, cmdLine, Settings().environment, Settings().options,
+    m_CaptureCallback(exe, workingDir, cmdLine, settings.environment, settings.options,
+                      settings.launchInjectMode,
                       [this](LiveCapture *live) {
                         if(ui->queueFrameCap->isChecked())
                           live->QueueCapture((int)ui->queuedFrame->value(),

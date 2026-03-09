@@ -45,6 +45,7 @@ class CaptureDialog : public QFrame, public ICaptureDialog
 public:
   typedef std::function<void(const QString &exe, const QString &workingDir, const QString &cmdLine,
                              const rdcarray<EnvironmentModification> &env, CaptureOptions opts,
+                             uint32_t launchInjectMode,
                              std::function<void(LiveCapture *)> callback)>
       OnCaptureMethod;
   typedef std::function<void(uint32_t PID, const rdcarray<EnvironmentModification> &env, const QString &name,
@@ -131,6 +132,7 @@ private:
 
   void PopulateMostRecent();
   CaptureSettings LoadSettingsFromDisk(const rdcstr &filename);
+  void UpdateLaunchInjectModeUI();
 
   void CheckAndroidSetup(QString &filename);
   AndroidFlags m_AndroidFlags;

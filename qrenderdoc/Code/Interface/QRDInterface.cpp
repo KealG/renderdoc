@@ -73,6 +73,7 @@ CaptureSettings::CaptureSettings()
 {
   inject = false;
   autoStart = false;
+  launchInjectMode = (uint32_t)LaunchInjectMode::Automatic;
   queuedFrameCap = 0;
   numQueuedFrames = 0;
   RENDERDOC_GetDefaultCaptureOptions(&options);
@@ -84,6 +85,7 @@ CaptureSettings::operator QVariant() const
 
   ret[lit("inject")] = inject;
   ret[lit("autoStart")] = autoStart;
+  ret[lit("launchInjectMode")] = launchInjectMode;
 
   ret[lit("executable")] = executable;
   ret[lit("workingDir")] = workingDir;
@@ -117,10 +119,17 @@ CaptureSettings::operator QVariant() const
 
 CaptureSettings::CaptureSettings(const QVariant &v)
 {
+  RENDERDOC_GetDefaultCaptureOptions(&options);
+
   QVariantMap data = v.toMap();
 
   inject = data[lit("inject")].toBool();
   autoStart = data[lit("autoStart")].toBool();
+
+  if(data.contains(lit("launchInjectMode")))
+    launchInjectMode = data[lit("launchInjectMode")].toUInt();
+  else
+    launchInjectMode = (uint32_t)LaunchInjectMode::Automatic;
 
   executable = data[lit("executable")].toString();
   workingDir = data[lit("workingDir")].toString();

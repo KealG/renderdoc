@@ -84,6 +84,7 @@ class QMenu;
 
 // we depend on the internal RenderDoc API, but the bindings for that are imported entirely
 #include "../../../renderdoc/common/brand_config.h"
+#include "../../../renderdoc/common/launch_inject_mode.h"
 #include "renderdoc_replay.h"
 
 typedef rdcpair<rdcstr, rdcstr> rdcstrpair;
@@ -118,6 +119,14 @@ struct CaptureSettings
 :type: bool
 )");
   bool autoStart;
+  DOCUMENT(R"(The launch injection mode to use for local Windows launch captures.
+
+This is only used when launching locally on Windows, and ignored for inject-into-process captures
+or remote hosts.
+
+:type: int
+)");
+  uint32_t launchInjectMode;
   DOCUMENT(R"(The path to the executable to run.
 
 :type: str

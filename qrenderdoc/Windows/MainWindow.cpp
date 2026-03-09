@@ -61,6 +61,25 @@
 
 #if defined(Q_OS_WIN32)
 extern "C" void *__stdcall GetModuleHandleA(const char *);
+extern "C" void *__stdcall GetProcAddress(void *, const char *);
+
+static void SetLocalLaunchInjectMode(uint32_t mode)
+{
+  typedef void(__cdecl *SetLaunchInjectModeFn)(uint32_t mode);
+
+  static SetLaunchInjectModeFn setLaunchInjectMode = NULL;
+
+  if(setLaunchInjectMode == NULL)
+    setLaunchInjectMode = (SetLaunchInjectModeFn)GetProcAddress(
+        GetModuleHandleA(RDOC_BRAND_CORE_DLL_NAME), "INTERNAL_SetLaunchInjectMode");
+
+  if(setLaunchInjectMode)
+    setLaunchInjectMode(mode);
+}
+#else
+static void SetLocalLaunchInjectMode(uint32_t)
+{
+}
 #endif
 
 NetworkWorker::NetworkWorker() : QObject(NULL)
@@ -715,12 +734,14 @@ void MainWindow::LoadFromFilename(const QString &filename, bool temporary)
 void MainWindow::OnCaptureTrigger(const QString &exe, const QString &workingDir,
                                   const QString &cmdLine,
                                   const rdcarray<EnvironmentModification> &env, CaptureOptions opts,
+                                  uint32_t launchInjectMode,
                                   std::function<void(LiveCapture *)> callback)
 {
   if(!PromptCloseCapture())
     return;
 
-  LambdaThread *th = new LambdaThread([this, exe, workingDir, cmdLine, env, opts, callback]() {
+  LambdaThread *th = new LambdaThread(
+      [this, exe, workingDir, cmdLine, env, opts, launchInjectMode, callback]() {
     if(isUnshareableDeviceInUse())
     {
       RDDialog::warning(this,
@@ -734,6 +755,9 @@ void MainWindow::OnCaptureTrigger(const QString &exe, const QString &workingDir,
     }
 
     QString capturefile = m_Ctx.TempCaptureFilename(QFileInfo(exe).baseName());
+
+    if(!m_Ctx.Replay().CurrentRemote().IsValid())
+      SetLocalLaunchInjectMode(launchInjectMode);
 
     ExecuteResult ret =
         m_Ctx.Replay().ExecuteAndInject(exe, workingDir, cmdLine, env, capturefile, opts);
@@ -771,7 +795,7 @@ void MainWindow::OnCaptureTrigger(const QString &exe, const QString &workingDir,
       ShowLiveCapture(live);
       callback(live);
     });
-  });
+      });
   th->setName(lit("ExecuteAndInject"));
   th->start();
   // wait a few ms before popping up a progress bar
