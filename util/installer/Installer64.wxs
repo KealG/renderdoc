@@ -82,7 +82,7 @@
             <File Id='symsrvDLL' Name='symsrv.dll' DiskId='1' Source='dist/Release64/symsrv.dll' />
             <File Id='symsrvYES' Name='symsrv.yes' DiskId='1' Source='dist/Release64/symsrv.yes' />
 
-            <File Id='RenderDocAPIheader' Name='$(var.AppHeaderName)' DiskId='1' Source='dist/Release64/$(var.AppHeaderName)' />
+            <File Id='AppHeader' Name='$(var.AppHeaderName)' DiskId='1' Source='dist/Release64/$(var.AppHeaderName)' />
 
             <RegistryValue Root="HKLM" Id="RDCCLSID" Action="write"
               Key="Software\Classes\CLSID\{5D6BF029-A6BA-417A-8523-120492B1DCE3}"

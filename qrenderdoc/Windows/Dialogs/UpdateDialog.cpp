@@ -107,7 +107,7 @@ void UpdateDialog::closeEvent(QCloseEvent *e)
 void UpdateDialog::on_releaseNotes_clicked()
 {
   QDesktopServices::openUrl(
-      QUrl(ApplyBrandingToUIString(lit("https://github.com/baldurk/renderdoc/releases/tag/v%1")).arg(m_NewVer)));
+      QUrl(QFormatStr("%1/releases/tag/v%2").arg(lit(RDOC_BRAND_SOURCE_URL)).arg(m_NewVer)));
 }
 
 void UpdateDialog::on_close_clicked()

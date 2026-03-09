@@ -27,6 +27,7 @@
 #include <QFileInfo>
 #include <QKeyEvent>
 #include <QRegularExpression>
+#include "../../../renderdoc/common/brand_config.h"
 #include "Code/Interface/QRDInterface.h"
 #include "Code/Resources.h"
 #include "Widgets/Extended/RDHeaderView.h"
@@ -64,7 +65,7 @@ ExtensionManager::ExtensionManager(ICaptureContext &ctx)
 
   if(m_Extensions.isEmpty())
   {
-    QString contrib_url = ApplyBrandingToUIString(lit("https://github.com/baldurk/renderdoc-contrib"));
+    QString contrib_url = lit(RDOC_BRAND_CONTRIB_URL);
     ui->extensions->addTopLevelItem(
         new RDTreeWidgetItem({QString(), tr("No extensions found available"), QString()}));
     ui->extensions->addTopLevelItem(new RDTreeWidgetItem(

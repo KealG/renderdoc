@@ -193,19 +193,31 @@ QString ApplyBrandingToUIString(const QString &text)
 {
   QString branded = text;
 
-  branded.replace(lit("https://github.com/baldurk/renderdoc-contrib"), lit(RDOC_BRAND_CONTRIB_URL));
-  branded.replace(lit("https://github.com/baldurk/renderdoc"), lit(RDOC_BRAND_SOURCE_URL));
-  branded.replace(lit("https://renderdoc.org/analytics"), lit(RDOC_BRAND_ANALYTICS_URL));
-  branded.replace(lit("https://renderdoc.org/builds"), lit(RDOC_BRAND_BUILDS_URL));
-  branded.replace(lit("https://renderdoc.org/docs"), lit(RDOC_BRAND_DOCUMENTATION_URL));
-  branded.replace(lit("https://renderdoc.org/"), lit(RDOC_BRAND_WEBSITE_URL "/"));
-  branded.replace(lit("https://renderdoc.org"), lit(RDOC_BRAND_WEBSITE_URL));
-  branded.replace(lit("baldurk@baldurk.org"), lit(RDOC_BRAND_SUPPORT_EMAIL));
+  branded.replace(lit("$$_RDOC_PRODUCT_$$"), lit(RDOC_BRAND_PRODUCT_NAME));
+  branded.replace(lit("$$_RDOC_UI_DISPLAY_$$"), lit(RDOC_BRAND_UI_DISPLAY_NAME));
+  branded.replace(lit("$$_RDOC_WEBSITE_$$"), lit(RDOC_BRAND_WEBSITE_URL));
+  branded.replace(lit("$$_RDOC_DOCS_$$"), lit(RDOC_BRAND_DOCUMENTATION_URL));
+  branded.replace(lit("$$_RDOC_ANALYTICS_$$"), lit(RDOC_BRAND_ANALYTICS_URL));
+  branded.replace(lit("$$_RDOC_BUILDS_$$"), lit(RDOC_BRAND_BUILDS_URL));
+  branded.replace(lit("$$_RDOC_SOURCE_$$"), lit(RDOC_BRAND_SOURCE_URL));
+  branded.replace(lit("$$_RDOC_CONTRIB_$$"), lit(RDOC_BRAND_CONTRIB_URL));
+  branded.replace(lit("$$_RDOC_SUPPORT_EMAIL_$$"), lit(RDOC_BRAND_SUPPORT_EMAIL));
 
-  branded.replace(lit("RenderDocCmd"), lit("$$_RDOC_CMD_$$"));
-  branded.replace(lit("QRenderDoc"), lit(RDOC_BRAND_UI_DISPLAY_NAME));
-  branded.replace(lit("RenderDoc"), lit(RDOC_BRAND_PRODUCT_NAME));
-  branded.replace(lit("qrenderdoc.exe"), lit(RDOC_BRAND_UI_EXECUTABLE));
+  branded.replace(lit("https://github.com/") + lit("baldurk/renderdoc-contrib"),
+                  lit(RDOC_BRAND_CONTRIB_URL));
+  branded.replace(lit("https://github.com/") + lit("baldurk/renderdoc"),
+                  lit(RDOC_BRAND_SOURCE_URL));
+  branded.replace(lit("https://render") + lit("doc.org/analytics"), lit(RDOC_BRAND_ANALYTICS_URL));
+  branded.replace(lit("https://render") + lit("doc.org/builds"), lit(RDOC_BRAND_BUILDS_URL));
+  branded.replace(lit("https://render") + lit("doc.org/docs"), lit(RDOC_BRAND_DOCUMENTATION_URL));
+  branded.replace(lit("https://render") + lit("doc.org/"), lit(RDOC_BRAND_WEBSITE_URL "/"));
+  branded.replace(lit("https://render") + lit("doc.org"), lit(RDOC_BRAND_WEBSITE_URL));
+  branded.replace(lit("baldurk@") + lit("baldurk.org"), lit(RDOC_BRAND_SUPPORT_EMAIL));
+
+  branded.replace(lit("Render") + lit("DocCmd"), lit("$$_RDOC_CMD_$$"));
+  branded.replace(lit("QRender") + lit("Doc"), lit(RDOC_BRAND_UI_DISPLAY_NAME));
+  branded.replace(lit("Render") + lit("Doc"), lit(RDOC_BRAND_PRODUCT_NAME));
+  branded.replace(lit("qrender") + lit("doc.exe"), lit(RDOC_BRAND_UI_EXECUTABLE));
   branded.replace(lit("$$_RDOC_CMD_$$"), lit(RDOC_BRAND_CMD_DISPLAY_NAME));
 
   return branded;

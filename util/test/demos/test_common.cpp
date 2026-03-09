@@ -24,6 +24,7 @@
 
 #include "test_common.h"
 #include "../../../renderdoc/common/brand_config.h"
+#include "../../../renderdoc/api/replay/compat_config.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <algorithm>
@@ -626,31 +627,31 @@ void GraphicsTest::Prepare(int argc, char **argv)
     }
   }
 
-  pRENDERDOC_GetAPI RENDERDOC_GetAPI = NULL;
+  pRENDERDOC_GetAPI getAPI = NULL;
 
 #if defined(WIN32)
   HMODULE mod = GetModuleHandleA(RDOC_BRAND_CORE_DLL_NAME);
   if(mod)
-    RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)GetProcAddress(mod, "RENDERDOC_GetAPI");
+    getAPI = (pRENDERDOC_GetAPI)GetProcAddress(mod, RDOC_COMPAT_GETAPI_NAME_STRING);
 #elif defined(ANDROID)
   void *mod = dlopen(RDOC_BRAND_ANDROID_CAPTURE_LIBRARY, RTLD_NOW | RTLD_NOLOAD);
   if(mod)
-    RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)dlsym(mod, "RENDERDOC_GetAPI");
+    getAPI = (pRENDERDOC_GetAPI)dlsym(mod, RDOC_COMPAT_GETAPI_NAME_STRING);
 #elif defined(__linux__)
   void *mod = dlopen(RDOC_BRAND_LINUX_CORE_LIBRARY, RTLD_NOW | RTLD_NOLOAD);
   if(mod)
-    RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)dlsym(mod, "RENDERDOC_GetAPI");
+    getAPI = (pRENDERDOC_GetAPI)dlsym(mod, RDOC_COMPAT_GETAPI_NAME_STRING);
 #elif defined(__APPLE__)
   void *mod = dlopen(RDOC_BRAND_APPLE_CORE_LIBRARY, RTLD_NOW | RTLD_NOLOAD);
   if(mod)
-    RENDERDOC_GetAPI = (pRENDERDOC_GetAPI)dlsym(mod, "RENDERDOC_GetAPI");
+    getAPI = (pRENDERDOC_GetAPI)dlsym(mod, RDOC_COMPAT_GETAPI_NAME_STRING);
 #else
 #error UNKNOWN PLATFORM
 #endif
 
-  if(RENDERDOC_GetAPI)
+  if(getAPI)
   {
-    int ret = RENDERDOC_GetAPI(eRENDERDOC_API_Version_1_7_0, (void **)&rdoc);
+    int ret = getAPI(eRENDERDOC_API_Version_1_7_0, (void **)&rdoc);
 
     if(ret != 1)
       rdoc = NULL;

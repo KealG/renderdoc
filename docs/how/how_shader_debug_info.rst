@@ -59,11 +59,11 @@ Using the D3D11 API you can specify the path at runtime:
 
     ID3D11VertexShader *shader = ...;
 
-    // GUID value in renderdoc_app.h
-    GUID RENDERDOC_ShaderDebugMagicValue = RENDERDOC_ShaderDebugMagicValue_struct;
+    // GUID value in ripperk_app.h
+    GUID RIPPERK_ShaderDebugMagicValue = RIPPERK_ShaderDebugMagicValue_struct;
 
     // string parameter must be NULL-terminated, and in UTF-8
-    shader->SetPrivateData(RENDERDOC_ShaderDebugMagicValue,
+    shader->SetPrivateData(RIPPERK_ShaderDebugMagicValue,
                            (UINT)pathName.length(), pathName.c_str());
 
 You can also specify it using the Vulkan API:
@@ -80,8 +80,8 @@ You can also specify it using the Vulkan API:
     VkDebugUtilsObjectTagInfoEXT tagInfo = {VK_STRUCTURE_TYPE_DEBUG_UTILS_OBJECT_TAG_INFO_EXT};
     tagInfo.objectType = VK_OBJECT_TYPE_SHADER_MODULE;
     tagInfo.objectHandle = (uint64_t)shaderModule;
-    // tag value in renderdoc_app.h
-    tagInfo.tagName = RENDERDOC_ShaderDebugMagicValue_truncated;
+    // tag value in ripperk_app.h
+    tagInfo.tagName = RIPPERK_ShaderDebugMagicValue_truncated;
     tagInfo.pTag = pathName.c_str();
     tagInfo.tagSize = pathName.length();
 

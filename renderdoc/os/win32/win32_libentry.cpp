@@ -55,7 +55,7 @@ static BOOL add_hooks()
            LibraryHooks::Detect(RDOC_COMPAT_REPLAY_MARKER_STRING);
   };
 
-  // search for an exported symbol with this name, typically renderdoc__replay__marker
+  // search for an exported symbol with this name to identify replay-only processes
   if(IsReplayApp())
   {
     RDCDEBUG("Not creating hooks - in replay app");

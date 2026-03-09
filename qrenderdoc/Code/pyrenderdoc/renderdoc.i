@@ -1,4 +1,4 @@
-%module renderdoc
+%module ripperk
 
 %feature("autodoc", "0");
 %feature("autodoc:noret", "1");

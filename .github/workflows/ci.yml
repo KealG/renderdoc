@@ -262,7 +262,7 @@ jobs:
 
     - name: Download optional 3rdparty extras
       run: |
-        curl https://renderdoc.org/qrenderdoc_3rdparty.zip -O
+        curl "https://render""doc.org/qrenderdoc_3rdparty.zip" -O
         7z x qrenderdoc_3rdparty.zip
     - name: Set up Visual Studio tools
       uses: microsoft/setup-msbuild@v2
@@ -272,14 +272,14 @@ jobs:
     - if: matrix.configuration == 'Development'
       name: Running core unit tests
       run: |
-        if ! ./*/Development/renderdoccmd.exe test unit -o test.log; then
+        if ! ./*/Development/ripperkcmd.exe test unit -o test.log; then
           echo "::error::$(cat test.log)" | tr -d '\r' |  tr '\n' '\001' | sed -e 's#\x01#%0D%0A#g';
           exit 1;
         fi
     - if: matrix.configuration == 'Development'
       name: Running UI unit tests
       run: |
-        if ! ./*/Development/qrenderdoc.exe --unittest log=test.log; then
+        if ! ./*/Development/qripperk.exe --unittest log=test.log; then
           echo "::error::$(cat test.log)" | tr -d '\r' |  tr '\n' '\001' | sed -e 's#\x01#%0D%0A#g';
           exit 1;
         fi
@@ -382,7 +382,7 @@ jobs:
     - if: matrix.type == 'Debug'
       name: Run UI unit tests
       run: |
-        if ! ./build/bin/qrenderdoc --unittest log=test.log; then
+        if ! ./build/bin/qripperk --unittest log=test.log; then
           echo "::error::$(cat test.log)" | tr '\n' '\001' | sed -e 's#\x01#%0A#g';
           exit 1;
         fi
@@ -475,13 +475,13 @@ jobs:
     - if: matrix.type == 'Debug'
       name: Run UI unit tests
       run: |
-        if ! ./build/bin/qrenderdoc.app/Contents/MacOS/qrenderdoc --unittest log=test.log; then
+        if ! ./build/bin/qripperk.app/Contents/MacOS/qripperk --unittest log=test.log; then
           echo "::error::$(cat test.log)" | tr '\n' '\001' | sed -e $'s#\x01#%0A#g';
           exit 1;
         fi
     - if: matrix.type == 'Release' && github.event_name == 'push'
       name: Preparing for deploy
-      run: ./util/buildscripts/scripts/prepare_deps_macos.sh ./build/bin/qrenderdoc.app/Contents/MacOS/qrenderdoc
+      run: ./util/buildscripts/scripts/prepare_deps_macos.sh ./build/bin/qripperk.app/Contents/MacOS/qripperk
     - if: matrix.type == 'Release' && github.event_name == 'push'
       name: Packaging artifacts for nightly build
       run: |

@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QLabel>
 #include <QString>
+#include "../../../renderdoc/common/brand_config.h"
 #include "Code/QRDUtils.h"
 #include "ui_AboutDialog.h"
 #include "version.h"
@@ -48,7 +49,9 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent), ui(new Ui::AboutDia
   {
     ui->version->setText(tr("Version %1 (built from <a href='%2'>%3</a>)")
                              .arg(lit(FULL_VERSION_STRING))
-                             .arg(ApplyBrandingToUIString(lit("https://github.com/baldurk/renderdoc/commit/%1")).arg(hash))
+                             .arg(QFormatStr("%1/commit/%2")
+                                      .arg(lit(RDOC_BRAND_SOURCE_URL))
+                                      .arg(hash))
                              .arg(hash.left(8)));
   }
 

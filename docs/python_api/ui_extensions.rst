@@ -239,4 +239,4 @@ Now that we've done that correctly our extension will be able to run in-depth re
 Conclusion
 ----------
 
-Hopefully now from that worked example you have an idea of the basics of writing UI extensions. More complex examples can be found at the `community contributed repository <https://github.com/baldurk/renderdoc-contrib>`_ and the source code for this extension is available in the `github repository <https://github.com/baldurk/renderdoc/tree/v1.x/docs/python_api/ui_extension_tutorial>`_
+Hopefully now from that worked example you have an idea of the basics of writing UI extensions. More complex examples can be found at the `community contributed repository <https://github.com/ripperk/ripperk-contrib>`_ and the source code for this extension is available in the `github repository <https://github.com/ripperk/ripperk/tree/v1.x/docs/python_api/ui_extension_tutorial>`_

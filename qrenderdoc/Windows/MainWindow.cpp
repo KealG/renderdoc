@@ -2943,8 +2943,7 @@ void MainWindow::on_action_View_Documentation_triggered()
 
 void MainWindow::on_action_Source_on_GitHub_triggered()
 {
-  QDesktopServices::openUrl(
-      QUrl::fromUserInput(ApplyBrandingToUIString(lit("https://github.com/baldurk/renderdoc"))));
+  QDesktopServices::openUrl(QUrl::fromUserInput(lit(RDOC_BRAND_SOURCE_URL)));
 }
 
 void MainWindow::on_action_Build_Release_Downloads_triggered()

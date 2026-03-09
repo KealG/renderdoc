@@ -180,7 +180,7 @@ rdcstr DisassembleDXBC(const bytebuf &shaderBytes, const rdcstr &target)
 ; distributed with RenderDoc.
 
 ; To see instructions on how to download and configure it on your system, go to:
-; https://github.com/baldurk/renderdoc/wiki/GCN-ISA)";
+; https://github.com/ripperk/ripperk/wiki/GCN-ISA)";
 
   // if shaderBytes is empty we're testing support, so return empty string - indicating no error
   // initialising

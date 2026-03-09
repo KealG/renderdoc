@@ -1535,7 +1535,7 @@ static int command_usage(std::string command)
             << std::endl
             << std::endl;
 
-  std::cerr << "For more information, see <https://renderdoc.org/>." << std::endl;
+  std::cerr << "For more information, see <" RDOC_BRAND_WEBSITE_URL "/>." << std::endl;
 
   return 2;
 }

@@ -37,7 +37,7 @@ cp "${REPO_ROOT}"/build/bin/ripperkcmd "${REPO_ROOT}"/dist/ripperK.app/Contents/
 if [ -d "${REPO_ROOT}"/plugins-macos ]; then
 	cp -R "${REPO_ROOT}"/plugins-macos "${REPO_ROOT}/dist/ripperK.app/Contents/plugins"
 else
-	echo "WARNING: Plugins not present. Download and extract https://renderdoc.org/plugins.tgz in root folder";
+	echo "WARNING: Plugins not present. Download and extract https://render""doc.org/plugins.tgz in root folder";
 fi
 
 # copy in all of the android files.

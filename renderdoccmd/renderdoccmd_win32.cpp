@@ -954,8 +954,8 @@ int main(int, char *)
   add_command(RDOC_BRAND_CRASH_HANDLE_COMMAND, new CrashHandlerCommand());
 #endif
 
-  // this installs a global windows hook pointing at renderdocshim*.dll that filters all running
-  // processes and loads renderdoc.dll in the target one. In any other process it unloads as soon as
+  // this installs a global windows hook pointing at the shim DLLs that filters all running
+  // processes and loads the core DLL in the target one. In any other process it unloads as soon as
   // possible
   add_command(RDOC_BRAND_GLOBAL_HOOK_COMMAND, new GlobalHookCommand());
 

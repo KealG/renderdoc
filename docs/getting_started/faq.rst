@@ -184,9 +184,9 @@ Yes indeed. Some APIs offer ways to do this already - ``D3DPERF_GetStatus()``, `
 
 In addition to those the simplest way is to see if the |brand_product_name| module is loaded, using ``GetModuleHandleA`` on Windows with |brand_core_dll_code| or ``dlopen`` on Linux with |brand_linux_core_library_code| and the ``RTLD_NOW | RTLD_NOLOAD`` flags. There are also API specific ways to query:
 
-Querying an ``ID3D11Device`` or ``ID3D12Device`` for UUID ``{A7AA6116-9C8D-4BBA-9083-B4D816B71B78}`` will return an ``IUnknown*`` and ``S_OK`` when RenderDoc is present.
+Querying an ``ID3D11Device`` or ``ID3D12Device`` for UUID ``{A7AA6116-9C8D-4BBA-9083-B4D816B71B78}`` will return an ``IUnknown*`` and ``S_OK`` when |brand_product_name| is present.
 
-`GL_EXT_debug_tool <https://renderdoc.org/debug_tool.txt>`_ is implemented on RenderDoc, which is an extension I've proposed for this purpose (identifying when and which tool is injected in your program). It allows you to query for the presence name and type of a debug tool that's currently hooked. At the time of writing only RenderDoc implements this as I've only just proposed the extension publicly, but in future you can use the queries described in that spec.
+`GL_EXT_debug_tool <|brand_debug_tool_url|>`_ is implemented on |brand_product_name|, which is an extension I've proposed for this purpose (identifying when and which tool is injected in your program). It allows you to query for the presence name and type of a debug tool that's currently hooked. At the time of writing only |brand_product_name| implements this as I've only just proposed the extension publicly, but in future you can use the queries described in that spec.
 
 .. note::
 

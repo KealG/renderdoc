@@ -683,5 +683,4 @@ endif()
 install (TARGETS renderdoc DESTINATION lib${LIB_SUFFIX}/${LIB_SUBFOLDER})
 
 # Copy in application API header to include
-install (FILES api/app/renderdoc_app.h DESTINATION include RENAME renderdoc_app.h)
 install (FILES api/app/${RDOC_COMPAT_APP_HEADER_NAME} DESTINATION include RENAME ${RDOC_COMPAT_APP_HEADER_NAME})

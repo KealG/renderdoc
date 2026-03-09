@@ -339,7 +339,7 @@ elseif(PySide2_FOUND AND Shiboken2_FOUND AND TARGET Shiboken2::libshiboken AND T
          "DEFINES+=PYSIDE2_SYS_PATH=${PYSIDE_PYTHONPATH}\n"
          "LIBS+=-lshiboken2${SHIBOKEN_PYTHON_SHARED_LIBRARY_SUFFIX}\n")
 else()
-    message(STATUS "PySide2 not found - Qt will not be accessible in python scripting. See https://github.com/baldurk/renderdoc/wiki/PySide2")
+    message(STATUS "PySide2 not found - Qt will not be accessible in python scripting. See https://github.com/" "baldurk/renderdoc/wiki/PySide2")
 
     file(APPEND
          ${CMAKE_BINARY_DIR}/qrenderdoc/qrenderdoc_cmake.pri
@@ -362,8 +362,14 @@ list(SORT QRD_INTERFACE_FILES)
 foreach(in ${swig_interfaces})
     get_filename_component(swig_file ${in} NAME_WE)
 
-    add_custom_command(OUTPUT ${swig_file}_python.cxx ${swig_file}.py
-            COMMAND ${CMAKE_BINARY_DIR}/bin/swig -v -Wextra -Werror ${SWIG_FLAGS} -O -c++ -python -modern -interface ${swig_file} -modernargs -enumclass -fastunpack -py3 -builtin -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_SOURCE_DIR}/renderdoc/api/replay -outdir ${CMAKE_CURRENT_BINARY_DIR} -o ${CMAKE_CURRENT_BINARY_DIR}/${swig_file}_python.cxx ${CMAKE_CURRENT_SOURCE_DIR}/${in}
+    if(swig_file STREQUAL "renderdoc")
+        set(swig_module_name ${RDOC_PY_CORE_MODULE_NAME})
+    else()
+        set(swig_module_name ${RDOC_PY_GUI_MODULE_NAME})
+    endif()
+
+    add_custom_command(OUTPUT ${swig_file}_python.cxx ${swig_module_name}.py
+            COMMAND ${CMAKE_BINARY_DIR}/bin/swig -v -Wextra -Werror ${SWIG_FLAGS} -O -interface ${swig_module_name} -c++ -python -modern -modernargs -enumclass -fastunpack -py3 -builtin -I${CMAKE_CURRENT_SOURCE_DIR} -I${CMAKE_SOURCE_DIR}/renderdoc/api/replay -outdir ${CMAKE_CURRENT_BINARY_DIR} -o ${CMAKE_CURRENT_BINARY_DIR}/${swig_file}_python.cxx ${CMAKE_CURRENT_SOURCE_DIR}/${in}
             DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${in}
             DEPENDS custom_swig
             DEPENDS ${RDOC_REPLAY_FILES}

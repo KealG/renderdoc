@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{61157930-78C3-4355-8B49-4CC91B98F17B}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>qrenderdoc_module</RootNamespace>
-    <ProjectName>qrenderdoc_module</ProjectName>
+    <RootNamespace>qripperk_module</RootNamespace>
+    <ProjectName>qripperk_module</ProjectName>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\util\WindowsSDKTarget.props" />
@@ -125,9 +125,9 @@
     <CustomBuild Include="qrenderdoc.i">
       <FileType>Document</FileType>
       <AdditionalInputs>%(Fullpath);$(SwigInterfaces);$(SwigHeaders);$(QRDHeaders);%(AdditionalInputs)</AdditionalInputs>
-      <Command>"$(ProjectDir)..\..\3rdparty\swig\swig.exe" -v -Wextra -Werror -O -interface %(Filename) -c++ -python -modern -modernargs -enumclass -fastunpack -py3 -builtin -I"$(ProjectDir)..\.." -I"$(SolutionDir)renderdoc\api\replay" -outdir "$(IntDir)generated" -o "$(IntDir)generated\%(Filename)_module_python.cxx" "%(FullPath)"</Command>
+      <Command>"$(ProjectDir)..\..\3rdparty\swig\swig.exe" -v -Wextra -Werror -O -interface $(RDOCPyGuiModuleTargetName) -c++ -python -modern -modernargs -enumclass -fastunpack -py3 -builtin -I"$(ProjectDir)..\.." -I"$(SolutionDir)renderdoc\api\replay" -outdir "$(IntDir)generated" -o "$(IntDir)generated\%(Filename)_module_python.cxx" "%(FullPath)"</Command>
       <Message>Compiling SWIG interface</Message>
-      <Outputs>$(IntDir)generated\%(Filename).py;$(IntDir)generated\%(Filename)_module_python.cxx;%(Outputs)</Outputs>
+      <Outputs>$(IntDir)generated\$(RDOCPyGuiModuleTargetName).py;$(IntDir)generated\%(Filename)_module_python.cxx;%(Outputs)</Outputs>
       <LinkObjects>false</LinkObjects>
     </CustomBuild>
     <ClCompile Include="$(IntDir)generated\qrenderdoc_module_python.cxx">
@@ -137,9 +137,9 @@
     <CustomBuild Include="renderdoc.i">
       <FileType>Document</FileType>
       <AdditionalInputs>%(Fullpath);$(SwigInterfaces);$(SwigHeaders);$(CoreReplayHeaders);%(AdditionalInputs)</AdditionalInputs>
-      <Command>"$(ProjectDir)..\..\3rdparty\swig\swig.exe" -v -Wextra -Werror -O -c++ -python -modern -modernargs -enumclass -fastunpack -py3 -builtin -I"$(SolutionDir)renderdoc\api\replay" -outdir "$(IntDir)generated" -o "$(IntDir)generated\%(Filename)_module_python.cxx" "%(FullPath)"</Command>
+      <Command>"$(ProjectDir)..\..\3rdparty\swig\swig.exe" -v -Wextra -Werror -O -interface $(RDOCPyCoreModuleTargetName) -c++ -python -modern -modernargs -enumclass -fastunpack -py3 -builtin -I"$(SolutionDir)renderdoc\api\replay" -outdir "$(IntDir)generated" -o "$(IntDir)generated\%(Filename)_module_python.cxx" "%(FullPath)"</Command>
       <Message>Compiling SWIG interface</Message>
-      <Outputs>$(IntDir)generated\%(Filename).py;$(IntDir)generated\%(Filename)_module_python.cxx;%(Outputs)</Outputs>
+      <Outputs>$(IntDir)generated\$(RDOCPyCoreModuleTargetName).py;$(IntDir)generated\%(Filename)_module_python.cxx;%(Outputs)</Outputs>
       <LinkObjects>false</LinkObjects>
     </CustomBuild>
     <ClCompile Include="$(IntDir)generated\renderdoc_module_python.cxx">

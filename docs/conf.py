@@ -88,6 +88,8 @@ doc_latex_name = os.environ.get('RDOC_DOC_LATEX_NAME', brand.PRODUCT_NAME + '.te
 
 rst_epilog = f"""
 .. |brand_product_name| replace:: {brand.PRODUCT_NAME}
+.. |brand_compat_getapi_code| replace:: ``{brand.COMPAT_GETAPI_NAME}``
+.. |brand_compat_app_header_code| replace:: ``{brand.COMPAT_APP_HEADER_NAME}``
 .. |brand_core_dll| replace:: {brand.CORE_DLL_NAME}
 .. |brand_linux_core_library| replace:: {brand.LINUX_CORE_LIBRARY}
 .. |brand_apple_core_library| replace:: {brand.APPLE_CORE_LIBRARY}
@@ -125,6 +127,7 @@ rst_epilog = f"""
 .. |brand_cmd_remoteserver_help_code| replace:: ``{brand.CMD_NAME} remoteserver --help``
 .. |brand_pycharm_helpers_url| replace:: {brand.SOURCE_URL}/tree/v1.x/docs/pycharm_helpers
 .. |brand_contrib_url| replace:: {brand.CONTRIB_URL}
+.. |brand_debug_tool_url| replace:: {brand.WEBSITE_URL}/debug_tool.txt
 """
 
 project = doc_project

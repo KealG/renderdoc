@@ -19,7 +19,6 @@
                 _exit;
                 VK_LAYER_RENDERDOC_*;
                 RIPPERK_GetAPI;
-                RENDERDOC_GetAPI;
                 RDOCSELF_AllocArrayMem;
                 RDOCSELF_FreeArrayMem;
                 RDOCSELF_GetDefaultCaptureOptions;

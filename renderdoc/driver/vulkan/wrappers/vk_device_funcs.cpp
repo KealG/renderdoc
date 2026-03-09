@@ -670,7 +670,7 @@ VkResult WrappedVulkan::vkCreateInstance(const VkInstanceCreateInfo *pCreateInfo
              modifiedCreateInfo.ppEnabledExtensionNames[i]);
       RDCERR(
           "For KHR/EXT extensions file an issue on github to request support: "
-          "https://github.com/baldurk/renderdoc");
+          RDOC_BRAND_SOURCE_URL);
 
       // see if any debug report callbacks were passed in the pNext chain
       VkDebugReportCallbackCreateInfoEXT *report =
@@ -4603,7 +4603,7 @@ VkResult WrappedVulkan::vkCreateDevice(VkPhysicalDevice physicalDevice,
              createInfo.ppEnabledExtensionNames[i]);
       RDCERR(
           "For KHR/EXT extensions file an issue on github to request support: "
-          "https://github.com/baldurk/renderdoc");
+          RDOC_BRAND_SOURCE_URL);
 
       SendUserDebugMessage(
           StringFormat::Fmt("RenderDoc does not support requested device extension: %s.",

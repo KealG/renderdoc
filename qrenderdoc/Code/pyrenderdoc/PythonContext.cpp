@@ -79,11 +79,11 @@ bool CheckCoreInterface(rdcstr &log);
 bool CheckQtInterface(rdcstr &log);
 
 // defined in SWIG-generated renderdoc_python.cpp
-extern "C" PyObject *PyInit_renderdoc(void);
+extern "C" PyObject *PyInit_ripperk(void);
 extern "C" PyObject *PassObjectToPython(const char *type, void *obj);
 extern "C" PyObject *PassNewObjectToPython(const char *type, void *obj);
 // this one is in qrenderdoc_python.cpp
-extern "C" PyObject *PyInit_qrenderdoc(void);
+extern "C" PyObject *PyInit_qripperk(void);
 extern "C" PyObject *WrapBareQWidget(QWidget *);
 extern "C" QWidget *UnwrapBareQWidget(PyObject *);
 
@@ -233,8 +233,8 @@ void PythonContext::GlobalInit()
   // for the exception signal
   qRegisterMetaType<QList<QString>>("QList<QString>");
 
-  PyImport_AppendInittab(RDOC_BRAND_PY_CORE_MODULE_NAME, &PyInit_renderdoc);
-  PyImport_AppendInittab(RDOC_BRAND_PY_GUI_MODULE_NAME, &PyInit_qrenderdoc);
+  PyImport_AppendInittab(RDOC_BRAND_PY_CORE_MODULE_NAME, &PyInit_ripperk);
+  PyImport_AppendInittab(RDOC_BRAND_PY_GUI_MODULE_NAME, &PyInit_qripperk);
 
 #if PY_VERSION_HEX > 0x030B0000
   PyConfig config;

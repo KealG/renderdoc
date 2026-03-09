@@ -22,8 +22,8 @@
     <UseNativeEnvironment>true</UseNativeEnvironment>
     <ProjectGuid>{E2B46D67-90E2-40B6-9597-72930E7845E5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>renderdoc</RootNamespace>
-    <ProjectName>renderdoc</ProjectName>
+    <RootNamespace>ripperk</RootNamespace>
+    <ProjectName>ripperk</ProjectName>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\util\WindowsSDKTarget.props" />
@@ -912,8 +912,6 @@ namespace DXCEnumerateAndCheck {
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
   <Target Name="AfterBuild" AfterTargets="Build">
-    <Copy SourceFiles="$(ProjectDir)api\app\renderdoc_app.h" DestinationFolder="$(OutDir)">
-    </Copy>
     <Copy SourceFiles="$(ProjectDir)api\app\$(RDOCCompatAppHeaderName)" DestinationFolder="$(OutDir)">
     </Copy>
     <Copy SourceFiles="$(ProjectDir)3rdparty\dbghelp\$(Platform)\symsrv.dll" DestinationFolder="$(OutDir)">

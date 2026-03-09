@@ -1,9 +1,9 @@
 #!/bin/bash
 
-CORE_DLL_NAME="${RDOC_CORE_DLL_NAME:-renderdoc.dll}"
+CORE_DLL_NAME="${RDOC_CORE_DLL_NAME:-ripperk.dll}"
 GUI_EXE_NAME="${RDOC_GUI_EXE_NAME:-qripperk.exe}"
 CMD_EXE_NAME="${RDOC_CMD_EXE_NAME:-ripperkcmd.exe}"
-DOC_CHM_NAME="${RDOC_DOC_CHM_NAME:-renderdoc.chm}"
+DOC_CHM_NAME="${RDOC_DOC_CHM_NAME:-ripperk.chm}"
 
 mkdir -p "${REPO_ROOT}/dist"
 

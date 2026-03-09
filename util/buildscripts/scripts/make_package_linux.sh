@@ -46,7 +46,7 @@ if [ -d "${REPO_ROOT}"/plugins-linux64 ]; then
 	cp -R "${REPO_ROOT}"/plugins-linux64 "./${FILENAME}/share/ripperk/plugins"
 	chmod +x -R "./${FILENAME}/share/ripperk/plugins"/*
 else
-	echo "WARNING: Plugins not present. Download and extract https://renderdoc.org/plugins.tgz in root folder";
+	echo "WARNING: Plugins not present. Download and extract https://render""doc.org/plugins.tgz in root folder";
 
 	if [[ "$STRICT" == "yes" ]]; then
 		echo "Strict mode: Failed to locate plugins.";

@@ -12,9 +12,11 @@ lessThan(QT_MAJOR_VERSION, 5): error("requires Qt 5.6; found $$[QT_VERSION]")
 
 equals(QT_MAJOR_VERSION, 5): lessThan(QT_MINOR_VERSION, 6): error("requires Qt 5.6; found $$[QT_VERSION]")
 
-isEmpty(RDOC_CORE_OUTPUT_NAME): RDOC_CORE_OUTPUT_NAME = renderdoc
-isEmpty(RDOC_GUI_TARGET_NAME): RDOC_GUI_TARGET_NAME = qrenderdoc
+isEmpty(RDOC_CORE_OUTPUT_NAME): RDOC_CORE_OUTPUT_NAME = ripperk
+isEmpty(RDOC_GUI_TARGET_NAME): RDOC_GUI_TARGET_NAME = qripperk
 isEmpty(RDOC_CORE_MAC_DYLIB_NAME): RDOC_CORE_MAC_DYLIB_NAME = lib$${RDOC_CORE_OUTPUT_NAME}.dylib
+isEmpty(RDOC_PY_CORE_MODULE_NAME): RDOC_PY_CORE_MODULE_NAME = ripperk
+isEmpty(RDOC_PY_GUI_MODULE_NAME): RDOC_PY_GUI_MODULE_NAME = qripperk
 
 TARGET = $$RDOC_GUI_TARGET_NAME
 TEMPLATE = app
@@ -61,21 +63,32 @@ win32 {
 		Release:DESTDIR = $$_PRO_FILE_PWD_/../x64/Release
 	}
 
-	# Run SWIG here, since normally we run it from VS
-	swig.name = SWIG ${QMAKE_FILE_IN}
-	swig.input = SWIGSOURCES
-	swig.output = ${QMAKE_FILE_BASE}_python.cxx
-	swig.commands = $$_PRO_FILE_PWD_/3rdparty/swig/swig.exe -v -Wextra -Werror -O -interface ${QMAKE_FILE_BASE} -c++ -python -modern -modernargs -enumclass -fastunpack -py3 -builtin -I$$_PRO_FILE_PWD_ -I$$_PRO_FILE_PWD_/../renderdoc/api/replay -outdir . -o ${QMAKE_FILE_BASE}_python.cxx ${QMAKE_FILE_IN}
-	swig.CONFIG += target_predeps
-	swig.variable_out = GENERATED_SOURCES
-	silent:swig.commands = @echo SWIG ${QMAKE_FILE_IN} && $$swig.commands
-	QMAKE_EXTRA_COMPILERS += swig
+	# Run SWIG here, since normally we run it from VS.
+	# Keep the generated native module names aligned with the branded Python imports.
+	swig_renderdoc.name = SWIG ${QMAKE_FILE_IN}
+	swig_renderdoc.input = SWIG_CORE_SOURCE
+	swig_renderdoc.output = renderdoc_python.cxx
+	swig_renderdoc.commands = $$_PRO_FILE_PWD_/3rdparty/swig/swig.exe -v -Wextra -Werror -O -interface $$RDOC_PY_CORE_MODULE_NAME -c++ -python -modern -modernargs -enumclass -fastunpack -py3 -builtin -I$$_PRO_FILE_PWD_ -I$$_PRO_FILE_PWD_/../renderdoc/api/replay -outdir . -o renderdoc_python.cxx ${QMAKE_FILE_IN}
+	swig_renderdoc.CONFIG += target_predeps
+	swig_renderdoc.variable_out = GENERATED_SOURCES
+	silent:swig_renderdoc.commands = @echo SWIG ${QMAKE_FILE_IN} && $$swig_renderdoc.commands
+
+	swig_qrenderdoc.name = SWIG ${QMAKE_FILE_IN}
+	swig_qrenderdoc.input = SWIG_GUI_SOURCE
+	swig_qrenderdoc.output = qrenderdoc_python.cxx
+	swig_qrenderdoc.commands = $$_PRO_FILE_PWD_/3rdparty/swig/swig.exe -v -Wextra -Werror -O -interface $$RDOC_PY_GUI_MODULE_NAME -c++ -python -modern -modernargs -enumclass -fastunpack -py3 -builtin -I$$_PRO_FILE_PWD_ -I$$_PRO_FILE_PWD_/../renderdoc/api/replay -outdir . -o qrenderdoc_python.cxx ${QMAKE_FILE_IN}
+	swig_qrenderdoc.CONFIG += target_predeps
+	swig_qrenderdoc.variable_out = GENERATED_SOURCES
+	silent:swig_qrenderdoc.commands = @echo SWIG ${QMAKE_FILE_IN} && $$swig_qrenderdoc.commands
+
+	QMAKE_EXTRA_COMPILERS += swig_renderdoc
+	QMAKE_EXTRA_COMPILERS += swig_qrenderdoc
 
 	# add qrc file with qt.conf
 	RESOURCES += Resources/qtconf.qrc
 
-	SWIGSOURCES += Code/pyrenderdoc/renderdoc.i
-	SWIGSOURCES += Code/pyrenderdoc/qrenderdoc.i
+	SWIG_CORE_SOURCE += Code/pyrenderdoc/renderdoc.i
+	SWIG_GUI_SOURCE += Code/pyrenderdoc/qrenderdoc.i
 
 	# Include and link against python
 	INCLUDEPATH += $$_PRO_FILE_PWD_/3rdparty/python/include

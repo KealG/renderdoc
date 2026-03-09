@@ -544,17 +544,7 @@ extern "C" RENDERDOC_API bool RENDERDOC_CC RENDERDOC_CanSelfHostedCapture(const 
 
 static pRENDERDOC_GetAPI GetAPIFunc(void *module)
 {
-  const char *getAPINames[] = {RDOC_COMPAT_GETAPI_NAME_STRING, "RENDERDOC_GetAPI"};
-
-  for(const char *getAPIName : getAPINames)
-  {
-    pRENDERDOC_GetAPI get = (pRENDERDOC_GetAPI)Process::GetFunctionAddress(module, getAPIName);
-
-    if(get != NULL)
-      return get;
-  }
-
-  return NULL;
+  return (pRENDERDOC_GetAPI)Process::GetFunctionAddress(module, RDOC_COMPAT_GETAPI_NAME_STRING);
 }
 
 extern "C" RENDERDOC_API void RENDERDOC_CC RENDERDOC_StartSelfHostCapture(const rdcstr &dllname)

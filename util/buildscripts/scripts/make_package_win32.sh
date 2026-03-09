@@ -1,12 +1,12 @@
 #!/bin/bash
 
-CORE_DLL_NAME="${RDOC_CORE_DLL_NAME:-renderdoc.dll}"
+CORE_DLL_NAME="${RDOC_CORE_DLL_NAME:-ripperk.dll}"
 CORE_JSON_NAME="${RDOC_CORE_JSON_NAME:-ripperk.json}"
 CMD_EXE_NAME="${RDOC_CMD_EXE_NAME:-ripperkcmd.exe}"
-SHIM32_DLL_NAME="${RDOC_SHIM32_DLL_NAME:-renderdocshim32.dll}"
-CORE_PDB_NAME="${RDOC_CORE_PDB_NAME:-renderdoc.pdb}"
+SHIM32_DLL_NAME="${RDOC_SHIM32_DLL_NAME:-ripperkshim32.dll}"
+CORE_PDB_NAME="${RDOC_CORE_PDB_NAME:-ripperk.pdb}"
 CMD_PDB_NAME="${RDOC_CMD_PDB_NAME:-ripperkcmd.pdb}"
-SHIM32_PDB_NAME="${RDOC_SHIM32_PDB_NAME:-renderdocshim32.pdb}"
+SHIM32_PDB_NAME="${RDOC_SHIM32_PDB_NAME:-ripperkshim32.pdb}"
 ANDROID_APK_GLOB="${RDOC_ANDROID_APK_GLOB:-org.ripperk.ripperkcmd.*.apk}"
 
 FILENAME="$1"
@@ -57,7 +57,7 @@ cp LICENSE.md Documentation/htmlhelp/*.chm dist/Release32/
 if [ -d plugins-win64 ]; then
 	cp -R plugins-win64/ dist/Release64/plugins
 else
-	echo "WARNING: x64 plugins missing, download and extract https://renderdoc.org/plugins.zip in root";
+	echo "WARNING: x64 plugins missing, download and extract https://render""doc.org/plugins.zip in root";
 
 	if [[ "$STRICT" == "yes" ]]; then
 		echo "Strict mode: Failed to locate plugins.";
@@ -68,7 +68,7 @@ fi;
 if [ -d plugins-win32 ]; then
 	cp -R plugins-win32/ dist/Release32/plugins
 else
-	echo "WARNING: x86 plugins missing, download and extract https://renderdoc.org/plugins.zip in root";
+	echo "WARNING: x86 plugins missing, download and extract https://render""doc.org/plugins.zip in root";
 
 	if [[ "$STRICT" == "yes" ]]; then
 		echo "Strict mode: Failed to locate plugins.";

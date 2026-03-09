@@ -1,185 +1,875 @@
+/******************************************************************************
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015-2026 Baldur Karlsson
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ ******************************************************************************/
+
 #pragma once
 
-#include "renderdoc_app.h"
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Documentation for the API is available at https://ripperk.invalid/docs/in_application_api.html
+//
 
-#define RIPPERK_APIObjectAnnotationHelper RENDERDOC_APIObjectAnnotationHelper
-#define RIPPERK_API_1_0_0 RENDERDOC_API_1_0_0
-#define RIPPERK_API_1_0_1 RENDERDOC_API_1_0_1
-#define RIPPERK_API_1_0_2 RENDERDOC_API_1_0_2
-#define RIPPERK_API_1_1_0 RENDERDOC_API_1_1_0
-#define RIPPERK_API_1_1_1 RENDERDOC_API_1_1_1
-#define RIPPERK_API_1_1_2 RENDERDOC_API_1_1_2
-#define RIPPERK_API_1_2_0 RENDERDOC_API_1_2_0
-#define RIPPERK_API_1_3_0 RENDERDOC_API_1_3_0
-#define RIPPERK_API_1_4_0 RENDERDOC_API_1_4_0
-#define RIPPERK_API_1_4_1 RENDERDOC_API_1_4_1
-#define RIPPERK_API_1_4_2 RENDERDOC_API_1_4_2
-#define RIPPERK_API_1_5_0 RENDERDOC_API_1_5_0
-#define RIPPERK_API_1_6_0 RENDERDOC_API_1_6_0
-#define RIPPERK_API_1_7_0 RENDERDOC_API_1_7_0
-#define RIPPERK_AnnotationType RENDERDOC_AnnotationType
-#define RIPPERK_AnnotationValue RENDERDOC_AnnotationValue
-#define RIPPERK_AnnotationVectorValue RENDERDOC_AnnotationVectorValue
-#define RIPPERK_CC RENDERDOC_CC
-#define RIPPERK_CaptureOption RENDERDOC_CaptureOption
-#define RIPPERK_DEVICEPOINTER_FROM_VKINSTANCE RENDERDOC_DEVICEPOINTER_FROM_VKINSTANCE
-#define RIPPERK_DevicePointer RENDERDOC_DevicePointer
-#define RIPPERK_GLResourceReference RENDERDOC_GLResourceReference
-#define RIPPERK_GetAPI RENDERDOC_GetAPI
-#define RIPPERK_InputButton RENDERDOC_InputButton
-#define RIPPERK_NO_STDINT RENDERDOC_NO_STDINT
-#define RIPPERK_OverlayBits RENDERDOC_OverlayBits
-#define RIPPERK_ShaderDebugMagicValue RENDERDOC_ShaderDebugMagicValue
-#define RIPPERK_ShaderDebugMagicValue_bytearray RENDERDOC_ShaderDebugMagicValue_bytearray
-#define RIPPERK_ShaderDebugMagicValue_struct RENDERDOC_ShaderDebugMagicValue_struct
-#define RIPPERK_ShaderDebugMagicValue_truncated RENDERDOC_ShaderDebugMagicValue_truncated
-#define RIPPERK_ShaderDebugMagicValue_value RENDERDOC_ShaderDebugMagicValue_value
-#define RIPPERK_Version RENDERDOC_Version
-#define RIPPERK_WindowHandle RENDERDOC_WindowHandle
-#define eRIPPERK_APIObject eRENDERDOC_APIObject
-#define eRIPPERK_API_Version_1_0_0 eRENDERDOC_API_Version_1_0_0
-#define eRIPPERK_API_Version_1_0_1 eRENDERDOC_API_Version_1_0_1
-#define eRIPPERK_API_Version_1_0_2 eRENDERDOC_API_Version_1_0_2
-#define eRIPPERK_API_Version_1_1_0 eRENDERDOC_API_Version_1_1_0
-#define eRIPPERK_API_Version_1_1_1 eRENDERDOC_API_Version_1_1_1
-#define eRIPPERK_API_Version_1_1_2 eRENDERDOC_API_Version_1_1_2
-#define eRIPPERK_API_Version_1_2_0 eRENDERDOC_API_Version_1_2_0
-#define eRIPPERK_API_Version_1_3_0 eRENDERDOC_API_Version_1_3_0
-#define eRIPPERK_API_Version_1_4_0 eRENDERDOC_API_Version_1_4_0
-#define eRIPPERK_API_Version_1_4_1 eRENDERDOC_API_Version_1_4_1
-#define eRIPPERK_API_Version_1_4_2 eRENDERDOC_API_Version_1_4_2
-#define eRIPPERK_API_Version_1_5_0 eRENDERDOC_API_Version_1_5_0
-#define eRIPPERK_API_Version_1_6_0 eRENDERDOC_API_Version_1_6_0
-#define eRIPPERK_API_Version_1_7_0 eRENDERDOC_API_Version_1_7_0
-#define eRIPPERK_AnnotationMax eRENDERDOC_AnnotationMax
-#define eRIPPERK_Bool eRENDERDOC_Bool
-#define eRIPPERK_Double eRENDERDOC_Double
-#define eRIPPERK_Empty eRENDERDOC_Empty
-#define eRIPPERK_Float eRENDERDOC_Float
-#define eRIPPERK_Int32 eRENDERDOC_Int32
-#define eRIPPERK_Int64 eRENDERDOC_Int64
-#define eRIPPERK_Key_0 eRENDERDOC_Key_0
-#define eRIPPERK_Key_1 eRENDERDOC_Key_1
-#define eRIPPERK_Key_2 eRENDERDOC_Key_2
-#define eRIPPERK_Key_3 eRENDERDOC_Key_3
-#define eRIPPERK_Key_4 eRENDERDOC_Key_4
-#define eRIPPERK_Key_5 eRENDERDOC_Key_5
-#define eRIPPERK_Key_6 eRENDERDOC_Key_6
-#define eRIPPERK_Key_7 eRENDERDOC_Key_7
-#define eRIPPERK_Key_8 eRENDERDOC_Key_8
-#define eRIPPERK_Key_9 eRENDERDOC_Key_9
-#define eRIPPERK_Key_A eRENDERDOC_Key_A
-#define eRIPPERK_Key_B eRENDERDOC_Key_B
-#define eRIPPERK_Key_Backspace eRENDERDOC_Key_Backspace
-#define eRIPPERK_Key_C eRENDERDOC_Key_C
-#define eRIPPERK_Key_D eRENDERDOC_Key_D
-#define eRIPPERK_Key_Delete eRENDERDOC_Key_Delete
-#define eRIPPERK_Key_Divide eRENDERDOC_Key_Divide
-#define eRIPPERK_Key_E eRENDERDOC_Key_E
-#define eRIPPERK_Key_End eRENDERDOC_Key_End
-#define eRIPPERK_Key_F eRENDERDOC_Key_F
-#define eRIPPERK_Key_F1 eRENDERDOC_Key_F1
-#define eRIPPERK_Key_F10 eRENDERDOC_Key_F10
-#define eRIPPERK_Key_F11 eRENDERDOC_Key_F11
-#define eRIPPERK_Key_F12 eRENDERDOC_Key_F12
-#define eRIPPERK_Key_F2 eRENDERDOC_Key_F2
-#define eRIPPERK_Key_F3 eRENDERDOC_Key_F3
-#define eRIPPERK_Key_F4 eRENDERDOC_Key_F4
-#define eRIPPERK_Key_F5 eRENDERDOC_Key_F5
-#define eRIPPERK_Key_F6 eRENDERDOC_Key_F6
-#define eRIPPERK_Key_F7 eRENDERDOC_Key_F7
-#define eRIPPERK_Key_F8 eRENDERDOC_Key_F8
-#define eRIPPERK_Key_F9 eRENDERDOC_Key_F9
-#define eRIPPERK_Key_G eRENDERDOC_Key_G
-#define eRIPPERK_Key_H eRENDERDOC_Key_H
-#define eRIPPERK_Key_Home eRENDERDOC_Key_Home
-#define eRIPPERK_Key_I eRENDERDOC_Key_I
-#define eRIPPERK_Key_Insert eRENDERDOC_Key_Insert
-#define eRIPPERK_Key_J eRENDERDOC_Key_J
-#define eRIPPERK_Key_K eRENDERDOC_Key_K
-#define eRIPPERK_Key_L eRENDERDOC_Key_L
-#define eRIPPERK_Key_M eRENDERDOC_Key_M
-#define eRIPPERK_Key_Max eRENDERDOC_Key_Max
-#define eRIPPERK_Key_Multiply eRENDERDOC_Key_Multiply
-#define eRIPPERK_Key_N eRENDERDOC_Key_N
-#define eRIPPERK_Key_NonPrintable eRENDERDOC_Key_NonPrintable
-#define eRIPPERK_Key_O eRENDERDOC_Key_O
-#define eRIPPERK_Key_P eRENDERDOC_Key_P
-#define eRIPPERK_Key_PageDn eRENDERDOC_Key_PageDn
-#define eRIPPERK_Key_PageUp eRENDERDOC_Key_PageUp
-#define eRIPPERK_Key_Pause eRENDERDOC_Key_Pause
-#define eRIPPERK_Key_Plus eRENDERDOC_Key_Plus
-#define eRIPPERK_Key_PrtScrn eRENDERDOC_Key_PrtScrn
-#define eRIPPERK_Key_Q eRENDERDOC_Key_Q
-#define eRIPPERK_Key_R eRENDERDOC_Key_R
-#define eRIPPERK_Key_S eRENDERDOC_Key_S
-#define eRIPPERK_Key_Subtract eRENDERDOC_Key_Subtract
-#define eRIPPERK_Key_T eRENDERDOC_Key_T
-#define eRIPPERK_Key_Tab eRENDERDOC_Key_Tab
-#define eRIPPERK_Key_U eRENDERDOC_Key_U
-#define eRIPPERK_Key_V eRENDERDOC_Key_V
-#define eRIPPERK_Key_W eRENDERDOC_Key_W
-#define eRIPPERK_Key_X eRENDERDOC_Key_X
-#define eRIPPERK_Key_Y eRENDERDOC_Key_Y
-#define eRIPPERK_Key_Z eRENDERDOC_Key_Z
-#define eRIPPERK_Option_APIValidation eRENDERDOC_Option_APIValidation
-#define eRIPPERK_Option_AllowFullscreen eRENDERDOC_Option_AllowFullscreen
-#define eRIPPERK_Option_AllowUnsupportedVendorExtensions eRENDERDOC_Option_AllowUnsupportedVendorExtensions
-#define eRIPPERK_Option_AllowVSync eRENDERDOC_Option_AllowVSync
-#define eRIPPERK_Option_CaptureAllCmdLists eRENDERDOC_Option_CaptureAllCmdLists
-#define eRIPPERK_Option_CaptureCallstacks eRENDERDOC_Option_CaptureCallstacks
-#define eRIPPERK_Option_CaptureCallstacksOnlyActions eRENDERDOC_Option_CaptureCallstacksOnlyActions
-#define eRIPPERK_Option_CaptureCallstacksOnlyDraws eRENDERDOC_Option_CaptureCallstacksOnlyDraws
-#define eRIPPERK_Option_DebugDeviceMode eRENDERDOC_Option_DebugDeviceMode
-#define eRIPPERK_Option_DebugOutputMute eRENDERDOC_Option_DebugOutputMute
-#define eRIPPERK_Option_DelayForDebugger eRENDERDOC_Option_DelayForDebugger
-#define eRIPPERK_Option_HookIntoChildren eRENDERDOC_Option_HookIntoChildren
-#define eRIPPERK_Option_RefAllResources eRENDERDOC_Option_RefAllResources
-#define eRIPPERK_Option_SaveAllInitials eRENDERDOC_Option_SaveAllInitials
-#define eRIPPERK_Option_SoftMemoryLimit eRENDERDOC_Option_SoftMemoryLimit
-#define eRIPPERK_Option_VerifyBufferAccess eRENDERDOC_Option_VerifyBufferAccess
-#define eRIPPERK_Option_VerifyMapWrites eRENDERDOC_Option_VerifyMapWrites
-#define eRIPPERK_Overlay_All eRENDERDOC_Overlay_All
-#define eRIPPERK_Overlay_CaptureList eRENDERDOC_Overlay_CaptureList
-#define eRIPPERK_Overlay_Default eRENDERDOC_Overlay_Default
-#define eRIPPERK_Overlay_Enabled eRENDERDOC_Overlay_Enabled
-#define eRIPPERK_Overlay_FrameNumber eRENDERDOC_Overlay_FrameNumber
-#define eRIPPERK_Overlay_FrameRate eRENDERDOC_Overlay_FrameRate
-#define eRIPPERK_Overlay_None eRENDERDOC_Overlay_None
-#define eRIPPERK_String eRENDERDOC_String
-#define eRIPPERK_UInt32 eRENDERDOC_UInt32
-#define eRIPPERK_UInt64 eRENDERDOC_UInt64
-#define pRIPPERK_DiscardFrameCapture pRENDERDOC_DiscardFrameCapture
-#define pRIPPERK_EndFrameCapture pRENDERDOC_EndFrameCapture
-#define pRIPPERK_GetAPI pRENDERDOC_GetAPI
-#define pRIPPERK_GetAPIVersion pRENDERDOC_GetAPIVersion
-#define pRIPPERK_GetCapture pRENDERDOC_GetCapture
-#define pRIPPERK_GetCaptureFilePathTemplate pRENDERDOC_GetCaptureFilePathTemplate
-#define pRIPPERK_GetCaptureOptionF32 pRENDERDOC_GetCaptureOptionF32
-#define pRIPPERK_GetCaptureOptionU32 pRENDERDOC_GetCaptureOptionU32
-#define pRIPPERK_GetLogFilePathTemplate pRENDERDOC_GetLogFilePathTemplate
-#define pRIPPERK_GetNumCaptures pRENDERDOC_GetNumCaptures
-#define pRIPPERK_GetOverlayBits pRENDERDOC_GetOverlayBits
-#define pRIPPERK_IsFrameCapturing pRENDERDOC_IsFrameCapturing
-#define pRIPPERK_IsRemoteAccessConnected pRENDERDOC_IsRemoteAccessConnected
-#define pRIPPERK_IsTargetControlConnected pRENDERDOC_IsTargetControlConnected
-#define pRIPPERK_LaunchReplayUI pRENDERDOC_LaunchReplayUI
-#define pRIPPERK_MaskOverlayBits pRENDERDOC_MaskOverlayBits
-#define pRIPPERK_RemoveHooks pRENDERDOC_RemoveHooks
-#define pRIPPERK_SetActiveWindow pRENDERDOC_SetActiveWindow
-#define pRIPPERK_SetCaptureFileComments pRENDERDOC_SetCaptureFileComments
-#define pRIPPERK_SetCaptureFilePathTemplate pRENDERDOC_SetCaptureFilePathTemplate
-#define pRIPPERK_SetCaptureKeys pRENDERDOC_SetCaptureKeys
-#define pRIPPERK_SetCaptureOptionF32 pRENDERDOC_SetCaptureOptionF32
-#define pRIPPERK_SetCaptureOptionU32 pRENDERDOC_SetCaptureOptionU32
-#define pRIPPERK_SetCaptureTitle pRENDERDOC_SetCaptureTitle
-#define pRIPPERK_SetCommandAnnotation pRENDERDOC_SetCommandAnnotation
-#define pRIPPERK_SetFocusToggleKeys pRENDERDOC_SetFocusToggleKeys
-#define pRIPPERK_SetLogFilePathTemplate pRENDERDOC_SetLogFilePathTemplate
-#define pRIPPERK_SetObjectAnnotation pRENDERDOC_SetObjectAnnotation
-#define pRIPPERK_ShowReplayUI pRENDERDOC_ShowReplayUI
-#define pRIPPERK_Shutdown pRENDERDOC_Shutdown
-#define pRIPPERK_StartFrameCapture pRENDERDOC_StartFrameCapture
-#define pRIPPERK_TriggerCapture pRENDERDOC_TriggerCapture
-#define pRIPPERK_TriggerMultiFrameCapture pRENDERDOC_TriggerMultiFrameCapture
-#define pRIPPERK_UnloadCrashHandler pRENDERDOC_UnloadCrashHandler
+#if !defined(RIPPERK_NO_STDINT)
+#include <stdint.h>
+#endif
+
+#if defined(WIN32) || defined(__WIN32__) || defined(_WIN32) || defined(_MSC_VER)
+#define RIPPERK_CC __cdecl
+#elif defined(__linux__) || defined(__FreeBSD__) || defined(__sun__) || defined(__OpenBSD__)
+#define RIPPERK_CC
+#elif defined(__APPLE__)
+#define RIPPERK_CC
+#else
+#error "Unknown platform"
+#endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Constants not used directly in below API
+
+// This is a GUID/magic value used for when applications pass a path where shader debug
+// information can be found to match up with a stripped shader.
+// the define can be used like so: const GUID RIPPERK_ShaderDebugMagicValue =
+// RIPPERK_ShaderDebugMagicValue_value
+#define RIPPERK_ShaderDebugMagicValue_struct                                \
+  {                                                                           \
+    0xeab25520, 0x6670, 0x4865, 0x84, 0x29, 0x6c, 0x8, 0x51, 0x54, 0x00, 0xff \
+  }
+
+// as an alternative when you want a byte array (assuming x86 endianness):
+#define RIPPERK_ShaderDebugMagicValue_bytearray                                                 \
+  {                                                                                               \
+    0x20, 0x55, 0xb2, 0xea, 0x70, 0x66, 0x65, 0x48, 0x84, 0x29, 0x6c, 0x8, 0x51, 0x54, 0x00, 0xff \
+  }
+
+// truncated version when only a uint64_t is available (e.g. Vulkan tags):
+#define RIPPERK_ShaderDebugMagicValue_truncated 0x48656670eab25520ULL
+
+// this is a magic value for vulkan user tags to indicate which dispatchable API objects are which
+// for object annotations
+#define RIPPERK_APIObjectAnnotationHelper 0xfbb3b337b664d0adULL
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ripperK capture options
+//
+
+typedef enum RIPPERK_CaptureOption
+{
+  // Allow the application to enable vsync
+  //
+  // Default - enabled
+  //
+  // 1 - The application can enable or disable vsync at will
+  // 0 - vsync is force disabled
+  eRIPPERK_Option_AllowVSync = 0,
+
+  // Allow the application to enable fullscreen
+  //
+  // Default - enabled
+  //
+  // 1 - The application can enable or disable fullscreen at will
+  // 0 - fullscreen is force disabled
+  eRIPPERK_Option_AllowFullscreen = 1,
+
+  // Record API debugging events and messages
+  //
+  // Default - disabled
+  //
+  // 1 - Enable built-in API debugging features and records the results into
+  //     the capture, which is matched up with events on replay
+  // 0 - no API debugging is forcibly enabled
+  eRIPPERK_Option_APIValidation = 2,
+  eRIPPERK_Option_DebugDeviceMode = 2,    // deprecated name of this enum
+
+  // Capture CPU callstacks for API events
+  //
+  // Default - disabled
+  //
+  // 1 - Enables capturing of callstacks
+  // 0 - no callstacks are captured
+  eRIPPERK_Option_CaptureCallstacks = 3,
+
+  // When capturing CPU callstacks, only capture them from actions.
+  // This option does nothing without the above option being enabled
+  //
+  // Default - disabled
+  //
+  // 1 - Only captures callstacks for actions.
+  //     Ignored if CaptureCallstacks is disabled
+  // 0 - Callstacks, if enabled, are captured for every event.
+  eRIPPERK_Option_CaptureCallstacksOnlyDraws = 4,
+  eRIPPERK_Option_CaptureCallstacksOnlyActions = 4,
+
+  // Specify a delay in seconds to wait for a debugger to attach, after
+  // creating or injecting into a process, before continuing to allow it to run.
+  //
+  // 0 indicates no delay, and the process will run immediately after injection
+  //
+  // Default - 0 seconds
+  //
+  eRIPPERK_Option_DelayForDebugger = 5,
+
+  // Verify buffer access. This includes checking the memory returned by a Map() call to
+  // detect any out-of-bounds modification, as well as initialising buffers with undefined contents
+  // to a marker value to catch use of uninitialised memory.
+  //
+  // NOTE: This option is only valid for OpenGL and D3D11. Explicit APIs such as D3D12 and Vulkan do
+  // not do the same kind of interception & checking and undefined contents are really undefined.
+  //
+  // Default - disabled
+  //
+  // 1 - Verify buffer access
+  // 0 - No verification is performed, and overwriting bounds may cause crashes or corruption in
+  //     ripperK.
+  eRIPPERK_Option_VerifyBufferAccess = 6,
+
+  // The old name for eRIPPERK_Option_VerifyBufferAccess was eRIPPERK_Option_VerifyMapWrites.
+  // This option now controls the filling of uninitialised buffers with 0xdddddddd which was
+  // previously always enabled
+  eRIPPERK_Option_VerifyMapWrites = eRIPPERK_Option_VerifyBufferAccess,
+
+  // Hooks any system API calls that create child processes, and injects
+  // ripperK into them recursively with the same options.
+  //
+  // Default - disabled
+  //
+  // 1 - Hooks into spawned child processes
+  // 0 - Child processes are not hooked by ripperK
+  eRIPPERK_Option_HookIntoChildren = 7,
+
+  // By default ripperK only includes resources in the final capture necessary
+  // for that frame, this allows you to override that behaviour.
+  //
+  // Default - disabled
+  //
+  // 1 - all live resources at the time of capture are included in the capture
+  //     and available for inspection
+  // 0 - only the resources referenced by the captured frame are included
+  eRIPPERK_Option_RefAllResources = 8,
+
+  // **NOTE**: As of ripperK v1.1 this option has been deprecated. Setting or
+  // getting it will be ignored, to allow compatibility with older versions.
+  // In v1.1 the option acts as if it's always enabled.
+  //
+  // By default ripperK skips saving initial states for resources where the
+  // previous contents don't appear to be used, assuming that writes before
+  // reads indicate previous contents aren't used.
+  //
+  // Default - disabled
+  //
+  // 1 - initial contents at the start of each captured frame are saved, even if
+  //     they are later overwritten or cleared before being used.
+  // 0 - unless a read is detected, initial contents will not be saved and will
+  //     appear as black or empty data.
+  eRIPPERK_Option_SaveAllInitials = 9,
+
+  // In APIs that allow for the recording of command lists to be replayed later,
+  // ripperK may choose to not capture command lists before a frame capture is
+  // triggered, to reduce overheads. This means any command lists recorded once
+  // and replayed many times will not be available and may cause a failure to
+  // capture.
+  //
+  // NOTE: This is only true for APIs where multithreading is difficult or
+  // discouraged. Newer APIs like Vulkan and D3D12 will ignore this option
+  // and always capture all command lists since the API is heavily oriented
+  // around it and the overheads have been reduced by API design.
+  //
+  // 1 - All command lists are captured from the start of the application
+  // 0 - Command lists are only captured if their recording begins during
+  //     the period when a frame capture is in progress.
+  eRIPPERK_Option_CaptureAllCmdLists = 10,
+
+  // Mute API debugging output when the API validation mode option is enabled
+  //
+  // Default - enabled
+  //
+  // 1 - Mute any API debug messages from being displayed or passed through
+  // 0 - API debugging is displayed as normal
+  eRIPPERK_Option_DebugOutputMute = 11,
+
+  // Option to allow vendor extensions to be used even when they may be
+  // incompatible with ripperK and cause corrupted replays or crashes.
+  //
+  // Default - inactive
+  //
+  // No values are documented, this option should only be used when absolutely
+  // necessary as directed by a ripperK developer.
+  eRIPPERK_Option_AllowUnsupportedVendorExtensions = 12,
+
+  // Define a soft memory limit which some APIs may aim to keep overhead under where
+  // possible. Anything above this limit will where possible be saved directly to disk during
+  // capture.
+  // This will cause increased disk space use (which may cause a capture to fail if disk space is
+  // exhausted) as well as slower capture times.
+  //
+  // Not all memory allocations may be deferred like this so it is not a guarantee of a memory
+  // limit.
+  //
+  // Units are in MBs, suggested values would range from 200MB to 1000MB.
+  //
+  // Default - 0 Megabytes
+  eRIPPERK_Option_SoftMemoryLimit = 13,
+} RIPPERK_CaptureOption;
+
+// Sets an option that controls how ripperK behaves on capture.
+//
+// Returns 1 if the option and value are valid
+// Returns 0 if either is invalid and the option is unchanged
+typedef int(RIPPERK_CC *pRIPPERK_SetCaptureOptionU32)(RIPPERK_CaptureOption opt, uint32_t val);
+typedef int(RIPPERK_CC *pRIPPERK_SetCaptureOptionF32)(RIPPERK_CaptureOption opt, float val);
+
+// Gets the current value of an option as a uint32_t
+//
+// If the option is invalid, 0xffffffff is returned
+typedef uint32_t(RIPPERK_CC *pRIPPERK_GetCaptureOptionU32)(RIPPERK_CaptureOption opt);
+
+// Gets the current value of an option as a float
+//
+// If the option is invalid, -FLT_MAX is returned
+typedef float(RIPPERK_CC *pRIPPERK_GetCaptureOptionF32)(RIPPERK_CaptureOption opt);
+
+typedef enum RIPPERK_InputButton
+{
+  // '0' - '9' matches ASCII values
+  eRIPPERK_Key_0 = 0x30,
+  eRIPPERK_Key_1 = 0x31,
+  eRIPPERK_Key_2 = 0x32,
+  eRIPPERK_Key_3 = 0x33,
+  eRIPPERK_Key_4 = 0x34,
+  eRIPPERK_Key_5 = 0x35,
+  eRIPPERK_Key_6 = 0x36,
+  eRIPPERK_Key_7 = 0x37,
+  eRIPPERK_Key_8 = 0x38,
+  eRIPPERK_Key_9 = 0x39,
+
+  // 'A' - 'Z' matches ASCII values
+  eRIPPERK_Key_A = 0x41,
+  eRIPPERK_Key_B = 0x42,
+  eRIPPERK_Key_C = 0x43,
+  eRIPPERK_Key_D = 0x44,
+  eRIPPERK_Key_E = 0x45,
+  eRIPPERK_Key_F = 0x46,
+  eRIPPERK_Key_G = 0x47,
+  eRIPPERK_Key_H = 0x48,
+  eRIPPERK_Key_I = 0x49,
+  eRIPPERK_Key_J = 0x4A,
+  eRIPPERK_Key_K = 0x4B,
+  eRIPPERK_Key_L = 0x4C,
+  eRIPPERK_Key_M = 0x4D,
+  eRIPPERK_Key_N = 0x4E,
+  eRIPPERK_Key_O = 0x4F,
+  eRIPPERK_Key_P = 0x50,
+  eRIPPERK_Key_Q = 0x51,
+  eRIPPERK_Key_R = 0x52,
+  eRIPPERK_Key_S = 0x53,
+  eRIPPERK_Key_T = 0x54,
+  eRIPPERK_Key_U = 0x55,
+  eRIPPERK_Key_V = 0x56,
+  eRIPPERK_Key_W = 0x57,
+  eRIPPERK_Key_X = 0x58,
+  eRIPPERK_Key_Y = 0x59,
+  eRIPPERK_Key_Z = 0x5A,
+
+  // leave the rest of the ASCII range free
+  // in case we want to use it later
+  eRIPPERK_Key_NonPrintable = 0x100,
+
+  eRIPPERK_Key_Divide,
+  eRIPPERK_Key_Multiply,
+  eRIPPERK_Key_Subtract,
+  eRIPPERK_Key_Plus,
+
+  eRIPPERK_Key_F1,
+  eRIPPERK_Key_F2,
+  eRIPPERK_Key_F3,
+  eRIPPERK_Key_F4,
+  eRIPPERK_Key_F5,
+  eRIPPERK_Key_F6,
+  eRIPPERK_Key_F7,
+  eRIPPERK_Key_F8,
+  eRIPPERK_Key_F9,
+  eRIPPERK_Key_F10,
+  eRIPPERK_Key_F11,
+  eRIPPERK_Key_F12,
+
+  eRIPPERK_Key_Home,
+  eRIPPERK_Key_End,
+  eRIPPERK_Key_Insert,
+  eRIPPERK_Key_Delete,
+  eRIPPERK_Key_PageUp,
+  eRIPPERK_Key_PageDn,
+
+  eRIPPERK_Key_Backspace,
+  eRIPPERK_Key_Tab,
+  eRIPPERK_Key_PrtScrn,
+  eRIPPERK_Key_Pause,
+
+  eRIPPERK_Key_Max,
+} RIPPERK_InputButton;
+
+// Sets which key or keys can be used to toggle focus between multiple windows
+//
+// If keys is NULL or num is 0, toggle keys will be disabled
+typedef void(RIPPERK_CC *pRIPPERK_SetFocusToggleKeys)(RIPPERK_InputButton *keys, int num);
+
+// Sets which key or keys can be used to capture the next frame
+//
+// If keys is NULL or num is 0, captures keys will be disabled
+typedef void(RIPPERK_CC *pRIPPERK_SetCaptureKeys)(RIPPERK_InputButton *keys, int num);
+
+typedef enum RIPPERK_OverlayBits
+{
+  // This single bit controls whether the overlay is enabled or disabled globally
+  eRIPPERK_Overlay_Enabled = 0x1,
+
+  // Show the average framerate over several seconds as well as min/max
+  eRIPPERK_Overlay_FrameRate = 0x2,
+
+  // Show the current frame number
+  eRIPPERK_Overlay_FrameNumber = 0x4,
+
+  // Show a list of recent captures, and how many captures have been made
+  eRIPPERK_Overlay_CaptureList = 0x8,
+
+  // Default values for the overlay mask
+  eRIPPERK_Overlay_Default = (eRIPPERK_Overlay_Enabled | eRIPPERK_Overlay_FrameRate |
+                                eRIPPERK_Overlay_FrameNumber | eRIPPERK_Overlay_CaptureList),
+
+  // Enable all bits
+  eRIPPERK_Overlay_All = 0x7ffffff,
+
+  // Disable all bits
+  eRIPPERK_Overlay_None = 0,
+} RIPPERK_OverlayBits;
+
+// returns the overlay bits that have been set
+typedef uint32_t(RIPPERK_CC *pRIPPERK_GetOverlayBits)(void);
+// sets the overlay bits with an and & or mask
+typedef void(RIPPERK_CC *pRIPPERK_MaskOverlayBits)(uint32_t And, uint32_t Or);
+
+// this function will attempt to remove ripperK's hooks in the application.
+//
+// Note: that this can only work correctly if done immediately after
+// the module is loaded, before any API work happens. ripperK will remove its
+// injected hooks and shut down. Behaviour is undefined if this is called
+// after any API functions have been called, and there is still no guarantee of
+// success.
+typedef void(RIPPERK_CC *pRIPPERK_RemoveHooks)(void);
+
+// DEPRECATED: compatibility for code compiled against pre-1.4.1 headers.
+typedef pRIPPERK_RemoveHooks pRIPPERK_Shutdown;
+
+// This function will unload ripperK's crash handler.
+//
+// If you use your own crash handler and don't want ripperK's handler to
+// intercede, you can call this function to unload it and any unhandled
+// exceptions will pass to the next handler.
+typedef void(RIPPERK_CC *pRIPPERK_UnloadCrashHandler)(void);
+
+// Sets the capture file path template
+//
+// pathtemplate is a UTF-8 string that gives a template for how captures will be named
+// and where they will be saved.
+//
+// Any extension is stripped off the path, and captures are saved in the directory
+// specified, and named with the filename and the frame number appended. If the
+// directory does not exist it will be created, including any parent directories.
+//
+// If pathtemplate is NULL, the template will remain unchanged
+//
+// Example:
+//
+// SetCaptureFilePathTemplate("my_captures/example");
+//
+// Capture #1 -> my_captures/example_frame123.rdc
+// Capture #2 -> my_captures/example_frame456.rdc
+typedef void(RIPPERK_CC *pRIPPERK_SetCaptureFilePathTemplate)(const char *pathtemplate);
+
+// returns the current capture path template, see SetCaptureFileTemplate above, as a UTF-8 string
+typedef const char *(RIPPERK_CC *pRIPPERK_GetCaptureFilePathTemplate)(void);
+
+// DEPRECATED: compatibility for code compiled against pre-1.1.2 headers.
+typedef pRIPPERK_SetCaptureFilePathTemplate pRIPPERK_SetLogFilePathTemplate;
+typedef pRIPPERK_GetCaptureFilePathTemplate pRIPPERK_GetLogFilePathTemplate;
+
+// returns the number of captures that have been made
+typedef uint32_t(RIPPERK_CC *pRIPPERK_GetNumCaptures)(void);
+
+// This function returns the details of a capture, by index. New captures are added
+// to the end of the list.
+//
+// filename will be filled with the absolute path to the capture file, as a UTF-8 string
+// pathlength will be written with the length in bytes of the filename string
+// timestamp will be written with the time of the capture, in seconds since the Unix epoch
+//
+// Any of the parameters can be NULL and they'll be skipped.
+//
+// The function will return 1 if the capture index is valid, or 0 if the index is invalid
+// If the index is invalid, the values will be unchanged
+//
+// Note: when captures are deleted in the UI they will remain in this list, so the
+// capture path may not exist anymore.
+typedef uint32_t(RIPPERK_CC *pRIPPERK_GetCapture)(uint32_t idx, char *filename,
+                                                      uint32_t *pathlength, uint64_t *timestamp);
+
+// Sets the comments associated with a capture file. These comments are displayed in the
+// UI program when opening.
+//
+// filePath should be a path to the capture file to add comments to. If set to NULL or ""
+// the most recent capture file created made will be used instead.
+// comments should be a NULL-terminated UTF-8 string to add as comments.
+//
+// Any existing comments will be overwritten.
+typedef void(RIPPERK_CC *pRIPPERK_SetCaptureFileComments)(const char *filePath,
+                                                              const char *comments);
+
+// returns 1 if the ripperK UI is connected to this application, 0 otherwise
+typedef uint32_t(RIPPERK_CC *pRIPPERK_IsTargetControlConnected)(void);
+
+// DEPRECATED: compatibility for code compiled against pre-1.1.1 headers.
+// This was renamed to IsTargetControlConnected in API 1.1.1, the old typedef is kept here for
+// backwards compatibility with old code, it is castable either way since it's ABI compatible
+// as the same function pointer type.
+typedef pRIPPERK_IsTargetControlConnected pRIPPERK_IsRemoteAccessConnected;
+
+// This function will launch the Replay UI associated with the ripperK library injected
+// into the running application.
+//
+// if connectTargetControl is 1, the Replay UI will be launched with a command line parameter
+// to connect to this application
+// cmdline is the rest of the command line, as a UTF-8 string. E.g. a captures to open
+// if cmdline is NULL, the command line will be empty.
+//
+// returns the PID of the replay UI if successful, 0 if not successful.
+typedef uint32_t(RIPPERK_CC *pRIPPERK_LaunchReplayUI)(uint32_t connectTargetControl,
+                                                          const char *cmdline);
+
+// ripperK can return a higher version than requested if it's backwards compatible,
+// this function returns the actual version returned. If a parameter is NULL, it will be
+// ignored and the others will be filled out.
+typedef void(RIPPERK_CC *pRIPPERK_GetAPIVersion)(int *major, int *minor, int *patch);
+
+// Requests that the replay UI show itself (if hidden or not the current top window). This can be
+// used in conjunction with IsTargetControlConnected and LaunchReplayUI to intelligently handle
+// showing the UI after making a capture.
+//
+// This will return 1 if the request was successfully passed on, though it's not guaranteed that
+// the UI will be on top in all cases depending on OS rules. It will return 0 if there is no current
+// target control connection to make such a request, or if there was another error
+typedef uint32_t(RIPPERK_CC *pRIPPERK_ShowReplayUI)(void);
+
+//////////////////////////////////////////////////////////////////////////
+// Capturing functions
+//
+
+// A device pointer is a pointer to the API's root handle.
+//
+// This would be an ID3D11Device, HGLRC/GLXContext, ID3D12Device, etc
+typedef void *RIPPERK_DevicePointer;
+
+// A window handle is the OS's native window handle
+//
+// This would be an HWND, GLXDrawable, etc
+typedef void *RIPPERK_WindowHandle;
+
+// A helper macro for Vulkan, where the device handle cannot be used directly.
+//
+// Passing the VkInstance to this macro will return the RIPPERK_DevicePointer to use.
+//
+// Specifically, the value needed is the dispatch table pointer, which sits as the first
+// pointer-sized object in the memory pointed to by the VkInstance. Thus we cast to a void** and
+// indirect once.
+#define RIPPERK_DEVICEPOINTER_FROM_VKINSTANCE(inst) (*((void **)(inst)))
+
+// This sets the ripperK in-app overlay in the API/window pair as 'active' and it will
+// respond to keypresses. Neither parameter can be NULL
+typedef void(RIPPERK_CC *pRIPPERK_SetActiveWindow)(RIPPERK_DevicePointer device,
+                                                       RIPPERK_WindowHandle wndHandle);
+
+// capture the next frame on whichever window and API is currently considered active
+typedef void(RIPPERK_CC *pRIPPERK_TriggerCapture)(void);
+
+// capture the next N frames on whichever window and API is currently considered active
+typedef void(RIPPERK_CC *pRIPPERK_TriggerMultiFrameCapture)(uint32_t numFrames);
+
+// When choosing either a device pointer or a window handle to capture, you can pass NULL.
+// Passing NULL specifies a 'wildcard' match against anything. This allows you to specify
+// any API rendering to a specific window, or a specific API instance rendering to any window,
+// or in the simplest case of one window and one API, you can just pass NULL for both.
+//
+// In either case, if there are two or more possible matching (device,window) pairs it
+// is undefined which one will be captured.
+//
+// Note: for headless rendering you can pass NULL for the window handle and either specify
+// a device pointer or leave it NULL as above.
+
+// Immediately starts capturing API calls on the specified device pointer and window handle.
+//
+// If there is no matching thing to capture (e.g. no supported API has been initialised),
+// this will do nothing.
+//
+// The results are undefined (including crashes) if two captures are started overlapping,
+// even on separate devices and/oror windows.
+typedef void(RIPPERK_CC *pRIPPERK_StartFrameCapture)(RIPPERK_DevicePointer device,
+                                                         RIPPERK_WindowHandle wndHandle);
+
+// Returns whether or not a frame capture is currently ongoing anywhere.
+//
+// This will return 1 if a capture is ongoing, and 0 if there is no capture running
+typedef uint32_t(RIPPERK_CC *pRIPPERK_IsFrameCapturing)(void);
+
+// Ends capturing immediately.
+//
+// This will return 1 if the capture succeeded, and 0 if there was an error capturing.
+typedef uint32_t(RIPPERK_CC *pRIPPERK_EndFrameCapture)(RIPPERK_DevicePointer device,
+                                                           RIPPERK_WindowHandle wndHandle);
+
+// Ends capturing immediately and discard any data stored without saving to disk.
+//
+// This will return 1 if the capture was discarded, and 0 if there was an error or no capture
+// was in progress
+typedef uint32_t(RIPPERK_CC *pRIPPERK_DiscardFrameCapture)(RIPPERK_DevicePointer device,
+                                                               RIPPERK_WindowHandle wndHandle);
+
+// Only valid to be called between a call to StartFrameCapture and EndFrameCapture. Gives a custom
+// title to the capture produced which will be displayed in the UI.
+//
+// If multiple captures are ongoing, this title will be applied to the first capture to end after
+// this call. The second capture to end will have no title, unless this function is called again.
+//
+// Calling this function has no effect if no capture is currently running, and if it is called
+// multiple times only the last title will be used.
+typedef void(RIPPERK_CC *pRIPPERK_SetCaptureTitle)(const char *title);
+
+// Annotations API:
+//
+// These functions allow you to specify annotations either on a per-command level, or a per-object
+// level.
+//
+// Basic types of annotations are supported, as well as vector versions and references to API objects.
+//
+// The annotations are stored as keys, with the key being a dot-separated path allowing arbitrary
+// nesting and user organisation. The keys are sorted in human order so `foo.2.bar` will be displayed
+// before `foo.10.bar` to allow creation of arrays if desired.
+//
+// Deleting an annotation can be done by assigning an empty value to it.
+
+// the type of an annotation value, or Empty to delete an annotation
+typedef enum RIPPERK_AnnotationType
+{
+  eRIPPERK_Empty,
+  eRIPPERK_Bool,
+  eRIPPERK_Int32,
+  eRIPPERK_UInt32,
+  eRIPPERK_Int64,
+  eRIPPERK_UInt64,
+  eRIPPERK_Float,
+  eRIPPERK_Double,
+  eRIPPERK_String,
+  eRIPPERK_APIObject,
+  eRIPPERK_AnnotationMax = 0x7FFFFFFF,
+} RIPPERK_AnnotationType;
+
+// a union with vector annotation value data
+typedef union RIPPERK_AnnotationVectorValue
+{
+  bool boolean[4];
+  int32_t int32[4];
+  int64_t int64[4];
+  uint32_t uint32[4];
+  uint64_t uint64[4];
+  float float32[4];
+  double float64[4];
+} RIPPERK_AnnotationVectorValue;
+
+// a union with scalar annotation value data
+typedef union RIPPERK_AnnotationValue
+{
+  bool boolean;
+  int32_t int32;
+  int64_t int64;
+  uint32_t uint32;
+  uint64_t uint64;
+  float float32;
+  double float64;
+
+  RIPPERK_AnnotationVectorValue vector;
+
+  const char *string;
+  void *apiObject;
+} RIPPERK_AnnotationValue;
+
+// a struct for specifying a GL object, as we don't have pointers we can use so instead we specify a
+// pointer to this struct giving both the type and the name
+typedef struct RIPPERK_GLResourceReference
+{
+  // this is the same GLenum identifier as passed to glObjectLabel
+  uint32_t identifier;
+  uint32_t name;
+} GLResourceReference;
+
+// simple C++ helpers to avoid the need for a temporary objects for value passing and GL object specification
+#ifdef __cplusplus
+struct RDGLObjectHelper
+{
+  RIPPERK_GLResourceReference gl;
+
+  RDGLObjectHelper(uint32_t identifier, uint32_t name)
+  {
+    gl.identifier = identifier;
+    gl.name = name;
+  }
+
+  operator RIPPERK_GLResourceReference *() { return &gl; }
+};
+
+struct RDAnnotationHelper
+{
+  RIPPERK_AnnotationValue val;
+
+  RDAnnotationHelper(bool b) { val.boolean = b; }
+  RDAnnotationHelper(int32_t i) { val.int32 = i; }
+  RDAnnotationHelper(int64_t i) { val.int64 = i; }
+  RDAnnotationHelper(uint32_t i) { val.uint32 = i; }
+  RDAnnotationHelper(uint64_t i) { val.uint64 = i; }
+  RDAnnotationHelper(float f) { val.float32 = f; }
+  RDAnnotationHelper(double d) { val.float64 = d; }
+  RDAnnotationHelper(const char *s) { val.string = s; }
+
+  operator RIPPERK_AnnotationValue *() { return &val; }
+};
+#endif
+
+// The device is specified in the same way as other API calls that take a RIPPERK_DevicePointer
+// to specify the device.
+//
+// The object or queue/commandbuffer will depend on the graphics API in question.
+//
+// Return value:
+// 0 - The annotation was applied successfully.
+// 1 - The device is unknown/invalid
+// 2 - The device is valid but the annotation is not supported for API-specific reasons, such as an
+//     unrecognised or invalid object or queue/commandbuffer
+// 3 - The call is ill-formed or invalid e.g. empty is specified with a value pointer, or non-empty
+//     is specified with a NULL value pointer
+typedef uint32_t(RIPPERK_CC *pRIPPERK_SetObjectAnnotation)(RIPPERK_DevicePointer device,
+                                                               void *object, const char *key,
+                                                               RIPPERK_AnnotationType valueType,
+                                                               uint32_t valueVectorWidth,
+                                                               const RIPPERK_AnnotationValue *value);
+
+typedef uint32_t(RIPPERK_CC *pRIPPERK_SetCommandAnnotation)(
+    RIPPERK_DevicePointer device, void *queueOrCommandBuffer, const char *key,
+    RIPPERK_AnnotationType valueType, uint32_t valueVectorWidth,
+    const RIPPERK_AnnotationValue *value);
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ripperK API versions
+//
+
+// ripperK uses semantic versioning (http://semver.org/).
+//
+// MAJOR version is incremented when incompatible API changes happen.
+// MINOR version is incremented when functionality is added in a backwards-compatible manner.
+// PATCH version is incremented when backwards-compatible bug fixes happen.
+//
+// Note that this means the API returned can be higher than the one you might have requested.
+// e.g. if you are running against a newer ripperK that supports 1.0.1, it will be returned
+// instead of 1.0.0. You can check this with the GetAPIVersion entry point
+typedef enum RIPPERK_Version
+{
+  eRIPPERK_API_Version_1_0_0 = 10000,    // RIPPERK_API_1_0_0 = 1 00 00
+  eRIPPERK_API_Version_1_0_1 = 10001,    // RIPPERK_API_1_0_1 = 1 00 01
+  eRIPPERK_API_Version_1_0_2 = 10002,    // RIPPERK_API_1_0_2 = 1 00 02
+  eRIPPERK_API_Version_1_1_0 = 10100,    // RIPPERK_API_1_1_0 = 1 01 00
+  eRIPPERK_API_Version_1_1_1 = 10101,    // RIPPERK_API_1_1_1 = 1 01 01
+  eRIPPERK_API_Version_1_1_2 = 10102,    // RIPPERK_API_1_1_2 = 1 01 02
+  eRIPPERK_API_Version_1_2_0 = 10200,    // RIPPERK_API_1_2_0 = 1 02 00
+  eRIPPERK_API_Version_1_3_0 = 10300,    // RIPPERK_API_1_3_0 = 1 03 00
+  eRIPPERK_API_Version_1_4_0 = 10400,    // RIPPERK_API_1_4_0 = 1 04 00
+  eRIPPERK_API_Version_1_4_1 = 10401,    // RIPPERK_API_1_4_1 = 1 04 01
+  eRIPPERK_API_Version_1_4_2 = 10402,    // RIPPERK_API_1_4_2 = 1 04 02
+  eRIPPERK_API_Version_1_5_0 = 10500,    // RIPPERK_API_1_5_0 = 1 05 00
+  eRIPPERK_API_Version_1_6_0 = 10600,    // RIPPERK_API_1_6_0 = 1 06 00
+  eRIPPERK_API_Version_1_7_0 = 10700,    // RIPPERK_API_1_7_0 = 1 07 00
+} RIPPERK_Version;
+
+// API version changelog:
+//
+// 1.0.0 - initial release
+// 1.0.1 - Bugfix: IsFrameCapturing() was returning false for captures that were triggered
+//         by keypress or TriggerCapture, instead of Start/EndFrameCapture.
+// 1.0.2 - Refactor: Renamed eRIPPERK_Option_DebugDeviceMode to eRIPPERK_Option_APIValidation
+// 1.1.0 - Add feature: TriggerMultiFrameCapture(). Backwards compatible with 1.0.x since the new
+//         function pointer is added to the end of the struct, the original layout is identical
+// 1.1.1 - Refactor: Renamed remote access to target control (to better disambiguate from remote
+//         replay/remote server concept in replay UI)
+// 1.1.2 - Refactor: Renamed "log file" in function names to just capture, to clarify that these
+//         are captures and not debug logging files. This is the first API version in the v1.0
+//         branch.
+// 1.2.0 - Added feature: SetCaptureFileComments() to add comments to a capture file that will be
+//         displayed in the UI program on load.
+// 1.3.0 - Added feature: New capture option eRIPPERK_Option_AllowUnsupportedVendorExtensions
+//         which allows users to opt-in to allowing unsupported vendor extensions to function.
+//         Should be used at the user's own risk.
+//         Refactor: Renamed eRIPPERK_Option_VerifyMapWrites to
+//         eRIPPERK_Option_VerifyBufferAccess, which now also controls initialisation to
+//         0xdddddddd of uninitialised buffer contents.
+// 1.4.0 - Added feature: DiscardFrameCapture() to discard a frame capture in progress and stop
+//         capturing without saving anything to disk.
+// 1.4.1 - Refactor: Renamed Shutdown to RemoveHooks to better clarify what is happening
+// 1.4.2 - Refactor: Renamed 'draws' to 'actions' in callstack capture option.
+// 1.5.0 - Added feature: ShowReplayUI() to request that the replay UI show itself if connected
+// 1.6.0 - Added feature: SetCaptureTitle() which can be used to set a title for a
+//         capture made with StartFrameCapture() or EndFrameCapture()
+// 1.7.0 - Added feature: SetObjectAnnotation() / SetCommandAnnotation() for adding rich
+//         annotations to objects and command streams
+
+typedef struct RIPPERK_API_1_7_0
+{
+  pRIPPERK_GetAPIVersion GetAPIVersion;
+
+  pRIPPERK_SetCaptureOptionU32 SetCaptureOptionU32;
+  pRIPPERK_SetCaptureOptionF32 SetCaptureOptionF32;
+
+  pRIPPERK_GetCaptureOptionU32 GetCaptureOptionU32;
+  pRIPPERK_GetCaptureOptionF32 GetCaptureOptionF32;
+
+  pRIPPERK_SetFocusToggleKeys SetFocusToggleKeys;
+  pRIPPERK_SetCaptureKeys SetCaptureKeys;
+
+  pRIPPERK_GetOverlayBits GetOverlayBits;
+  pRIPPERK_MaskOverlayBits MaskOverlayBits;
+
+  // Shutdown was renamed to RemoveHooks in 1.4.1.
+  // These unions allow old code to continue compiling without changes
+  union
+  {
+    pRIPPERK_Shutdown Shutdown;
+    pRIPPERK_RemoveHooks RemoveHooks;
+  };
+  pRIPPERK_UnloadCrashHandler UnloadCrashHandler;
+
+  // Get/SetLogFilePathTemplate was renamed to Get/SetCaptureFilePathTemplate in 1.1.2.
+  // These unions allow old code to continue compiling without changes
+  union
+  {
+    // deprecated name
+    pRIPPERK_SetLogFilePathTemplate SetLogFilePathTemplate;
+    // current name
+    pRIPPERK_SetCaptureFilePathTemplate SetCaptureFilePathTemplate;
+  };
+  union
+  {
+    // deprecated name
+    pRIPPERK_GetLogFilePathTemplate GetLogFilePathTemplate;
+    // current name
+    pRIPPERK_GetCaptureFilePathTemplate GetCaptureFilePathTemplate;
+  };
+
+  pRIPPERK_GetNumCaptures GetNumCaptures;
+  pRIPPERK_GetCapture GetCapture;
+
+  pRIPPERK_TriggerCapture TriggerCapture;
+
+  // IsRemoteAccessConnected was renamed to IsTargetControlConnected in 1.1.1.
+  // This union allows old code to continue compiling without changes
+  union
+  {
+    // deprecated name
+    pRIPPERK_IsRemoteAccessConnected IsRemoteAccessConnected;
+    // current name
+    pRIPPERK_IsTargetControlConnected IsTargetControlConnected;
+  };
+  pRIPPERK_LaunchReplayUI LaunchReplayUI;
+
+  pRIPPERK_SetActiveWindow SetActiveWindow;
+
+  pRIPPERK_StartFrameCapture StartFrameCapture;
+  pRIPPERK_IsFrameCapturing IsFrameCapturing;
+  pRIPPERK_EndFrameCapture EndFrameCapture;
+
+  // new function in 1.1.0
+  pRIPPERK_TriggerMultiFrameCapture TriggerMultiFrameCapture;
+
+  // new function in 1.2.0
+  pRIPPERK_SetCaptureFileComments SetCaptureFileComments;
+
+  // new function in 1.4.0
+  pRIPPERK_DiscardFrameCapture DiscardFrameCapture;
+
+  // new function in 1.5.0
+  pRIPPERK_ShowReplayUI ShowReplayUI;
+
+  // new function in 1.6.0
+  pRIPPERK_SetCaptureTitle SetCaptureTitle;
+
+  // new functions in 1.7.0
+  pRIPPERK_SetObjectAnnotation SetObjectAnnotation;
+  pRIPPERK_SetCommandAnnotation SetCommandAnnotation;
+} RIPPERK_API_1_7_0;
+
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_0_0;
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_0_1;
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_0_2;
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_1_0;
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_1_1;
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_1_2;
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_2_0;
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_3_0;
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_4_0;
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_4_1;
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_4_2;
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_5_0;
+typedef RIPPERK_API_1_7_0 RIPPERK_API_1_6_0;
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// ripperK API entry point
+//
+// This entry point can be obtained via GetProcAddress/dlsym if ripperK is available.
+//
+// The name is the same as the typedef - "RIPPERK_GetAPI"
+//
+// This function is not thread safe, and should not be called on multiple threads at once.
+// Ideally, call this once as early as possible in your application's startup, before doing
+// any API work, since some configuration functionality etc has to be done also before
+// initialising any APIs.
+//
+// Parameters:
+//   version is a single value from the RIPPERK_Version above.
+//
+//   outAPIPointers will be filled out with a pointer to the corresponding struct of function
+//   pointers.
+//
+// Returns:
+//   1 - if the outAPIPointers has been filled with a pointer to the API struct requested
+//   0 - if the requested version is not supported or the arguments are invalid.
+//
+typedef int(RIPPERK_CC *pRIPPERK_GetAPI)(RIPPERK_Version version, void **outAPIPointers);
+
+#ifdef __cplusplus
+}    // extern "C"
+#endif

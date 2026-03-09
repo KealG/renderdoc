@@ -17,11 +17,11 @@ This page is a random hodge-podge of different tips and tricks that might not be
    Note though that by default the range will be remembered or each texture, so once you have fitted the range once for each texture you should be able to flip back and forth more easily.
 #. You can double click on a thumbnail in the texture viewer to open a :doc:`locked texture <../how/how_view_texture>` tab
 #. You can close tabs by middle clicking on them.
-#. You can trigger a capture from code. |brand_core_dll_code| exports an :doc:`../in_application_api` for this purpose, defined in ``renderdoc_app.h`` in the distributed builds.
+#. You can trigger a capture from code. |brand_core_dll_code| exports an :doc:`../in_application_api` for this purpose, defined in |brand_compat_app_header_code| in the distributed builds.
 #. To get API debug or error messages, enable "Enable API validation" when capturing then check out the :doc:`../window/debug_messages` window.
 #. You can annotate a capture by adding bookmarks, renaming resources, and adding comments. These can all be saved and embedded in the capture, so that when you share it with someone else.
 #. Dragging an executable onto the RenderDoc window anywhere will open the :guilabel:`Launch Executable` panel with the executable path filled in.
-#. Detecting RenderDoc from your code can either be done by trying to load and use the renderdoc :doc:`../in_application_api`, or through API specific ways:
+#. Detecting |brand_product_name| from your code can either be done by trying to load and use the in-application :doc:`../in_application_api`, or through API specific ways:
 
    .. highlight:: c++
    .. code:: c++
@@ -30,10 +30,10 @@ This page is a random hodge-podge of different tips and tricks that might not be
        ID3D11Device *devicePointer = ...;
        IUnknown *unk = NULL;
        HRESULT hr = devicePointer->QueryInterface(MAKE_GUID({A7AA6116-9C8D-4BBA-9083-B4D816B71B78}), &unk);
-       if(SUCCEEDED(hr)) { /* renderdoc is present; */ }
+       if(SUCCEEDED(hr)) { /* |brand_product_name| is present; */ }
 
        // For OpenGL:
-       // if GL_EXT_debug_tool is present (see https://renderdoc.org/debug_tool.txt)
+       // if GL_EXT_debug_tool is present (see |brand_debug_tool_url|)
        glIsEnabled(GL_DEBUG_TOOL_EXT);
 
        // Use reserved enumerants as the extension will not become official

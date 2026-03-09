@@ -13,10 +13,10 @@
   <?define ManufacturerName = "Baldur Karlsson" ?>
   <?define InstallerDescription = "Installer for ripperK" ?>
   <?define CabinetName = "ripperk.cab" ?>
-  <?define ProductHomepageComment = "ripperK Homepage is https://renderdoc.org/" ?>
-  <?define ProductHomepageHelpLink = "https://renderdoc.org/" ?>
-  <?define ProductHomepageUrl = "https://renderdoc.org/" ?>
-  <?define ProductDocumentationUrl = "https://renderdoc.org/docs" ?>
+  <?define ProductHomepageComment = "ripperK Homepage is https://ripperk.invalid/" ?>
+  <?define ProductHomepageHelpLink = "https://ripperk.invalid/" ?>
+  <?define ProductHomepageUrl = "https://ripperk.invalid/" ?>
+  <?define ProductDocumentationUrl = "https://ripperk.invalid/docs" ?>
   <?define InstallDiskPromptName = "ripperK Installation" ?>
   <?define InstallDirName = "ripperK" ?>
   <?define DocumentationBaseName = "ripperk" ?>

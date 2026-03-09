@@ -24,7 +24,7 @@
 
 #include <string.h>
 #include "api/app/renderdoc_app.h"
-#include "api/replay/apidefs.h"    // for RENDERDOC_API to export the RENDERDOC_GetAPI function
+#include "api/replay/apidefs.h"    // for RENDERDOC_API to export the GetAPI function
 #include "api/replay/compat_config.h"
 #include "common/common.h"
 #include "common/formatting.h"
@@ -406,7 +406,7 @@ static int GetAPIImpl(RENDERDOC_Version version, void **outAPIPointers)
 {
   if(outAPIPointers == NULL)
   {
-    RDCERR("Invalid call to RENDERDOC_GetAPI with NULL outAPIPointers");
+    RDCERR("Invalid call to %s with NULL outAPIPointers", RDOC_COMPAT_GETAPI_NAME_STRING);
     return 0;
   }
 
@@ -452,12 +452,6 @@ static int GetAPIImpl(RENDERDOC_Version version, void **outAPIPointers)
   RDCERR("Unrecognised API version '%d'. Supported versions:%s", version, supportedVersions.c_str());
 
   return 0;
-}
-
-extern "C" RENDERDOC_API int RENDERDOC_CC RENDERDOC_GetAPI(RENDERDOC_Version version,
-                                                           void **outAPIPointers)
-{
-  return GetAPIImpl(version, outAPIPointers);
 }
 
 extern "C" RENDERDOC_API int RENDERDOC_CC RDOC_COMPAT_GETAPI_NAME_TOKEN(

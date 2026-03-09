@@ -209,7 +209,7 @@ There have been many people who have helped in the creation of RenderDoc. Whethe
 Contributors
 ------------
 
-The following list highlights notable open source contributions. Many other people have contributed individual bug fixes and tweaks, which can be seen `on github <https://github.com/baldurk/renderdoc/graphs/contributors>`_ !
+The following list highlights notable open source contributions. Many other people have contributed individual bug fixes and tweaks, which can be seen `on github <https://github.com/ripperk/ripperk/graphs/contributors>`_ !
 
 * Michael Vance - Implemented a sophisticated frame statistics system for D3D11 around binding and draw API calls.
 * Matthäus G. Chajdas - Converted this documentation from sandcastle to sphinx.
