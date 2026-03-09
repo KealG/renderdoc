@@ -775,6 +775,143 @@ static rdcstr DescribeRemoteLoadFailure(DWORD loaderError)
   return "";
 }
 
+struct ChildProcessInfo
+{
+  uint32_t pid = 0;
+  rdcstr description;
+};
+
+static rdcarray<ChildProcessInfo> EnumerateLiveChildProcesses(uint32_t parentPID)
+{
+  rdcarray<ChildProcessInfo> ret;
+
+  HANDLE hProcessSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+
+  if(hProcessSnap == INVALID_HANDLE_VALUE)
+    return ret;
+
+  PROCESSENTRY32W pe32;
+  RDCEraseEl(pe32);
+  pe32.dwSize = sizeof(pe32);
+
+  if(Process32FirstW(hProcessSnap, &pe32))
+  {
+    do
+    {
+      if(pe32.th32ParentProcessID != parentPID)
+        continue;
+
+      bool alive = true;
+      HANDLE hChild = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, pe32.th32ProcessID);
+
+      if(hChild)
+      {
+        DWORD exitCode = 0;
+        if(GetExitCodeProcess(hChild, &exitCode))
+          alive = (exitCode == STILL_ACTIVE);
+        CloseHandle(hChild);
+      }
+
+      if(!alive)
+        continue;
+
+      ChildProcessInfo child;
+      child.pid = pe32.th32ProcessID;
+      child.description =
+          StringFormat::Fmt("%s (%u)", StringFormat::Wide2UTF8(pe32.szExeFile).c_str(), child.pid);
+      ret.push_back(child);
+    } while(Process32NextW(hProcessSnap, &pe32));
+  }
+
+  CloseHandle(hProcessSnap);
+
+  return ret;
+}
+
+static uint32_t FindCandidateChildProcess(uint32_t parentPID, rdcstr *description)
+{
+  rdcarray<ChildProcessInfo> children = EnumerateLiveChildProcesses(parentPID);
+
+  uint32_t bestPID = 0;
+  rdcstr bestDescription;
+
+  for(const ChildProcessInfo &child : children)
+  {
+    if(child.pid >= bestPID)
+    {
+      bestPID = child.pid;
+      bestDescription = child.description;
+    }
+  }
+
+  if(description)
+    *description = bestDescription;
+
+  return bestPID;
+}
+
+static rdcstr DescribeLaunchProcessExit(HANDLE hProcess)
+{
+  if(hProcess == NULL)
+    return "";
+
+  DWORD exitCode = STILL_ACTIVE;
+
+  if(!GetExitCodeProcess(hProcess, &exitCode) || exitCode == STILL_ACTIVE)
+    return "";
+
+  rdcstr ret = StringFormat::Fmt("\n\nThe launched process exited with code 0x%08x", exitCode);
+
+  switch(exitCode)
+  {
+    case 0xC0000135:
+      ret += " (STATUS_DLL_NOT_FOUND: a dependent DLL could not be found during process startup)";
+      break;
+    case 0xC0000139:
+      ret += " (STATUS_ENTRYPOINT_NOT_FOUND: a dependent DLL version does not match what the executable expects)";
+      break;
+    case 0xC000007B:
+      ret += " (STATUS_INVALID_IMAGE_FORMAT: a DLL has the wrong architecture or is corrupt)";
+      break;
+    case 0xC0000142:
+      ret += " (STATUS_DLL_INIT_FAILED: a DLL failed during process initialisation)";
+      break;
+    case 0xC0000409:
+      ret += " (STATUS_STACK_BUFFER_OVERRUN / fast-fail: the target aborted itself very early)";
+      break;
+    case 0xC0000005:
+      ret += " (STATUS_ACCESS_VIOLATION: the target likely crashed during startup)";
+      break;
+    default: break;
+  }
+
+  ret += ".";
+  return ret;
+}
+
+static rdcstr DescribeChildProcesses(uint32_t parentPID)
+{
+  rdcarray<ChildProcessInfo> children = EnumerateLiveChildProcesses(parentPID);
+
+  if(children.empty())
+    return "";
+
+  rdcstr ret = "\n\nThe launched process spawned child process";
+  ret += children.size() > 1 ? "es that are still running: " : " that is still running: ";
+
+  for(size_t i = 0; i < children.size(); i++)
+  {
+    if(i > 0)
+      ret += i + 1 == children.size() ? " and " : ", ";
+
+    ret += children[i].description;
+  }
+
+  ret += ". This target may use a launcher; try enabling child process capture or inject into "
+         "the final child process directly.";
+  return ret;
+}
+
 static uintptr_t WaitForRemoteDLL(HANDLE hProcess, DWORD pid, const rdcstr &libName,
                                   uint32_t attempts, uint32_t delayMilliseconds)
 {
@@ -1665,6 +1802,52 @@ static rdcpair<RDResult, uint32_t> LateAttachIntoRunningProcess(
   return result;
 }
 
+static rdcpair<RDResult, uint32_t> FollowLauncherChildProcess(
+    uint32_t parentPID, const rdcstr &capturefile, const CaptureOptions &opts,
+    const rdcpair<RDResult, uint32_t> &initialResult, bool *attempted)
+{
+  if(attempted)
+    *attempted = false;
+
+  const DWORD retryDelays[] = {0, 25, 50, 100, 200, 400, 800, 1200};
+  rdcpair<RDResult, uint32_t> result = initialResult;
+
+  for(size_t attempt = 0; attempt < ARRAY_COUNT(retryDelays); attempt++)
+  {
+    if(retryDelays[attempt] > 0)
+      Sleep(retryDelays[attempt]);
+
+    rdcstr childDescription;
+    uint32_t childPID = FindCandidateChildProcess(parentPID, &childDescription);
+
+    if(childPID == 0)
+      continue;
+
+    if(attempted)
+      *attempted = true;
+
+    RDCDEBUG("Attempting injection into child process %u spawned by launcher %u (%s)", childPID,
+             parentPID, childDescription.c_str());
+
+    HANDLE hChild = OpenProcess(PROCESS_QUERY_INFORMATION | SYNCHRONIZE, FALSE, childPID);
+
+    if(hChild)
+    {
+      result = LateAttachIntoRunningProcess(hChild, childPID, capturefile, opts, result);
+      CloseHandle(hChild);
+    }
+    else
+    {
+      result = Process::InjectIntoProcess(childPID, {}, capturefile, opts, false);
+    }
+
+    if(InjectSucceeded(result))
+      return result;
+  }
+
+  return result;
+}
+
 static rdcstr JoinLaunchInjectAttempts(const rdcarray<rdcstr> &attempts)
 {
   rdcstr ret;
@@ -1876,9 +2059,26 @@ rdcpair<RDResult, uint32_t> Process::LaunchAndInjectIntoProcess(
     resumed = true;
   }
 
+  if(!InjectSucceeded(ret) && launchMode == LaunchInjectMode::Automatic &&
+     !IsProcessActive(pi.hProcess))
+  {
+    bool attemptedChildFollow = false;
+    rdcpair<RDResult, uint32_t> childRet =
+        FollowLauncherChildProcess(pi.dwProcessId, capturefile, opts, ret, &attemptedChildFollow);
+
+    if(attemptedChildFollow)
+    {
+      attemptedPaths.push_back("launcher child follow-up injection");
+      ret = childRet;
+    }
+  }
+
   if(!InjectSucceeded(ret))
   {
-    ret = MakeLaunchInjectFailure(launchMode, attemptedPaths, ret, "");
+    rdcstr extraNotes = DescribeLaunchProcessExit(pi.hProcess);
+    extraNotes += DescribeChildProcesses(pi.dwProcessId);
+
+    ret = MakeLaunchInjectFailure(launchMode, attemptedPaths, ret, extraNotes);
 
     CloseHandle(pi.hProcess);
     CloseHandle(pi.hThread);
