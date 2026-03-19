@@ -39,6 +39,7 @@
 #include <QToolTip>
 #include "Code/QRDUtils.h"
 #include "Code/Resources.h"
+#include <renderdoc_names.h>
 #include "Widgets/Extended/RDLabel.h"
 #include "Widgets/Extended/RDMenu.h"
 #include "Widgets/ReplayOptionsSelector.h"
@@ -263,8 +264,9 @@ MainWindow::MainWindow(ICaptureContext &ctx) : QMainWindow(NULL), ui(new Ui::Mai
               NULL, tr("vkconfig detected - possible incompatibility"),
               tr("Configuration from 'vkconfig' tool detected.\n\n"
                  "This program has caused problems in the past and it is \n"
-                 "strongly recommended that you disable it while using RenderDoc.\n\n"
-                 "If this program is not active check the path below for any leftover files:\n\n%1")
+                 "strongly recommended that you disable it while using %1.\n\n"
+                 "If this program is not active check the path below for any leftover files:\n\n%2")
+                  .arg(lit(RENDERDOC_PRODUCT_NAME))
                   .arg(vkconfigcheck.absoluteFilePath()));
 
           qInfo() << "vkconfig detected and warned";
@@ -718,9 +720,11 @@ void MainWindow::OnCaptureTrigger(const QString &exe, const QString &workingDir,
   LambdaThread *th = new LambdaThread([this, exe, workingDir, cmdLine, env, opts, callback]() {
     if(isUnshareableDeviceInUse())
     {
-      RDDialog::warning(this, tr("RenderDoc is already capturing an app on this device"),
-                        tr("A running app on this device is already being captured with RenderDoc. "
-                           "First please close the app then try to launch again."),
+      RDDialog::warning(this, tr("%1 is already capturing an app on this device")
+                                  .arg(lit(RENDERDOC_PRODUCT_NAME)),
+                        tr("A running app on this device is already being captured with %1. "
+                           "First please close the app then try to launch again.")
+                            .arg(lit(RENDERDOC_PRODUCT_NAME)),
                         QMessageBox::Ok);
       return;
     }
@@ -789,12 +793,60 @@ void MainWindow::OnInjectTrigger(uint32_t PID, const rdcarray<EnvironmentModific
 
     ExecuteResult ret = RENDERDOC_InjectIntoProcess(PID, env, capturefile, opts, false);
 
-    GUIInvoke::call(this, [this, PID, ret, callback]() {
+    GUIInvoke::call(this, [this, PID, env, name, opts, ret, callback]() {
       if(ret.result.code != ResultCode::Succeeded)
       {
+        QString errorText = ret.result.Message();
+
+#if defined(Q_OS_WIN32)
+        if(!IsRunningAsAdmin() &&
+           (errorText.contains(lit("Access is denied"), Qt::CaseInsensitive) ||
+            errorText.contains(lit("CreateRemoteThread failed"), Qt::CaseInsensitive) ||
+            errorText.contains(lit("OpenProcess failed"), Qt::CaseInsensitive)))
+        {
+          QStringList restartParams;
+          QString restartAction;
+
+          if(env.empty())
+          {
+            restartParams << lit("--inject-pid") << QString::number(PID) << lit("--inject-name")
+                          << name << lit("--inject-opts")
+                          << QString::fromUtf8(opts.EncodeAsString().c_str());
+            restartAction = tr("restart %1 as administrator and retry the inject automatically")
+                                .arg(lit(QRENDERDOC_PRODUCT_NAME));
+          }
+          else
+          {
+            restartParams << lit("--injectui");
+            restartAction = tr("restart %1 as administrator and reopen the inject dialog")
+                                .arg(lit(QRENDERDOC_PRODUCT_NAME));
+          }
+
+          QMessageBox::StandardButton res =
+              RDDialog::question(this, tr("Restart as administrator?"),
+                                 tr("Injecting into process %1 failed.\n\n%2\n\nThis looks like a "
+                                    "permission problem. Do you want to %3?")
+                                     .arg(PID)
+                                     .arg(errorText)
+                                     .arg(restartAction),
+                                 RDDialog::YesNoCancel);
+
+          if(res == QMessageBox::Yes)
+          {
+            if(RunProcessAsAdmin(qApp->applicationFilePath(), restartParams))
+            {
+              m_Ctx.Config().Save();
+              m_Ctx.Config().Close();
+              close();
+              return;
+            }
+          }
+        }
+#endif
+
         RDDialog::critical(
             this, tr("Error injecting into process"),
-            tr("Error injecting into process %1 for capture.\n\n%2").arg(PID).arg(ret.result.Message()));
+            tr("Error injecting into process %1 for capture.\n\n%2").arg(PID).arg(errorText));
         return;
       }
 
@@ -1212,7 +1264,7 @@ void MainWindow::SetTitle(const QString &filename)
   if(m_Ctx.Replay().CurrentRemote().IsValid())
     prefix += tr("Remote: %1 - ").arg(m_Ctx.Replay().CurrentRemote().Name());
 
-  QString text = prefix + lit("RenderDoc ");
+  QString text = prefix + lit(RENDERDOC_PRODUCT_NAME " ");
 
   if(RENDERDOC_STABLE_BUILD)
     text += lit(FULL_VERSION_STRING);
@@ -1252,13 +1304,14 @@ bool MainWindow::HandleMismatchedVersions()
 #else
     QMessageBox::StandardButton res = RDDialog::critical(
         this, tr("Mismatched versions"),
-        tr("RenderDoc has detected mismatched versions between its internal module and UI.\n"
+        tr("%1 has detected mismatched versions between its internal module and UI.\n"
            "This is likely caused by a buggy update in the past which partially updated your "
            "install."
            "Likely because a program was running with renderdoc while the update happened.\n"
-           "You should reinstall RenderDoc immediately as this configuration is almost guaranteed "
-           "to crash.\n\n"
-           "Would you like to open the downloads page to reinstall?"),
+           "You should reinstall %1 immediately as this configuration is almost guaranteed to "
+           "crash.\n\n"
+           "Would you like to open the downloads page to reinstall?")
+            .arg(lit(RENDERDOC_PRODUCT_NAME)),
         QMessageBox::Yes | QMessageBox::No);
 
     if(res == QMessageBox::Yes)
@@ -2084,8 +2137,8 @@ void MainWindow::setRemoteHost(int hostIdx)
               RDDialog::critical(
                   this, tr("Unsupported Device Android Version"),
                   tr("This device is older than Android 6.0, the minimum required version for "
-                     "RenderDoc.\n\nThis may break or cause unknown problems - use at your own "
-                     "risk."));
+                     "%1.\n\nThis may break or cause unknown problems - use at your own risk.")
+                      .arg(lit(RENDERDOC_PRODUCT_NAME)));
             }
 
             m_Ctx.Config().UnsupportedAndroid_LastUpdate = today;
@@ -2094,8 +2147,9 @@ void MainWindow::setRemoteHost(int hostIdx)
           {
             RDDialog::critical(
                 this, tr("Unsupported Device"),
-                tr("This device is not able to support RenderDoc. Please consult the documentation "
-                   "for this type of device to see what the problem may be."));
+                tr("This device is not able to support %1. Please consult the documentation "
+                   "for this type of device to see what the problem may be.")
+                    .arg(lit(RENDERDOC_PRODUCT_NAME)));
           }
         });
       }
@@ -3085,7 +3139,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
   if(RENDERDOC_IsGlobalHookActive())
   {
     RDDialog::critical(this, tr("Global hook active"),
-                       tr("Cannot close RenderDoc while global hook is active."));
+                       tr("Cannot close %1 while global hook is active.")
+                           .arg(lit(RENDERDOC_PRODUCT_NAME)));
     event->ignore();
     return;
   }
@@ -3291,9 +3346,10 @@ void MainWindow::showLaunchError(ResultDetails result)
     case ResultCode::AndroidGrantPermissionsFailed:
       message =
           tr("%1.\n\n"
-             "Please manually allow the RenderDocCmd program storage permissions on your device "
+             "Please manually allow the %2 program storage permissions on your device "
              "to ensure correct functionality.")
-              .arg(result.Message());
+              .arg(result.Message())
+              .arg(lit(RENDERDOC_CMD_BASENAME));
       break;
     case ResultCode::AndroidABINotFound:
       message = tr("%1.\n\nPlease check device connection and result.").arg(result.Message());
@@ -3315,11 +3371,16 @@ void MainWindow::showLaunchError(ResultDetails result)
           );
       break;
     default:
-      message = tr("Error encountered launching RenderDoc remote server: %1.").arg(result.Message());
+      message =
+          tr("Error encountered launching %1 remote server: %2.")
+              .arg(lit(RENDERDOC_PRODUCT_NAME))
+              .arg(result.Message());
       break;
   }
   GUIInvoke::call(this, [this, message]() {
-    RDDialog::warning(this, tr("Problems launching RenderDoc remote server"), message);
+    RDDialog::warning(this, tr("Problems launching %1 remote server")
+                                .arg(lit(RENDERDOC_PRODUCT_NAME)),
+                      message);
   });
 }
 

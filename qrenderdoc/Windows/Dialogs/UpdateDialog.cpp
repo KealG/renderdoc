@@ -33,6 +33,7 @@
 #include <QNetworkReply>
 #include <QString>
 #include "Code/QRDUtils.h"
+#include <renderdoc_names.h>
 #include "ui_UpdateDialog.h"
 #include "version.h"
 
@@ -125,10 +126,11 @@ void UpdateDialog::on_close_clicked()
 void UpdateDialog::on_update_clicked()
 {
   QMessageBox::StandardButton res =
-      RDDialog::question(this, tr("RenderDoc Update"),
-                         tr("This will close RenderDoc immediately - if you have any "
+      RDDialog::question(this, tr("%1 Update").arg(lit(RENDERDOC_PRODUCT_NAME)),
+                         tr("This will close %1 immediately - if you have any "
                             "unsaved work, save it first!\n"
-                            "Continue?"),
+                            "Continue?")
+                             .arg(lit(RENDERDOC_PRODUCT_NAME)),
                          QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
 
   if(res == QMessageBox::Yes)
@@ -168,8 +170,9 @@ void UpdateDialog::on_update_clicked()
     if(running > 0)
     {
       RDDialog::critical(
-          this, tr("RenderDoc in use"),
-          tr("RenderDoc is currently capturing, cannot update until the program%1 closed:\n\n")
+          this, tr("%1 in use").arg(lit(RENDERDOC_PRODUCT_NAME)),
+          tr("%1 is currently capturing, cannot update until the program%2 closed:\n\n")
+                  .arg(lit(RENDERDOC_PRODUCT_NAME))
                   .arg(running > 1 ? lit("s are") : lit(" is")) +
               runningPrograms);
       return;
@@ -229,8 +232,8 @@ void UpdateDialog::on_update_clicked()
 
       QDir dir(QDir::tempPath());
 
-      dir.mkdir(lit("RenderDocUpdate"));
-      dir.cd(lit("RenderDocUpdate"));
+      dir.mkdir(lit(RENDERDOC_UPDATE_DIRECTORY));
+      dir.cd(lit(RENDERDOC_UPDATE_DIRECTORY));
 
       QString path = dir.absoluteFilePath(lit("update.zip"));
 
@@ -255,8 +258,8 @@ void UpdateDialog::on_update_clicked()
 
       bool success = true;
 
-      QString dll = lit("renderdoc.dll");
-      QString cmd = lit("renderdoccmd.exe");
+      QString dll = lit(RENDERDOC_CORE_DLL);
+      QString cmd = lit(RENDERDOC_CMD_EXE);
 
       QFile::remove(dir.absoluteFilePath(dll));
       QFile::remove(dir.absoluteFilePath(cmd));

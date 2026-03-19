@@ -242,9 +242,15 @@ CaptureContext::~CaptureContext()
 }
 
 void CaptureContext::Begin(QString paramFilename, QString remoteHost, uint32_t remoteIdent,
-                           bool temp, QString scriptFilename)
+                           bool temp, QString scriptFilename, bool openInjectDialog)
 {
   m_MainWindow->show();
+
+  if(openInjectDialog)
+  {
+    QMetaObject::invokeMethod(m_MainWindow, "on_action_Inject_into_Process_triggered",
+                              Qt::QueuedConnection);
+  }
 
   if(remoteIdent != 0)
   {

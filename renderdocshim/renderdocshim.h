@@ -22,6 +22,8 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
+#include "../renderdoc/api/replay/renderdoc_names.h"
+
 struct ShimData
 {
   wchar_t pathmatchstring[2048];
@@ -33,9 +35,9 @@ struct ShimData
 };
 
 #ifdef WIN64
-#define GLOBAL_HOOK_DATA_NAME "RenderDocGlobalHookData64"
-#define SHIM_DLL_NAME "renderdocshim64.dll"
+#define GLOBAL_HOOK_DATA_NAME RENDERDOC_GLOBAL_HOOK_DATA_64
+#define SHIM_DLL_NAME RENDERDOC_SHIM_64_DLL
 #else
-#define GLOBAL_HOOK_DATA_NAME "RenderDocGlobalHookData32"
-#define SHIM_DLL_NAME "renderdocshim32.dll"
+#define GLOBAL_HOOK_DATA_NAME RENDERDOC_GLOBAL_HOOK_DATA_32
+#define SHIM_DLL_NAME RENDERDOC_SHIM_32_DLL
 #endif

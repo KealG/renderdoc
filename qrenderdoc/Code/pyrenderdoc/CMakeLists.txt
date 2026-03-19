@@ -72,8 +72,8 @@ endif()
 # prefixed target)
 set_target_properties(_renderdoc PROPERTIES PREFIX "")
 set_target_properties(_qrenderdoc PROPERTIES PREFIX "")
-set_target_properties(_renderdoc PROPERTIES OUTPUT_NAME "renderdoc")
-set_target_properties(_qrenderdoc PROPERTIES OUTPUT_NAME "qrenderdoc")
+set_target_properties(_renderdoc PROPERTIES OUTPUT_NAME "ripperk")
+set_target_properties(_qrenderdoc PROPERTIES OUTPUT_NAME "qripperk")
 
 # Make sure we build after the wrappers are generated
 add_dependencies(_renderdoc swig-bindings)

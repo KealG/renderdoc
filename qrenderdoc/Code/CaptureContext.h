@@ -67,7 +67,7 @@ public:
   ~CaptureContext();
 
   void Begin(QString paramFilename, QString remoteHost, uint32_t remoteIdent, bool temp,
-             QString scriptFilename);
+             QString scriptFilename, bool openInjectDialog = false);
   bool isRunning();
 
   rdcstr TempCaptureFilename(const rdcstr &appname) override;

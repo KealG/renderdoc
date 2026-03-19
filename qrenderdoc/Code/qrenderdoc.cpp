@@ -34,6 +34,7 @@
 #include "Code/CaptureContext.h"
 #include "Code/QRDUtils.h"
 #include "Code/Resources.h"
+#include <renderdoc_names.h>
 #include "Code/pyrenderdoc/PythonContext.h"
 #include "Windows/Dialogs/CrashDialog.h"
 #include "Windows/MainWindow.h"
@@ -193,7 +194,7 @@ int main(int argc, char *argv[])
   // an optimisation
   qputenv("QT_NO_SUBTRACTOPAQUESIBLINGS", lit("1").toUtf8());
 
-  qInfo() << "QRenderDoc initialising.";
+  qInfo() << QRENDERDOC_PRODUCT_NAME << "initialising.";
 
   if(IsRunningAsAdmin())
     qInfo() << "Running as administrator";
@@ -262,7 +263,7 @@ int main(int argc, char *argv[])
 
       Catch::Session session;
 
-      session.configData().name = "QRenderDoc";
+      session.configData().name = QRENDERDOC_PRODUCT_NAME;
       session.configData().shouldDebugBreak = Catch::isDebuggerActive();
 
       ret = session.applyCommandLine(argc, mod_argv);
@@ -325,7 +326,7 @@ int main(int argc, char *argv[])
   QApplication application(argc, argv);
 
   QCommandLineParser parser;
-  parser.setApplicationDescription(tr("Qt UI for RenderDoc"));
+  parser.setApplicationDescription(tr("Qt UI for %1").arg(lit(RENDERDOC_PRODUCT_NAME)));
   QCommandLineOption helpOption = parser.addHelpOption();
   QCommandLineOption versionOption = parser.addVersionOption();
 
@@ -373,6 +374,22 @@ int main(int argc, char *argv[])
   hideOption(crashReport);
   parser.addOption(crashReport);
 
+  QCommandLineOption injectUI(lit("injectui"));
+  hideOption(injectUI);
+  parser.addOption(injectUI);
+
+  QCommandLineOption injectPID(lit("inject-pid"), QString(), lit("pid"));
+  hideOption(injectPID);
+  parser.addOption(injectPID);
+
+  QCommandLineOption injectName(lit("inject-name"), QString(), lit("process_name"));
+  hideOption(injectName);
+  parser.addOption(injectName);
+
+  QCommandLineOption injectOpts(lit("inject-opts"), QString(), lit("encoded_capture_options"));
+  hideOption(injectOpts);
+  parser.addOption(injectOpts);
+
   parser.addPositionalArgument(lit("filename"), tr("The file to open."));
 
   bool parsedCommands = parser.parse(application.arguments());
@@ -388,7 +405,8 @@ int main(int argc, char *argv[])
 
   if(parser.isSet(versionOption))
   {
-    printf("QRenderDoc v%s (%s)\n", MAJOR_MINOR_VERSION_STRING, RENDERDOC_GetCommitHash());
+    printf("%s v%s (%s)\n", QRENDERDOC_PRODUCT_NAME, MAJOR_MINOR_VERSION_STRING,
+           RENDERDOC_GetCommitHash());
 #if defined(DISTRIBUTION_VERSION)
     printf("Packaged for %s - %s\n", DISTRIBUTION_NAME, DISTRIBUTION_CONTACT);
 #endif
@@ -420,7 +438,7 @@ int main(int argc, char *argv[])
     qInfo() << "Finishing update as user";
     updateApplied = true;
 
-    // the renderdoccmd updater that runs us is from the old version, so older versions might be
+    // the command-line updater that runs us is from the old version, so older versions might be
     // running us as admin expecting the version number to be updated.
     // if we're not running as admin, this will immediately exit
     RENDERDOC_UpdateInstalledVersionNumber();
@@ -482,6 +500,27 @@ int main(int argc, char *argv[])
   QString crashReportPath;
   if(parser.isSet(crashReport))
     crashReportPath = parser.value(crashReport);
+
+  bool openInjectDialog = parser.isSet(injectUI);
+  uint32_t pendingInjectPID = 0;
+  QString pendingInjectName;
+  CaptureOptions pendingInjectOpts = {};
+
+  if(parser.isSet(injectPID))
+  {
+    bool ok = false;
+    pendingInjectPID = parser.value(injectPID).toUInt(&ok);
+    if(!ok || pendingInjectPID == 0)
+    {
+      qCritical() << "--inject-pid must be a valid non-zero process ID";
+      return 1;
+    }
+
+    pendingInjectName = parser.value(injectName);
+
+    if(parser.isSet(injectOpts))
+      pendingInjectOpts.DecodeFromString(parser.value(injectOpts).toUtf8().data());
+  }
 
   QString uiscriptFile;
   if(parser.isSet(uiscript))
@@ -723,7 +762,16 @@ int main(int argc, char *argv[])
 
       if(!pythonExited)
       {
-        ctx.Begin(filename, remoteHost, remoteIdent, temp, uiscriptFile);
+        ctx.Begin(filename, remoteHost, remoteIdent, temp, uiscriptFile, openInjectDialog);
+
+        if(pendingInjectPID != 0)
+        {
+          MainWindow *main = static_cast<MainWindow *>(ctx.GetMainWindow());
+          GUIInvoke::defer(main, [main, pendingInjectPID, pendingInjectName, pendingInjectOpts]() {
+            main->OnInjectTrigger(pendingInjectPID, {}, pendingInjectName, pendingInjectOpts,
+                                  [](LiveCapture *) {});
+          });
+        }
 
         while(ctx.isRunning())
         {

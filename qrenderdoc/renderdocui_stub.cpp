@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  ******************************************************************************/
 
+#include "../renderdoc/api/replay/renderdoc_names.h"
 #include <windows.h>
 
 int WINAPI wWinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine,
@@ -57,7 +58,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInst, _In_opt_ HINSTANCE hPrevInstance, _In_
     w++;
   }
 
-  wcscat_s(curFile, 511, L"qrenderdoc.exe");
+  wcscat_s(curFile, 511, QRENDERDOC_EXE_W);
 
   wcscpy_s(paramsAlloc, len, curFile);
 

@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include "../api/replay/renderdoc_names.h"
+
 /////////////////////////////////////////////////
 // Option macros
 // From: http://www.codersnotes.com/notes/easy-preprocessor-defines/
