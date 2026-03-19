@@ -1602,6 +1602,59 @@ void RestoreRegistry(const GlobalHookData &hookdata)
 
 static GlobalHookData *globalHook = NULL;
 
+static void AddGlobalHookCandidate(rdcarray<rdcstr> &candidates, const rdcstr &path)
+{
+  if(!path.empty() && !candidates.contains(path))
+    candidates.push_back(path);
+}
+
+static void AddGlobalHookCandidateFile(rdcarray<rdcstr> &candidates, const rdcstr &dir,
+                                       const char *filename)
+{
+  if(!dir.empty())
+    AddGlobalHookCandidate(candidates, dir + "\\" + filename);
+}
+
+static rdcstr ReplaceGlobalHookDir(const rdcstr &path, const char *find, const char *replace)
+{
+  int idx = path.find(find);
+
+  if(idx < 0)
+    return "";
+
+  rdcstr ret = path;
+  ret.erase(idx, ~0U);
+  ret += replace;
+  return ret;
+}
+
+static rdcstr ResolveGlobalHookPath(const rdcarray<rdcstr> &candidates)
+{
+  for(size_t i = 0; i < candidates.size(); i++)
+  {
+    if(FileIO::exists(candidates[i]))
+      return candidates[i];
+  }
+
+  return "";
+}
+
+static rdcstr DescribeGlobalHookCandidates(const rdcarray<rdcstr> &candidates)
+{
+  rdcstr ret;
+
+  for(size_t i = 0; i < candidates.size(); i++)
+  {
+    if(i > 0)
+      ret += "\n";
+
+    ret += " - ";
+    ret += candidates[i];
+  }
+
+  return ret;
+}
+
 // a thread we run in the background just to keep the pipes open and wait until we're ready to stop
 // the global hook.
 static void GlobalHookThread()
@@ -1647,53 +1700,117 @@ RDResult Process::StartGlobalHook(const rdcstr &pathmatch, const rdcstr &capture
 
   renderdocPath = get_dirname(renderdocPath);
 
-  // the native command helper is always next to the DLL. Wow32 will be somewhere else
-  rdcstr cmdpathNative = renderdocPath + "\\" RENDERDOC_CMD_EXE;
-  rdcstr cmdpathWow32;
+  rdcarray<rdcstr> nativeCmdCandidates;
+  rdcarray<rdcstr> wow32CmdCandidates;
+  rdcarray<rdcstr> nativeShimCandidates;
+  rdcarray<rdcstr> wow32ShimCandidates;
 
-  rdcstr shimpathNative = renderdocPath;
-  rdcstr shimpathWow32;
+  AddGlobalHookCandidateFile(nativeCmdCandidates, renderdocPath, RENDERDOC_CMD_EXE);
 
 #if ENABLED(RDOC_X64)
+  AddGlobalHookCandidateFile(nativeShimCandidates, renderdocPath, RENDERDOC_SHIM_64_DLL);
 
-  // native shim is the 64-bit shim beside the core DLL
-  shimpathNative = renderdocPath + "\\" RENDERDOC_SHIM_64_DLL;
+  rdcstr x64ReleaseDir =
+      ReplaceGlobalHookDir(renderdocPath, "\\x64\\Development", "\\x64\\Release");
+  rdcstr x64DevelopmentDir =
+      ReplaceGlobalHookDir(renderdocPath, "\\x64\\Release", "\\x64\\Development");
 
-  // if it looks like we're in the development environment, look for the alternate bitness in the
-  // corresponding folder
-  int devLocation = renderdocPath.find("\\x64\\Development");
-  if(devLocation >= 0)
-  {
-    renderdocPath.erase(devLocation, ~0U);
+  AddGlobalHookCandidateFile(nativeCmdCandidates, x64ReleaseDir, RENDERDOC_CMD_EXE);
+  AddGlobalHookCandidateFile(nativeCmdCandidates, x64DevelopmentDir, RENDERDOC_CMD_EXE);
+  AddGlobalHookCandidateFile(nativeShimCandidates, x64ReleaseDir, RENDERDOC_SHIM_64_DLL);
+  AddGlobalHookCandidateFile(nativeShimCandidates, x64DevelopmentDir, RENDERDOC_SHIM_64_DLL);
 
-    shimpathWow32 = renderdocPath + "\\Win32\\Development\\" RENDERDOC_SHIM_32_DLL;
-    cmdpathWow32 = renderdocPath + "\\Win32\\Development\\" RENDERDOC_CMD_EXE;
-  }
-  else
-  {
-    devLocation = renderdocPath.find("\\x64\\Release");
+  AddGlobalHookCandidateFile(
+      wow32CmdCandidates,
+      ReplaceGlobalHookDir(renderdocPath, "\\x64\\Development", "\\Win32\\Development"),
+      RENDERDOC_CMD_EXE);
+  AddGlobalHookCandidateFile(
+      wow32CmdCandidates,
+      ReplaceGlobalHookDir(renderdocPath, "\\x64\\Development", "\\Win32\\Release"),
+      RENDERDOC_CMD_EXE);
+  AddGlobalHookCandidateFile(
+      wow32CmdCandidates, ReplaceGlobalHookDir(renderdocPath, "\\x64\\Release", "\\Win32\\Release"),
+      RENDERDOC_CMD_EXE);
+  AddGlobalHookCandidateFile(
+      wow32CmdCandidates,
+      ReplaceGlobalHookDir(renderdocPath, "\\x64\\Release", "\\Win32\\Development"),
+      RENDERDOC_CMD_EXE);
 
-    if(devLocation >= 0)
-    {
-      renderdocPath.erase(devLocation, ~0U);
+  AddGlobalHookCandidateFile(
+      wow32ShimCandidates,
+      ReplaceGlobalHookDir(renderdocPath, "\\x64\\Development", "\\Win32\\Development"),
+      RENDERDOC_SHIM_32_DLL);
+  AddGlobalHookCandidateFile(
+      wow32ShimCandidates,
+      ReplaceGlobalHookDir(renderdocPath, "\\x64\\Development", "\\Win32\\Release"),
+      RENDERDOC_SHIM_32_DLL);
+  AddGlobalHookCandidateFile(
+      wow32ShimCandidates,
+      ReplaceGlobalHookDir(renderdocPath, "\\x64\\Release", "\\Win32\\Release"),
+      RENDERDOC_SHIM_32_DLL);
+  AddGlobalHookCandidateFile(
+      wow32ShimCandidates,
+      ReplaceGlobalHookDir(renderdocPath, "\\x64\\Release", "\\Win32\\Development"),
+      RENDERDOC_SHIM_32_DLL);
 
-      shimpathWow32 = renderdocPath + "\\Win32\\Release\\" RENDERDOC_SHIM_32_DLL;
-      cmdpathWow32 = renderdocPath + "\\Win32\\Release\\" RENDERDOC_CMD_EXE;
-    }
-  }
-
-  // if we're not in the dev environment, assume it's under a x86\ subfolder
-  if(devLocation < 0)
-  {
-    shimpathWow32 = renderdocPath + "\\x86\\" RENDERDOC_SHIM_32_DLL;
-    cmdpathWow32 = renderdocPath + "\\x86\\" RENDERDOC_CMD_EXE;
-  }
+  AddGlobalHookCandidateFile(wow32CmdCandidates, renderdocPath + "\\x86", RENDERDOC_CMD_EXE);
+  AddGlobalHookCandidateFile(wow32ShimCandidates, renderdocPath + "\\x86", RENDERDOC_SHIM_32_DLL);
 
 #else
 
-  // nothing fancy to do here for 32-bit, just point the shim next to our dll.
-  shimpathNative = renderdocPath + "\\" RENDERDOC_SHIM_32_DLL;
+  AddGlobalHookCandidateFile(nativeShimCandidates, renderdocPath, RENDERDOC_SHIM_32_DLL);
 
+  rdcstr win32ReleaseDir =
+      ReplaceGlobalHookDir(renderdocPath, "\\Win32\\Development", "\\Win32\\Release");
+  rdcstr win32DevelopmentDir =
+      ReplaceGlobalHookDir(renderdocPath, "\\Win32\\Release", "\\Win32\\Development");
+
+  AddGlobalHookCandidateFile(nativeCmdCandidates, win32ReleaseDir, RENDERDOC_CMD_EXE);
+  AddGlobalHookCandidateFile(nativeCmdCandidates, win32DevelopmentDir, RENDERDOC_CMD_EXE);
+  AddGlobalHookCandidateFile(nativeShimCandidates, win32ReleaseDir, RENDERDOC_SHIM_32_DLL);
+  AddGlobalHookCandidateFile(nativeShimCandidates, win32DevelopmentDir, RENDERDOC_SHIM_32_DLL);
+
+#endif
+
+  rdcstr cmdpathNative = ResolveGlobalHookPath(nativeCmdCandidates);
+  rdcstr shimpathNative = ResolveGlobalHookPath(nativeShimCandidates);
+  rdcstr cmdpathWow32 = ResolveGlobalHookPath(wow32CmdCandidates);
+  rdcstr shimpathWow32 = ResolveGlobalHookPath(wow32ShimCandidates);
+
+  if(cmdpathNative.empty())
+  {
+    RETURN_ERROR_RESULT(ResultCode::FileIOFailed,
+                        "Couldn't find " RENDERDOC_CMD_EXE " needed to start the global hook.\n"
+                        "Looked in:\n%s",
+                        DescribeGlobalHookCandidates(nativeCmdCandidates).c_str());
+  }
+
+  if(shimpathNative.empty())
+  {
+    RETURN_ERROR_RESULT(ResultCode::FileIOFailed,
+                        "Couldn't find the native shim DLL needed to start the global hook.\n"
+                        "Looked in:\n%s",
+                        DescribeGlobalHookCandidates(nativeShimCandidates).c_str());
+  }
+
+#if ENABLED(RDOC_X64)
+  if(cmdpathWow32.empty())
+  {
+    RETURN_ERROR_RESULT(ResultCode::FileIOFailed,
+                        "Couldn't find the 32-bit command helper needed to start the global "
+                        "hook on a 64-bit build.\n"
+                        "Looked in:\n%s",
+                        DescribeGlobalHookCandidates(wow32CmdCandidates).c_str());
+  }
+
+  if(shimpathWow32.empty())
+  {
+    RETURN_ERROR_RESULT(ResultCode::FileIOFailed,
+                        "Couldn't find the 32-bit shim DLL needed to start the global hook on a "
+                        "64-bit build.\n"
+                        "Looked in:\n%s",
+                        DescribeGlobalHookCandidates(wow32ShimCandidates).c_str());
+  }
 #endif
 
   GlobalHookData hookdata;
