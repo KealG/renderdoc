@@ -191,6 +191,7 @@ CaptureOptions::CaptureOptions()
   captureAllCmdLists = false;
   debugOutputMute = true;
   softMemoryLimit = 0;
+  useProxyLoaderMode = false;
 }
 
 #if ENABLED(ENABLE_UNIT_TESTS)
@@ -215,6 +216,7 @@ TEST_CASE("Check CaptureOptions de/serialise to string", "[serialise]")
       &opts.refAllResources,
       &opts.captureAllCmdLists,
       &opts.debugOutputMute,
+      &opts.useProxyLoaderMode,
   };
 
   for(uint32_t delay = 0; delay < 1000; delay++)

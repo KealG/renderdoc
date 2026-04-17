@@ -485,6 +485,10 @@ endif()
 
 add_subdirectory(renderdoc)
 
+if(WIN32)
+    add_subdirectory(renderdocproxy)
+endif()
+
 # these variables are handled within the CMakeLists.txt in qrenderdoc,
 # but we need to add it if either is enabled since the swig bindings
 # are handled in common

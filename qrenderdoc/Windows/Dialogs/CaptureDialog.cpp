@@ -217,6 +217,10 @@ CaptureDialog::CaptureDialog(ICaptureContext &ctx, OnCaptureMethod captureCallba
   m_CaptureCallback = captureCallback;
   m_InjectCallback = injectCallback;
 
+#if !defined(Q_OS_WIN32)
+  ui->UseProxyLoaderMode->setVisible(false);
+#endif
+
   SetSettings(CaptureSettings());
 
   UpdateGlobalHook();
@@ -250,6 +254,7 @@ void CaptureDialog::SetInjectMode(bool inject)
     ui->verticalLayout->invalidate();
 
     ui->globalGroup->setVisible(false);
+    ui->UseProxyLoaderMode->setVisible(false);
 
     fillProcessList();
 
@@ -265,6 +270,7 @@ void CaptureDialog::SetInjectMode(bool inject)
     ui->verticalLayout->invalidate();
 
     ui->globalGroup->setVisible(m_Ctx.Config().AllowGlobalHook);
+    ui->UseProxyLoaderMode->setVisible(true);
 
     ui->launch->setText(lit("Launch"));
     this->setWindowTitle(lit("Launch Application"));
@@ -930,6 +936,7 @@ void CaptureDialog::SetSettings(CaptureSettings settings)
   ui->VerifyBufferAccess->setChecked(settings.options.verifyBufferAccess);
   ui->AutoStart->setChecked(settings.autoStart);
   ui->SoftMemoryLimit->setValue(settings.options.softMemoryLimit);
+  ui->UseProxyLoaderMode->setChecked(settings.options.useProxyLoaderMode);
 
   // force flush this state
   on_CaptureCallstacks_toggled(ui->CaptureCallstacks->isChecked());
@@ -978,6 +985,7 @@ CaptureSettings CaptureDialog::Settings()
   ret.options.delayForDebugger = (uint32_t)ui->DelayForDebugger->value();
   ret.options.verifyBufferAccess = ui->VerifyBufferAccess->isChecked();
   ret.options.softMemoryLimit = (uint32_t)ui->SoftMemoryLimit->value();
+  ret.options.useProxyLoaderMode = ui->UseProxyLoaderMode->isChecked();
 
   if(ui->queueFrameCap->isChecked())
   {

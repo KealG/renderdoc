@@ -246,6 +246,24 @@ Default - 0 Megabytes
 :type: int
 )");
   uint32_t softMemoryLimit;
+
+  DOCUMENT(R"(Use the explicit Windows Proxy Loader Mode for launched Vulkan applications.
+
+This mode stages a temporary launch directory containing a `vulkan-1.dll` proxy that bootstraps
+`ripperk.dll` through a session manifest, instead of relying on the default remote-thread
+injection path.
+
+This mode is intended only for launched captures, not injecting into an already-running process.
+
+Default - disabled
+
+``True`` - launch through the Vulkan proxy loader mode.
+
+``False`` - use the normal launch and inject flow.
+
+:type: bool
+)");
+  bool useProxyLoaderMode;
 };
 
 DECLARE_REFLECTION_STRUCT(CaptureOptions);

@@ -520,6 +520,16 @@
        </widget>
       </item>
       <item>
+       <widget class="QCheckBox" name="UseProxyLoaderMode">
+        <property name="toolTip">
+         <string>Windows only. Launch through an explicit Vulkan proxy loader session that bootstraps ripperK via a session manifest instead of remote-thread injection.</string>
+        </property>
+        <property name="text">
+         <string>Use Proxy Loader Mode (Vulkan)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QCheckBox" name="VerifyBufferAccess">
         <property name="toolTip">
          <string>When enabled, verify some buffer access on OpenGL and D3D11. This initialises buffers with undefined contents on creation to 0xdddddddd instead of 0x0, and verifies that Map() bounds are not overrun.</string>

@@ -29,12 +29,306 @@
 #include <Psapi.h>
 #include <tchar.h>
 #include <tlhelp32.h>
+#include "api/replay/renderdoc_replay.h"
 #include "common/formatting.h"
 #include "core/core.h"
 #include "os/os_specific.h"
 #include "strings/string_utils.h"
 
 #include <string>
+
+static PROCESS_INFORMATION RunProcess(const rdcstr &app, const rdcstr &workingDir,
+                                      const rdcstr &cmdLine,
+                                      const rdcarray<EnvironmentModification> &env,
+                                      bool internal, HANDLE *hChildStdOutput,
+                                      HANDLE *hChildStdError);
+
+struct ProxyLaunchManifest
+{
+  uint32_t version = 1;
+  rdcstr targetAPI = "vulkan";
+  rdcstr coreDLLPath;
+  rdcstr workingDirectory;
+  rdcstr captureFileTemplate;
+  rdcstr injectFlags;
+  rdcstr createdByPID;
+  rdcstr sessionNonce;
+  rdcstr debugLogFile;
+  rdcstr originalExecutable;
+};
+
+static int ManifestHexValue(char c)
+{
+  if(c >= '0' && c <= '9')
+    return int(c - '0');
+  if(c >= 'a' && c <= 'f')
+    return 10 + int(c - 'a');
+  if(c >= 'A' && c <= 'F')
+    return 10 + int(c - 'A');
+
+  return -1;
+}
+
+static rdcstr ManifestHexEncode(const rdcstr &value)
+{
+  static const char hex[] = "0123456789abcdef";
+
+  rdcstr ret;
+  ret.reserve(value.size() * 2);
+
+  for(size_t i = 0; i < value.size(); i++)
+  {
+    byte b = byte(value[i]);
+    ret.push_back(hex[(b >> 4) & 0xf]);
+    ret.push_back(hex[b & 0xf]);
+  }
+
+  return ret;
+}
+
+static bool ManifestHexDecode(const rdcstr &value, rdcstr &decoded)
+{
+  if((value.size() % 2) != 0)
+    return false;
+
+  decoded.clear();
+  decoded.reserve(value.size() / 2);
+
+  for(size_t i = 0; i < value.size(); i += 2)
+  {
+    int hi = ManifestHexValue(value[i + 0]);
+    int lo = ManifestHexValue(value[i + 1]);
+
+    if(hi < 0 || lo < 0)
+      return false;
+
+    decoded.push_back(char((hi << 4) | lo));
+  }
+
+  return true;
+}
+
+static void AppendManifestLine(rdcstr &data, const char *key, const rdcstr &value)
+{
+  data += key;
+  data += "=";
+  data += ManifestHexEncode(value);
+  data += "\n";
+}
+
+static bool WriteProxyLaunchManifest(const rdcstr &path, const ProxyLaunchManifest &manifest)
+{
+  rdcstr data;
+
+  AppendManifestLine(data, "version", StringFormat::Fmt("%u", manifest.version));
+  AppendManifestLine(data, "target_api", manifest.targetAPI);
+  AppendManifestLine(data, "core_dll_path", manifest.coreDLLPath);
+  AppendManifestLine(data, "working_directory", manifest.workingDirectory);
+  AppendManifestLine(data, "capture_file_template", manifest.captureFileTemplate);
+  AppendManifestLine(data, "inject_flags", manifest.injectFlags);
+  AppendManifestLine(data, "created_by_pid", manifest.createdByPID);
+  AppendManifestLine(data, "session_nonce", manifest.sessionNonce);
+  AppendManifestLine(data, "debug_log_file", manifest.debugLogFile);
+  AppendManifestLine(data, "original_executable", manifest.originalExecutable);
+
+  FileIO::CreateParentDirectory(path);
+
+  FILE *f = FileIO::fopen(path, FileIO::WriteText);
+
+  if(f == NULL)
+    return false;
+
+  fwrite(data.data(), 1, data.size(), f);
+  fclose(f);
+  return true;
+}
+
+static bool ReadProxyLaunchManifest(const rdcstr &path, ProxyLaunchManifest &manifest)
+{
+  FILE *f = FileIO::fopen(path, FileIO::ReadText);
+
+  if(f == NULL)
+    return false;
+
+  fseek(f, 0, SEEK_END);
+  long sz = ftell(f);
+  fseek(f, 0, SEEK_SET);
+
+  if(sz < 0)
+  {
+    fclose(f);
+    return false;
+  }
+
+  rdcstr contents;
+  contents.resize((size_t)sz);
+
+  if(sz > 0)
+    fread(contents.data(), 1, (size_t)sz, f);
+
+  fclose(f);
+
+  rdcarray<rdcstr> lines;
+  split(contents, lines, '\n');
+
+  for(size_t i = 0; i < lines.size(); i++)
+  {
+    rdcstr line = lines[i].trimmed();
+
+    if(line.empty())
+      continue;
+
+    int equals = line.find('=');
+
+    if(equals <= 0)
+      continue;
+
+    rdcstr key = line.substr(0, equals);
+    rdcstr encoded = line.substr(equals + 1, ~0U);
+    rdcstr value;
+
+    if(!ManifestHexDecode(encoded, value))
+      return false;
+
+    if(key == "version")
+      manifest.version = RDCMAX(1, atoi(value.c_str()));
+    else if(key == "target_api")
+      manifest.targetAPI = value;
+    else if(key == "core_dll_path")
+      manifest.coreDLLPath = value;
+    else if(key == "working_directory")
+      manifest.workingDirectory = value;
+    else if(key == "capture_file_template")
+      manifest.captureFileTemplate = value;
+    else if(key == "inject_flags")
+      manifest.injectFlags = value;
+    else if(key == "created_by_pid")
+      manifest.createdByPID = value;
+    else if(key == "session_nonce")
+      manifest.sessionNonce = value;
+    else if(key == "debug_log_file")
+      manifest.debugLogFile = value;
+    else if(key == "original_executable")
+      manifest.originalExecutable = value;
+  }
+
+  return manifest.version >= 1 && manifest.targetAPI == "vulkan" && !manifest.coreDLLPath.empty();
+}
+
+static rdcstr ResolveExecutablePathForLaunch(const rdcstr &app)
+{
+  rdcstr appPath = app;
+  rdcstr basename = get_basename(appPath);
+  int dot = basename.find_last_of(".");
+
+  if(dot < 0 || strlower(basename.substr(dot + 1, ~0U)) != "exe")
+    appPath += ".exe";
+
+  if(FileIO::exists(appPath))
+    return FileIO::GetFullPathname(appPath);
+
+  return FileIO::FindFileInPath(appPath);
+}
+
+static bool GetExecutable64Bit(const rdcstr &app, bool &is64Bit)
+{
+  rdcstr resolved = ResolveExecutablePathForLaunch(app);
+
+  if(resolved.empty())
+    return false;
+
+  FILE *f = FileIO::fopen(resolved, FileIO::ReadBinary);
+
+  if(f == NULL)
+    return false;
+
+  IMAGE_DOS_HEADER dosHeader = {};
+  fread(&dosHeader, sizeof(dosHeader), 1, f);
+
+  if(dosHeader.e_magic != IMAGE_DOS_SIGNATURE)
+  {
+    fclose(f);
+    return false;
+  }
+
+  fseek(f, dosHeader.e_lfanew, SEEK_SET);
+
+  DWORD peSignature = 0;
+  fread(&peSignature, sizeof(peSignature), 1, f);
+
+  if(peSignature != IMAGE_NT_SIGNATURE)
+  {
+    fclose(f);
+    return false;
+  }
+
+  IMAGE_FILE_HEADER fileHeader = {};
+  fread(&fileHeader, sizeof(fileHeader), 1, f);
+  fclose(f);
+
+  is64Bit = (fileHeader.Machine == IMAGE_FILE_MACHINE_AMD64 ||
+             fileHeader.Machine == IMAGE_FILE_MACHINE_ARM64);
+  return true;
+}
+
+static uint32_t WaitForProxyTargetIdent(uint32_t pid, HANDLE hProcess, uint32_t timeoutMS)
+{
+  uint64_t start = Timing::GetTick();
+
+  for(;;)
+  {
+    uint32_t ident = 0;
+
+    while((ident = RENDERDOC_EnumerateRemoteTargets("localhost", ident)) != 0)
+    {
+      ITargetControl *control = RENDERDOC_CreateTargetControl("localhost", ident, "proxyloader", false);
+
+      if(control == NULL)
+        continue;
+
+      uint32_t controlPID = control->GetPID();
+      control->Shutdown();
+
+      if(controlPID == pid)
+        return ident;
+    }
+
+    if(WaitForSingleObject(hProcess, 0) == WAIT_OBJECT_0)
+      return 0;
+
+    if((Timing::GetTick() - start) * 1000 / Timing::GetTickFrequency() > timeoutMS)
+      return 0;
+
+    Sleep(100);
+  }
+}
+
+extern "C" __declspec(dllexport) uint32_t __cdecl RENDERDOC_PROXY_BOOTSTRAP_SYMBOL(
+    const wchar_t *manifestPath)
+{
+  if(manifestPath == NULL || manifestPath[0] == 0)
+    return 0;
+
+  ProxyLaunchManifest manifest;
+
+  if(!ReadProxyLaunchManifest(StringFormat::Wide2UTF8(manifestPath), manifest))
+    return 0;
+
+  if(!manifest.debugLogFile.empty())
+    RENDERDOC_SetDebugLogFile(manifest.debugLogFile);
+
+  if(!manifest.captureFileTemplate.empty())
+    RenderDoc::Inst().SetCaptureFileTemplate(manifest.captureFileTemplate);
+
+  if(!manifest.injectFlags.empty())
+  {
+    CaptureOptions opts;
+    opts.DecodeFromString(manifest.injectFlags);
+    RenderDoc::Inst().SetCaptureOptions(opts);
+  }
+
+  return RenderDoc::Inst().GetTargetControlIdent();
+}
 
 struct InjectDiagnostic
 {
@@ -134,6 +428,155 @@ static rdcstr DescribeInjectDiagnostic(const InjectDiagnostic &diag, uint32_t pi
   }
 
   return details;
+}
+
+static rdcpair<RDResult, uint32_t> LaunchWithProxyLoaderMode(
+    const rdcstr &app, const rdcstr &workingDir, const rdcstr &cmdLine,
+    const rdcarray<EnvironmentModification> &env, const rdcstr &capturefile,
+    const CaptureOptions &opts, bool waitForExit)
+{
+  bool target64Bit = false;
+
+  if(!GetExecutable64Bit(app, target64Bit))
+  {
+    RDResult result;
+    SET_ERROR_RESULT(result, ResultCode::FileIOFailed,
+                     "Couldn't inspect the executable bitness for proxy loader mode: %s",
+                     app.c_str());
+    return {result, 0};
+  }
+
+#if ENABLED(RDOC_X64)
+  if(!target64Bit)
+  {
+    RDResult result;
+    SET_ERROR_RESULT(result, ResultCode::IncompatibleProcess,
+                     "Proxy Loader Mode currently requires a matching 32-bit build of "
+                     RENDERDOC_PRODUCT_NAME " to launch 32-bit targets.");
+    return {result, 0};
+  }
+#else
+  if(target64Bit)
+  {
+    RDResult result;
+    SET_ERROR_RESULT(result, ResultCode::IncompatibleProcess,
+                     "Proxy Loader Mode currently requires a matching 64-bit build of "
+                     RENDERDOC_PRODUCT_NAME " to launch 64-bit targets.");
+    return {result, 0};
+  }
+#endif
+
+  rdcstr resolvedApp = ResolveExecutablePathForLaunch(app);
+
+  if(resolvedApp.empty())
+  {
+    RDResult result;
+    SET_ERROR_RESULT(result, ResultCode::FileIOFailed,
+                     "Couldn't resolve executable path '%s' for proxy loader mode.", app.c_str());
+    return {result, 0};
+  }
+
+  wchar_t renderdocPath[MAX_PATH] = {0};
+  GetModuleFileNameW(GetModuleHandleA(RENDERDOC_CORE_DLL), &renderdocPath[0], MAX_PATH - 1);
+
+  rdcstr coreDLLPath = StringFormat::Wide2UTF8(renderdocPath);
+  rdcstr coreDir = get_dirname(coreDLLPath);
+  rdcstr proxyDLLSource = coreDir + "\\" RENDERDOC_VULKAN_PROXY_DLL;
+
+  if(!FileIO::exists(proxyDLLSource))
+  {
+    RDResult result;
+    SET_ERROR_RESULT(result, ResultCode::FileIOFailed,
+                     "Couldn't find " RENDERDOC_VULKAN_PROXY_DLL
+                     " next to " RENDERDOC_CORE_DLL " for Proxy Loader Mode.");
+    return {result, 0};
+  }
+
+  rdcstr sessionNonce =
+      StringFormat::Fmt("%u_%llu", Process::GetCurrentPID(), (uint64_t)Timing::GetUnixTimestamp());
+  rdcstr sessionDir =
+      FileIO::GetTempFolderFilename() + RENDERDOC_CAPTURE_DIRECTORY "\\proxy\\" + sessionNonce;
+  rdcstr stagedExe = sessionDir + "\\" + get_basename(resolvedApp);
+  rdcstr stagedProxyDLL = sessionDir + "\\" RENDERDOC_VULKAN_PROXY_DLL;
+  rdcstr manifestPath = sessionDir + "\\" RENDERDOC_PROXY_MANIFEST_NAME;
+
+  FileIO::CreateParentDirectory(manifestPath);
+
+  if(!FileIO::Copy(resolvedApp, stagedExe, true))
+  {
+    RDResult result;
+    SET_ERROR_RESULT(result, ResultCode::FileIOFailed,
+                     "Couldn't stage executable '%s' into proxy session '%s'.", resolvedApp.c_str(),
+                     stagedExe.c_str());
+    return {result, 0};
+  }
+
+  if(!FileIO::Copy(proxyDLLSource, stagedProxyDLL, true))
+  {
+    RDResult result;
+    SET_ERROR_RESULT(result, ResultCode::FileIOFailed,
+                     "Couldn't stage proxy DLL '%s' into proxy session '%s'.",
+                     proxyDLLSource.c_str(), stagedProxyDLL.c_str());
+    return {result, 0};
+  }
+
+  ProxyLaunchManifest manifest;
+  manifest.coreDLLPath = coreDLLPath;
+  manifest.workingDirectory = workingDir.empty() ? get_dirname(resolvedApp) : workingDir;
+  manifest.captureFileTemplate = capturefile;
+  manifest.injectFlags = opts.EncodeAsString();
+  manifest.createdByPID = StringFormat::Fmt("%u", Process::GetCurrentPID());
+  manifest.sessionNonce = sessionNonce;
+  manifest.debugLogFile = RDCGETLOGFILE();
+  manifest.originalExecutable = resolvedApp;
+
+  if(!WriteProxyLaunchManifest(manifestPath, manifest))
+  {
+    RDResult result;
+    SET_ERROR_RESULT(result, ResultCode::FileIOFailed,
+                     "Couldn't write proxy loader manifest '%s'.", manifestPath.c_str());
+    return {result, 0};
+  }
+
+  PROCESS_INFORMATION pi =
+      RunProcess(stagedExe, manifest.workingDirectory, cmdLine, env, false, NULL, NULL);
+
+  if(pi.dwProcessId == 0)
+  {
+    RDResult result;
+    SET_ERROR_RESULT(result, ResultCode::InjectionFailed,
+                     "Failed to launch staged proxy executable '%s'.", stagedExe.c_str());
+    return {result, 0};
+  }
+
+  ResumeThread(pi.hThread);
+
+  uint32_t ident = WaitForProxyTargetIdent(pi.dwProcessId, pi.hProcess, 15000);
+
+  if(ident == 0)
+  {
+    DWORD exitCode = STILL_ACTIVE;
+    GetExitCodeProcess(pi.hProcess, &exitCode);
+
+    RDResult result;
+    SET_ERROR_RESULT(
+        result, ResultCode::InjectionFailed,
+        "Proxy Loader Mode failed to initialise the target control connection for '%s'. "
+        "The staged executable was '%s' and the manifest was '%s'. Exit code: %u.",
+        resolvedApp.c_str(), stagedExe.c_str(), manifestPath.c_str(), exitCode);
+
+    CloseHandle(pi.hThread);
+    CloseHandle(pi.hProcess);
+    return {result, 0};
+  }
+
+  if(waitForExit)
+    WaitForSingleObject(pi.hProcess, INFINITE);
+
+  CloseHandle(pi.hThread);
+  CloseHandle(pi.hProcess);
+
+  return {ResultCode::Succeeded, ident};
 }
 
 static rdcarray<EnvironmentModification> &GetEnvModifications()
@@ -1274,6 +1717,21 @@ rdcpair<RDResult, uint32_t> Process::LaunchAndInjectIntoProcess(
     const rdcarray<EnvironmentModification> &env, const rdcstr &capturefile,
     const CaptureOptions &opts, bool waitForExit)
 {
+  if(get_basename(app) == "explorer.exe" || get_basename(app) == "dllhost.exe")
+  {
+    RDResult result;
+    SET_ERROR_RESULT(
+        result, ResultCode::InjectionFailed,
+        "For safety reasons " RENDERDOC_PRODUCT_NAME
+        " does not support capturing executables with a "
+        "reserved system filename such as '%s'. Please rename your executable to capture.",
+        get_basename(app).c_str());
+    return {result, 0};
+  }
+
+  if(opts.useProxyLoaderMode)
+    return LaunchWithProxyLoaderMode(app, workingDir, cmdLine, env, capturefile, opts, waitForExit);
+
   void *func =
       GetProcAddress(GetModuleHandleA(STRINGIZE(RDOC_BASE_NAME) ".dll"), "INTERNAL_SetCaptureFile");
 
@@ -1284,18 +1742,6 @@ rdcpair<RDResult, uint32_t> Process::LaunchAndInjectIntoProcess(
     SET_ERROR_RESULT(result, ResultCode::InternalError,
                      "Can't find required export function in %s.dll - corrupted/missing file?",
                      rdoc_dll);
-    return {result, 0};
-  }
-
-  if(get_basename(app) == "explorer.exe" || get_basename(app) == "dllhost.exe")
-  {
-    RDResult result;
-    SET_ERROR_RESULT(
-        result, ResultCode::InjectionFailed,
-        "For safety reasons " RENDERDOC_PRODUCT_NAME
-        " does not support capturing executables with a "
-        "reserved system filename such as '%s'. Please rename your executable to capture.",
-        get_basename(app).c_str());
     return {result, 0};
   }
 
